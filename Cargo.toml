@@ -1,0 +1,12 @@
+[package]
+name = "creator-standard"
+version = "0.1.0"
+edition = "2021"
+license = "WTFPL"
+publish = false
+
+[dependencies]
+solana-program = "1.14.4"
+
+[lib]
+crate-type = ["cdylib", "lib"]
