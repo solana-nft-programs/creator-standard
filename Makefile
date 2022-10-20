@@ -15,7 +15,6 @@ start:
 		--bpf-program mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS ./program/target/deploy/cardinal_creator_standard.so \
 		--reset --quiet & echo $$! > validator.PID
 	sleep 8
-	solana-keygen pubkey ./sdk/tests/test-keypairs/test-key.json
 	solana airdrop 1000 $(TEST_KEY) --url http://localhost:8899
 
 test:

@@ -1,17 +1,16 @@
-import type { Signer } from "@solana/web3.js";
-import {
-  PublicKey,
-  Keypair,
-  Connection,
-  LAMPORTS_PER_SOL,
-} from "@solana/web3.js";
+import { Connection } from "@solana/web3.js";
+import { SignerWallet } from "@saberhq/solana-contrib";
+import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { PROGRAM_ADDRESS } from "../src/generated";
+import { utils } from "@project-serum/anchor";
 
 export async function newAccountWithLamports(
   connection: Connection,
   lamports = LAMPORTS_PER_SOL
-): Promise<Signer> {
-  const account = Keypair.generate();
+): Promise<Keypair> {
+  const account = Keypair.fromSecretKey(
+    utils.bytes.bs58.decode(process.env.TEST_SECRET_KEY || "")
+  );
   const signature = await connection.requestAirdrop(
     account.publicKey,
     lamports
@@ -25,6 +24,22 @@ export async function getConnection(): Promise<Connection> {
   const connection = new Connection(url, "confirmed");
   await connection.getVersion();
   return connection;
+}
+
+type CardinalProvider = {
+  connection: Connection;
+  wallet: SignerWallet;
+  keypair: Keypair;
+};
+export async function getProvider(): Promise<CardinalProvider> {
+  const connection = await getConnection();
+  const keypair = await newAccountWithLamports(connection);
+  const wallet = new SignerWallet(keypair);
+  return {
+    connection,
+    wallet,
+    keypair,
+  };
 }
 
 export const TEST_PROGRAM_ID = process.env.TEST_PROGRAM_ID
