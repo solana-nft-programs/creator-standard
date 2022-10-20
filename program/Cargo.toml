@@ -2,8 +2,11 @@
 name = "cardinal-creator-standard"
 version = "0.1.0"
 edition = "2021"
-license = "WTFPL"
-publish = false
+homepage = "https://cardinal.so"
+repository = "https://github.com/cardinal-labs/cardinal-creator-standard"
+authors = ["Cardinal <team@cardinal.so>"]
+license = "AGPL-3.0"
+keywords = ["solana", "cardinal"]
 
 [dependencies]
 solana-program = "1.14.4"
