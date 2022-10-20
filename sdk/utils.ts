@@ -1,7 +1,7 @@
 import { Connection } from "@solana/web3.js";
 import { SignerWallet } from "@saberhq/solana-contrib";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { PROGRAM_ADDRESS } from "../src/generated";
+import { PROGRAM_ADDRESS } from "./src/generated";
 import { utils } from "@project-serum/anchor";
 
 export async function newAccountWithLamports(

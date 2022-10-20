@@ -1,6 +1,6 @@
 import { test, beforeAll } from "@jest/globals";
-import { getConnection, getProvider, newAccountWithLamports } from "./utils";
-import type { Connection, PublicKey, Signer } from "@solana/web3.js";
+import { getProvider } from "../utils";
+import type { PublicKey } from "@solana/web3.js";
 import {
   Keypair,
   Transaction,

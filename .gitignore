@@ -2,4 +2,5 @@ program/target
 sdk/node_modules
 validator.PID
 test-ledger
+yarn-error.log
 sdk/.env
