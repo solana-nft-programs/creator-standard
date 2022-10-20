@@ -7,6 +7,7 @@ use solana_program::msg;
 use solana_program::pubkey::Pubkey;
 
 pub mod instructions;
+pub mod utils;
 
 use instructions::*;
 
