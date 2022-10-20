@@ -1,4 +1,4 @@
-use crate::mint_manager_seeds;
+use crate::state::mint_manager_seeds;
 use crate::utils::assert_with_msg;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;

@@ -1,9 +1,8 @@
-use solana_program::{
-    account_info::AccountInfo,
-    entrypoint::ProgramResult,
-    program::{invoke, invoke_signed},
-    pubkey::Pubkey,
-};
+use solana_program::account_info::AccountInfo;
+use solana_program::entrypoint::ProgramResult;
+use solana_program::program::invoke;
+use solana_program::program::invoke_signed;
+use solana_program::pubkey::Pubkey;
 
 pub fn initialize_mint<'a, 'b>(
     freeze_authority: &Pubkey,

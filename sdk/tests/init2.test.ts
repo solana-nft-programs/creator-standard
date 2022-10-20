@@ -1,13 +1,13 @@
-import { test, beforeAll } from "@jest/globals";
-import { getProvider } from "../utils";
+import { test, beforeAll, expect } from "@jest/globals";
+import { executeTransaction, getProvider } from "../utils";
 import type { PublicKey } from "@solana/web3.js";
+import { Keypair, Transaction } from "@solana/web3.js";
 import {
-  Keypair,
-  Transaction,
-  sendAndConfirmTransaction,
-} from "@solana/web3.js";
-import { createInitInstruction } from "../src/generated";
+  createInitMintManagerInstruction,
+  MintManager,
+} from "../src/generated";
 import { createMint } from "@solana/spl-token";
+import { findMintManagerId } from "../src/pda";
 
 let mint: PublicKey;
 
@@ -28,11 +28,19 @@ test("Init", async () => {
   const provider = await getProvider();
   const tx = new Transaction();
   tx.add(
-    createInitInstruction({
+    createInitMintManagerInstruction({
       mint: mint,
+      mintManager: findMintManagerId(mint),
       authority: provider.wallet.publicKey,
-      standard: Keypair.generate().publicKey,
+      payer: provider.wallet.payer.publicKey,
+      ruleset: Keypair.generate().publicKey,
     })
   );
-  await sendAndConfirmTransaction(provider.connection, tx, [provider.keypair]);
+  await executeTransaction(provider.connection, tx, provider.wallet);
+
+  const mintManager = await MintManager.fromAccountAddress(
+    provider.connection,
+    findMintManagerId(mint)
+  );
+  expect(mintManager.mint.toString()).toBe(mint.toString());
 });

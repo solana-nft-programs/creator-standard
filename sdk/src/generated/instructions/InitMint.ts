@@ -11,50 +11,57 @@ import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category Init
+ * @category InitMint
  * @category generated
  */
-export const InitStruct = new beet.BeetArgsStruct<{
+export const InitMintStruct = new beet.BeetArgsStruct<{
   instructionDiscriminator: number
-}>([['instructionDiscriminator', beet.u8]], 'InitInstructionArgs')
+}>([['instructionDiscriminator', beet.u8]], 'InitMintInstructionArgs')
 /**
- * Accounts required by the _Init_ instruction
+ * Accounts required by the _InitMint_ instruction
  *
  * @property [_writable_] mint
+ * @property [_writable_] mintManager
  * @property [_writable_, **signer**] authority
- * @property [_writable_] standard
+ * @property [_writable_, **signer**] payer
  * @category Instructions
- * @category Init
+ * @category InitMint
  * @category generated
  */
-export type InitInstructionAccounts = {
+export type InitMintInstructionAccounts = {
   mint: web3.PublicKey
+  mintManager: web3.PublicKey
   authority: web3.PublicKey
-  standard: web3.PublicKey
+  payer: web3.PublicKey
   tokenProgram?: web3.PublicKey
   systemProgram?: web3.PublicKey
 }
 
-export const initInstructionDiscriminator = 0
+export const initMintInstructionDiscriminator = 0
 
 /**
- * Creates a _Init_ instruction.
+ * Creates a _InitMint_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @category Instructions
- * @category Init
+ * @category InitMint
  * @category generated
  */
-export function createInitInstruction(
-  accounts: InitInstructionAccounts,
+export function createInitMintInstruction(
+  accounts: InitMintInstructionAccounts,
   programId = new web3.PublicKey('mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS')
 ) {
-  const [data] = InitStruct.serialize({
-    instructionDiscriminator: initInstructionDiscriminator,
+  const [data] = InitMintStruct.serialize({
+    instructionDiscriminator: initMintInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.mint,
+      isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.mintManager,
       isWritable: true,
       isSigner: false,
     },
@@ -64,9 +71,9 @@ export function createInitInstruction(
       isSigner: true,
     },
     {
-      pubkey: accounts.standard,
+      pubkey: accounts.payer,
       isWritable: true,
-      isSigner: false,
+      isSigner: true,
     },
     {
       pubkey: accounts.tokenProgram ?? splToken.TOKEN_PROGRAM_ID,

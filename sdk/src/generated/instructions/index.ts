@@ -1,1 +1,2 @@
-export * from './Init'
+export * from './InitMint'
+export * from './InitMintManager'

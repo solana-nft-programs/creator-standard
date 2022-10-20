@@ -1,77 +1,60 @@
-use arrayref::{array_mut_ref, array_ref, array_refs, mut_array_refs};
-use solana_program::{
-    program_error::ProgramError,
-    program_pack::{Pack, Sealed},
-    pubkey::Pubkey,
-};
+use borsh::BorshDeserialize;
+use borsh::BorshSerialize;
+use shank::ShankAccount;
+use solana_program::program_error::ProgramError;
+use solana_program::pubkey::Pubkey;
 
-/// Mint data.
+use crate::utils::assert_with_msg;
+
+pub const MINT_MANAGER_SEED: &str = "mint-manager";
+pub const MINT_MANAGER_SIZE: usize = std::mem::size_of::<MintManager>() + 8;
+
+#[inline]
+pub fn mint_manager_seeds(mint_id: &Pubkey) -> (Pubkey, Vec<Vec<u8>>) {
+    let mut seeds = vec![
+        MINT_MANAGER_SEED.as_bytes().to_vec(),
+        mint_id.as_ref().to_vec(),
+    ];
+    let (key, bump) = Pubkey::find_program_address(
+        &seeds.iter().map(|s| s.as_slice()).collect::<Vec<&[u8]>>(),
+        &crate::id(),
+    );
+    seeds.push(vec![bump]);
+    (key, seeds)
+}
+
+#[inline]
+pub fn assert_mint_manager_seeds(
+    mint_id: &Pubkey,
+    expected_key: &Pubkey,
+) -> Result<Vec<Vec<u8>>, ProgramError> {
+    let (key, seeds) = mint_manager_seeds(mint_id);
+    assert_with_msg(
+        expected_key == &key,
+        ProgramError::InvalidInstructionData,
+        "Invalid mint manager seeds",
+    )?;
+    Ok(seeds)
+}
+
 #[repr(C)]
-#[derive(Clone, Copy, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
+#[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone, ShankAccount)]
 pub struct MintManager {
+    pub account_type: u8,
+    pub version: u8,
     pub mint: Pubkey,
     pub authority: Pubkey,
     pub ruleset: Pubkey,
 }
-impl Sealed for MintManager {}
-impl Pack for MintManager {
-    const LEN: usize = 82;
-    fn unpack_from_slice(src: &[u8]) -> Result<Self, ProgramError> {
-        let src = array_ref![src, 0, 82];
-        let (mint, authority, ruleset) = array_refs![src, 32, 32, 32];
-        Ok(MintManager {
-            mint,
-            authority,
-            ruleset,
-        })
-    }
-    fn pack_into_slice(&self, dst: &mut [u8]) {
-        let dst = array_mut_ref![dst, 0, 82];
-        let (
-            mint_authority_dst,
-            supply_dst,
-            decimals_dst,
-            is_initialized_dst,
-            freeze_authority_dst,
-        ) = mut_array_refs![dst, 36, 8, 1, 1, 36];
-        let &MintManager {
-            mint,
-            authority,
-            ruleset,
-        } = self;
-        *supply_dst = supply.to_le_bytes();
-        decimals_dst[0] = decimals;
-        is_initialized_dst[0] = is_initialized as u8;
-    }
 
-    fn get_packed_len() -> usize {
-        Self::LEN
-    }
-
-    fn unpack(input: &[u8]) -> Result<Self, ProgramError>
-    where
-        Self: solana_program::program_pack::IsInitialized,
-    {
-        let value = Self::unpack_unchecked(input)?;
-        if value.is_initialized() {
-            Ok(value)
-        } else {
-            Err(ProgramError::UninitializedAccount)
-        }
-    }
-
-    fn unpack_unchecked(input: &[u8]) -> Result<Self, ProgramError> {
-        if input.len() != Self::LEN {
-            return Err(ProgramError::InvalidAccountData);
-        }
-        Self::unpack_from_slice(input)
-    }
-
-    fn pack(src: Self, dst: &mut [u8]) -> Result<(), ProgramError> {
-        if dst.len() != Self::LEN {
-            return Err(ProgramError::InvalidAccountData);
-        }
-        src.pack_into_slice(dst);
-        Ok(())
-    }
+#[repr(C)]
+#[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
+#[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone, ShankAccount)]
+pub struct MintManagerV2 {
+    pub account_type: u8,
+    pub version: u8,
+    pub mint: Pubkey,
+    pub authority: Pubkey,
+    pub ruleset: Pubkey,
 }

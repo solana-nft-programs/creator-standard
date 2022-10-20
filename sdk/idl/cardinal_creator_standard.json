@@ -3,10 +3,15 @@
   "name": "cardinal_creator_standard",
   "instructions": [
     {
-      "name": "Init",
+      "name": "InitMint",
       "accounts": [
         {
           "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mintManager",
           "isMut": true,
           "isSigner": false
         },
@@ -16,9 +21,9 @@
           "isSigner": true
         },
         {
-          "name": "standard",
+          "name": "payer",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "tokenProgram",
@@ -37,6 +42,111 @@
       "discriminant": {
         "type": "u8",
         "value": 0
+      }
+    },
+    {
+      "name": "InitMintManager",
+      "accounts": [
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mintManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "ruleset",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "desc": "Token program"
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "desc": "System program"
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 1
+      }
+    }
+  ],
+  "accounts": [
+    {
+      "name": "MintManager",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": "u8"
+          },
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "ruleset",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MintManagerV2",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": "u8"
+          },
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "ruleset",
+            "type": "publicKey"
+          }
+        ]
       }
     }
   ],

@@ -7,6 +7,7 @@ use solana_program::msg;
 use solana_program::pubkey::Pubkey;
 
 pub mod instructions;
+pub mod pda;
 pub mod state;
 pub mod utils;
 
@@ -28,6 +29,15 @@ pub enum CreatorStandardInstruction {
     #[account(4, name = "token_program", desc = "Token program")]
     #[account(5, name = "system_program", desc = "System program")]
     InitMint,
+
+    #[account(0, writable, name = "mint")]
+    #[account(1, writable, name = "mint_manager")]
+    #[account(2, signer, name = "authority")]
+    #[account(3, name = "ruleset")]
+    #[account(4, writable, signer, name = "payer")]
+    #[account(5, name = "token_program", desc = "Token program")]
+    #[account(6, name = "system_program", desc = "System program")]
+    InitMintManager,
 }
 
 pub fn process_instruction(
@@ -42,16 +52,10 @@ pub fn process_instruction(
             let init_mint_ctx = InitMintCtx::load(accounts)?;
             init_mint::handler(init_mint_ctx)
         }
+        CreatorStandardInstruction::InitMintManager => {
+            msg!("CreatorStandardInstruction::InitMintManager");
+            let ctx = InitMintManagerCtx::load(accounts)?;
+            init_mint_manager::handler(ctx)
+        }
     }
-}
-
-#[inline]
-fn mint_manager_seeds(mint_id: &Pubkey) -> (Pubkey, Vec<Vec<u8>>) {
-    let mut seeds = vec![mint_id.as_ref().to_vec()];
-    let (key, bump) = Pubkey::find_program_address(
-        &seeds.iter().map(|s| s.as_slice()).collect::<Vec<&[u8]>>(),
-        &crate::id(),
-    );
-    seeds.push(vec![bump]);
-    (key, seeds)
 }

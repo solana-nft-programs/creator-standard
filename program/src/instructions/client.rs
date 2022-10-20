@@ -1,6 +1,7 @@
 use crate::CreatorStandardInstruction;
 use borsh::BorshSerialize;
-use solana_program::instruction::{AccountMeta, Instruction};
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use solana_program::system_program;
@@ -19,6 +20,6 @@ pub fn init_ix(
             AccountMeta::new_readonly(spl_token::id(), false),
             AccountMeta::new_readonly(system_program::id(), false),
         ],
-        data: CreatorStandardInstruction::Init.try_to_vec()?,
+        data: CreatorStandardInstruction::InitMintManager.try_to_vec()?,
     })
 }
