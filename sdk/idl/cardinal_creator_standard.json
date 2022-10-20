@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0",
+  "name": "cardinal_creator_standard",
+  "instructions": [],
+  "metadata": {
+    "origin": "shank",
+    "address": "mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS",
+    "binaryVersion": "0.0.5",
+    "libVersion": "^0.0.5"
+  }
+}
