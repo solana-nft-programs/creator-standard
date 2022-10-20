@@ -1,10 +1,15 @@
 import type { Signer } from "@solana/web3.js";
-import { PublicKey, Keypair, Connection } from "@solana/web3.js";
+import {
+  PublicKey,
+  Keypair,
+  Connection,
+  LAMPORTS_PER_SOL,
+} from "@solana/web3.js";
 import { PROGRAM_ADDRESS } from "../src/generated";
 
 export async function newAccountWithLamports(
   connection: Connection,
-  lamports = 1000000
+  lamports = LAMPORTS_PER_SOL
 ): Promise<Signer> {
   const account = Keypair.generate();
   const signature = await connection.requestAirdrop(

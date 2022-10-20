@@ -30,14 +30,9 @@ impl<'a, 'info> InitCtx<'a, 'info> {
             system_program: next_account_info(account_iter)?,
         };
         assert_with_msg(
-            ctx.mint.data_is_empty(),
-            ProgramError::InvalidAccountData,
-            "Mint account must be uninitialized",
-        )?;
-        assert_with_msg(
-            ctx.mint.owner == &system_program::id(),
+            ctx.mint.owner == ctx.token_program.key,
             ProgramError::IllegalOwner,
-            "Mint account must be owned by the System Program when uninitialized",
+            "Mint account must be owned by the Token Program",
         )?;
         assert_with_msg(
             ctx.authority.is_writable,
