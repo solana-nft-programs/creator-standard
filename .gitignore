@@ -1,2 +1,4 @@
 program/target
 sdk/node_modules
+validator.PID
+test-ledger
