@@ -1,31 +1,42 @@
 use borsh::BorshDeserialize;
-use instruction::CreatorStandardInstruction;
+use borsh::BorshSerialize;
+use shank::ShankInstruction;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::msg;
 use solana_program::pubkey::Pubkey;
 
-pub mod instruction;
+pub mod instructions;
+
+use instructions::*;
 
 solana_program::declare_id!("mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS");
 
 #[cfg(not(feature = "no-entrypoint"))]
+solana_program::entrypoint!(handler);
 
-solana_program::entrypoint!(process_instruction);
-pub fn process_instruction(
+#[derive(Debug, Clone, ShankInstruction, BorshSerialize, BorshDeserialize)]
+#[rustfmt::skip]
+pub enum CreatorStandardInstruction {
+
+    #[account(0, writable, name = "mint")]
+    #[account(1, writable, signer, name = "authority")]
+    #[account(2, writable, name = "standard")]
+    #[account(3, name = "token_program", desc = "Token program")]
+    #[account(4, name = "system_program", desc = "System program")]
+    Init,
+}
+
+pub fn handler(
     _program_id: &Pubkey,
     accounts: &[AccountInfo],
     instruction_data: &[u8],
 ) -> ProgramResult {
     let instruction = CreatorStandardInstruction::try_from_slice(instruction_data)?;
     match instruction {
-        CreatorStandardInstruction::Initialize => {
-            msg!("CreatorStandardInstruction::Initialize");
-            process_initialize(accounts)
+        CreatorStandardInstruction::Init => {
+            msg!("CreatorStandardInstruction::Init");
+            init::handler(accounts)
         }
     }
-}
-
-pub fn process_initialize(accounts: &[AccountInfo]) -> ProgramResult {
-    Ok(())
 }

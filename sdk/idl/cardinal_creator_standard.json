@@ -3,7 +3,7 @@
   "name": "cardinal_creator_standard",
   "instructions": [
     {
-      "name": "Initialize",
+      "name": "Init",
       "accounts": [
         {
           "name": "mint",

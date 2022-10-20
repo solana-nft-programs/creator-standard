@@ -11,23 +11,23 @@ import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category Initialize
+ * @category Init
  * @category generated
  */
-export const InitializeStruct = new beet.BeetArgsStruct<{
+export const InitStruct = new beet.BeetArgsStruct<{
   instructionDiscriminator: number
-}>([['instructionDiscriminator', beet.u8]], 'InitializeInstructionArgs')
+}>([['instructionDiscriminator', beet.u8]], 'InitInstructionArgs')
 /**
- * Accounts required by the _Initialize_ instruction
+ * Accounts required by the _Init_ instruction
  *
  * @property [_writable_] mint
  * @property [_writable_, **signer**] authority
  * @property [_writable_] standard
  * @category Instructions
- * @category Initialize
+ * @category Init
  * @category generated
  */
-export type InitializeInstructionAccounts = {
+export type InitInstructionAccounts = {
   mint: web3.PublicKey
   authority: web3.PublicKey
   standard: web3.PublicKey
@@ -35,22 +35,22 @@ export type InitializeInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const initializeInstructionDiscriminator = 0
+export const initInstructionDiscriminator = 0
 
 /**
- * Creates a _Initialize_ instruction.
+ * Creates a _Init_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @category Instructions
- * @category Initialize
+ * @category Init
  * @category generated
  */
-export function createInitializeInstruction(
-  accounts: InitializeInstructionAccounts,
+export function createInitInstruction(
+  accounts: InitInstructionAccounts,
   programId = new web3.PublicKey('mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS')
 ) {
-  const [data] = InitializeStruct.serialize({
-    instructionDiscriminator: initializeInstructionDiscriminator,
+  const [data] = InitStruct.serialize({
+    instructionDiscriminator: initInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {

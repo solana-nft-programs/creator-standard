@@ -1,25 +1,19 @@
-use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use shank::ShankInstruction;
+use solana_program::account_info::AccountInfo;
+use solana_program::entrypoint::ProgramResult;
 use solana_program::instruction::AccountMeta;
 use solana_program::instruction::Instruction;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use solana_program::system_program;
 
-#[derive(Debug, Clone, ShankInstruction, BorshSerialize, BorshDeserialize)]
-#[rustfmt::skip]
-pub enum CreatorStandardInstruction {
+use crate::CreatorStandardInstruction;
 
-    #[account(0, writable, name = "mint")]
-    #[account(1, writable, signer, name = "authority")]
-    #[account(2, writable, name = "standard")]
-    #[account(3, name = "token_program", desc = "Token program")]
-    #[account(4, name = "system_program", desc = "System program")]
-    Initialize,
+pub fn handler(accounts: &[AccountInfo]) -> ProgramResult {
+    Ok(())
 }
 
-pub fn initialize_ix(
+pub fn init_ix(
     mint: &Pubkey,
     authority: &Pubkey,
     standard: &Pubkey,
@@ -33,6 +27,6 @@ pub fn initialize_ix(
             AccountMeta::new_readonly(spl_token::id(), false),
             AccountMeta::new_readonly(system_program::id(), false),
         ],
-        data: CreatorStandardInstruction::Initialize.try_to_vec()?,
+        data: CreatorStandardInstruction::Init.try_to_vec()?,
     })
 }
