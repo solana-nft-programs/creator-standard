@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as splToken from '@solana/spl-token'
-import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
+import * as splToken from "@solana/spl-token";
+import * as beet from "@metaplex-foundation/beet";
+import * as web3 from "@solana/web3.js";
 
 /**
  * @category Instructions
@@ -15,8 +15,8 @@ import * as web3 from '@solana/web3.js'
  * @category generated
  */
 export const InitMintStruct = new beet.BeetArgsStruct<{
-  instructionDiscriminator: number
-}>([['instructionDiscriminator', beet.u8]], 'InitMintInstructionArgs')
+  instructionDiscriminator: number;
+}>([["instructionDiscriminator", beet.u8]], "InitMintInstructionArgs");
 /**
  * Accounts required by the _InitMint_ instruction
  *
@@ -29,15 +29,15 @@ export const InitMintStruct = new beet.BeetArgsStruct<{
  * @category generated
  */
 export type InitMintInstructionAccounts = {
-  mint: web3.PublicKey
-  mintManager: web3.PublicKey
-  authority: web3.PublicKey
-  payer: web3.PublicKey
-  tokenProgram?: web3.PublicKey
-  systemProgram?: web3.PublicKey
-}
+  mint: web3.PublicKey;
+  mintManager: web3.PublicKey;
+  authority: web3.PublicKey;
+  payer: web3.PublicKey;
+  tokenProgram?: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+};
 
-export const initMintInstructionDiscriminator = 0
+export const initMintInstructionDiscriminator = 0;
 
 /**
  * Creates a _InitMint_ instruction.
@@ -49,11 +49,11 @@ export const initMintInstructionDiscriminator = 0
  */
 export function createInitMintInstruction(
   accounts: InitMintInstructionAccounts,
-  programId = new web3.PublicKey('mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS')
+  programId = new web3.PublicKey("creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez")
 ) {
   const [data] = InitMintStruct.serialize({
     instructionDiscriminator: initMintInstructionDiscriminator,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.mint,
@@ -85,12 +85,12 @@ export function createInitMintInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   const ix = new web3.TransactionInstruction({
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }

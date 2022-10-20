@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as web3 from '@solana/web3.js'
-import * as beet from '@metaplex-foundation/beet'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as web3 from "@solana/web3.js";
+import * as beet from "@metaplex-foundation/beet";
+import * as beetSolana from "@metaplex-foundation/beet-solana";
 
 /**
  * Arguments used to create {@link MintManagerV2}
@@ -15,12 +15,12 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type MintManagerV2Args = {
-  accountType: number
-  version: number
-  mint: web3.PublicKey
-  authority: web3.PublicKey
-  ruleset: web3.PublicKey
-}
+  accountType: number;
+  version: number;
+  mint: web3.PublicKey;
+  authority: web3.PublicKey;
+  ruleset: web3.PublicKey;
+};
 /**
  * Holds the data for the {@link MintManagerV2} Account and provides de/serialization
  * functionality for that data
@@ -47,7 +47,7 @@ export class MintManagerV2 implements MintManagerV2Args {
       args.mint,
       args.authority,
       args.ruleset
-    )
+    );
   }
 
   /**
@@ -58,7 +58,7 @@ export class MintManagerV2 implements MintManagerV2Args {
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
   ): [MintManagerV2, number] {
-    return MintManagerV2.deserialize(accountInfo.data, offset)
+    return MintManagerV2.deserialize(accountInfo.data, offset);
   }
 
   /**
@@ -71,11 +71,11 @@ export class MintManagerV2 implements MintManagerV2Args {
     connection: web3.Connection,
     address: web3.PublicKey
   ): Promise<MintManagerV2> {
-    const accountInfo = await connection.getAccountInfo(address)
+    const accountInfo = await connection.getAccountInfo(address);
     if (accountInfo == null) {
-      throw new Error(`Unable to find MintManagerV2 account at ${address}`)
+      throw new Error(`Unable to find MintManagerV2 account at ${address}`);
     }
-    return MintManagerV2.fromAccountInfo(accountInfo, 0)[0]
+    return MintManagerV2.fromAccountInfo(accountInfo, 0)[0];
   }
 
   /**
@@ -86,10 +86,10 @@ export class MintManagerV2 implements MintManagerV2Args {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      'mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS'
+      "creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez"
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, mintManagerV2Beet)
+    return beetSolana.GpaBuilder.fromStruct(programId, mintManagerV2Beet);
   }
 
   /**
@@ -97,7 +97,7 @@ export class MintManagerV2 implements MintManagerV2Args {
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static deserialize(buf: Buffer, offset = 0): [MintManagerV2, number] {
-    return mintManagerV2Beet.deserialize(buf, offset)
+    return mintManagerV2Beet.deserialize(buf, offset);
   }
 
   /**
@@ -105,7 +105,7 @@ export class MintManagerV2 implements MintManagerV2Args {
    * @returns a tuple of the created Buffer and the offset up to which the buffer was written to store it.
    */
   serialize(): [Buffer, number] {
-    return mintManagerV2Beet.serialize(this)
+    return mintManagerV2Beet.serialize(this);
   }
 
   /**
@@ -113,7 +113,7 @@ export class MintManagerV2 implements MintManagerV2Args {
    * {@link MintManagerV2}
    */
   static get byteSize() {
-    return mintManagerV2Beet.byteSize
+    return mintManagerV2Beet.byteSize;
   }
 
   /**
@@ -129,7 +129,7 @@ export class MintManagerV2 implements MintManagerV2Args {
     return connection.getMinimumBalanceForRentExemption(
       MintManagerV2.byteSize,
       commitment
-    )
+    );
   }
 
   /**
@@ -137,7 +137,7 @@ export class MintManagerV2 implements MintManagerV2Args {
    * hold {@link MintManagerV2} data.
    */
   static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === MintManagerV2.byteSize
+    return buf.byteLength - offset === MintManagerV2.byteSize;
   }
 
   /**
@@ -151,7 +151,7 @@ export class MintManagerV2 implements MintManagerV2Args {
       mint: this.mint.toBase58(),
       authority: this.authority.toBase58(),
       ruleset: this.ruleset.toBase58(),
-    }
+    };
   }
 }
 
@@ -164,12 +164,12 @@ export const mintManagerV2Beet = new beet.BeetStruct<
   MintManagerV2Args
 >(
   [
-    ['accountType', beet.u8],
-    ['version', beet.u8],
-    ['mint', beetSolana.publicKey],
-    ['authority', beetSolana.publicKey],
-    ['ruleset', beetSolana.publicKey],
+    ["accountType", beet.u8],
+    ["version", beet.u8],
+    ["mint", beetSolana.publicKey],
+    ["authority", beetSolana.publicKey],
+    ["ruleset", beetSolana.publicKey],
   ],
   MintManagerV2.fromArgs,
-  'MintManagerV2'
-)
+  "MintManagerV2"
+);

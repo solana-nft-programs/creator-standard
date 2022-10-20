@@ -4,3 +4,4 @@ validator.PID
 test-ledger
 yarn-error.log
 sdk/.env
+target

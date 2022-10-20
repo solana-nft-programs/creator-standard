@@ -1,9 +1,7 @@
-pub mod client;
-pub mod init_mint;
-pub mod init_mint_manager;
-pub mod token;
+pub mod mint_manager;
+pub use mint_manager::init_mint_manager::*;
+pub use mint_manager::update_mint_manager::*;
 
-pub use client::*;
-pub use init_mint::*;
-pub use init_mint_manager::*;
-pub use token::*;
+pub mod standard;
+pub use standard::init_standard::*;
+pub use standard::update_standard::*;

@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as splToken from '@solana/spl-token'
-import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
+import * as splToken from "@solana/spl-token";
+import * as beet from "@metaplex-foundation/beet";
+import * as web3 from "@solana/web3.js";
 
 /**
  * @category Instructions
@@ -15,8 +15,8 @@ import * as web3 from '@solana/web3.js'
  * @category generated
  */
 export const InitMintManagerStruct = new beet.BeetArgsStruct<{
-  instructionDiscriminator: number
-}>([['instructionDiscriminator', beet.u8]], 'InitMintManagerInstructionArgs')
+  instructionDiscriminator: number;
+}>([["instructionDiscriminator", beet.u8]], "InitMintManagerInstructionArgs");
 /**
  * Accounts required by the _InitMintManager_ instruction
  *
@@ -30,16 +30,16 @@ export const InitMintManagerStruct = new beet.BeetArgsStruct<{
  * @category generated
  */
 export type InitMintManagerInstructionAccounts = {
-  mint: web3.PublicKey
-  mintManager: web3.PublicKey
-  authority: web3.PublicKey
-  ruleset: web3.PublicKey
-  payer: web3.PublicKey
-  tokenProgram?: web3.PublicKey
-  systemProgram?: web3.PublicKey
-}
+  mint: web3.PublicKey;
+  mintManager: web3.PublicKey;
+  authority: web3.PublicKey;
+  ruleset: web3.PublicKey;
+  payer: web3.PublicKey;
+  tokenProgram?: web3.PublicKey;
+  systemProgram?: web3.PublicKey;
+};
 
-export const initMintManagerInstructionDiscriminator = 1
+export const initMintManagerInstructionDiscriminator = 1;
 
 /**
  * Creates a _InitMintManager_ instruction.
@@ -51,11 +51,11 @@ export const initMintManagerInstructionDiscriminator = 1
  */
 export function createInitMintManagerInstruction(
   accounts: InitMintManagerInstructionAccounts,
-  programId = new web3.PublicKey('mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS')
+  programId = new web3.PublicKey("creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez")
 ) {
   const [data] = InitMintManagerStruct.serialize({
     instructionDiscriminator: initMintManagerInstructionDiscriminator,
-  })
+  });
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.mint,
@@ -92,12 +92,12 @@ export function createInitMintManagerInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ]
+  ];
 
   const ix = new web3.TransactionInstruction({
     programId,
     keys,
     data,
-  })
-  return ix
+  });
+  return ix;
 }
