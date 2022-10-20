@@ -6,6 +6,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest --setupFiles dotenv/config",
+    "idl:generate": "./generate-idls.sh",
+    "docs:generate": "typedoc --excludePrivate --includeVersion --out site/ src/index.ts",
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
