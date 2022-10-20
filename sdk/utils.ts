@@ -1,8 +1,7 @@
 import { Connection } from "@solana/web3.js";
-import { SignerWallet } from "@saberhq/solana-contrib";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { PROGRAM_ADDRESS } from "./src/generated";
-import { utils } from "@project-serum/anchor";
+import { utils, Wallet } from "@project-serum/anchor";
 
 export async function newAccountWithLamports(
   connection: Connection,
@@ -28,13 +27,13 @@ export async function getConnection(): Promise<Connection> {
 
 type CardinalProvider = {
   connection: Connection;
-  wallet: SignerWallet;
+  wallet: Wallet;
   keypair: Keypair;
 };
 export async function getProvider(): Promise<CardinalProvider> {
   const connection = await getConnection();
   const keypair = await newAccountWithLamports(connection);
-  const wallet = new SignerWallet(keypair);
+  const wallet = new Wallet(keypair);
   return {
     connection,
     wallet,

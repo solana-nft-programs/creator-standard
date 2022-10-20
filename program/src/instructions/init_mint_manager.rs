@@ -1,38 +1,40 @@
-use borsh::BorshSerialize;
+use crate::mint_manager_seeds;
+use crate::utils::assert_with_msg;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
-use solana_program::instruction::AccountMeta;
-use solana_program::instruction::Instruction;
+use solana_program::program::invoke;
 use solana_program::program_error::ProgramError;
-use solana_program::pubkey::Pubkey;
+use solana_program::program_pack::Pack;
+use solana_program::rent::Rent;
+use solana_program::system_instruction;
 use solana_program::system_program;
+use solana_program::sysvar::Sysvar;
 
-use crate::utils::assert_with_msg;
-use crate::CreatorStandardInstruction;
-
-pub struct InitCtx<'a, 'info> {
+pub struct InitMintManagerCtx<'a, 'info> {
     pub mint: &'a AccountInfo<'info>,
+    pub mint_manager: &'a AccountInfo<'info>,
     pub authority: &'a AccountInfo<'info>,
-    pub standard: &'a AccountInfo<'info>,
+    pub payer: &'a AccountInfo<'info>,
     pub token_program: &'a AccountInfo<'info>,
     pub system_program: &'a AccountInfo<'info>,
 }
 
-impl<'a, 'info> InitCtx<'a, 'info> {
+impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
     pub fn load(accounts: &'a [AccountInfo<'info>]) -> Result<Self, ProgramError> {
         let account_iter = &mut accounts.iter();
         let ctx = Self {
             mint: next_account_info(account_iter)?,
+            mint_manager: next_account_info(account_iter)?,
             authority: next_account_info(account_iter)?,
-            standard: next_account_info(account_iter)?,
+            payer: next_account_info(account_iter)?,
             token_program: next_account_info(account_iter)?,
             system_program: next_account_info(account_iter)?,
         };
         assert_with_msg(
             ctx.mint.owner == ctx.token_program.key,
             ProgramError::IllegalOwner,
-            "Mint account must be owned by the Token Program",
+            "Invalid token program",
         )?;
         assert_with_msg(
             ctx.authority.is_writable,
@@ -53,31 +55,23 @@ impl<'a, 'info> InitCtx<'a, 'info> {
     }
 }
 
-pub fn handler(accounts: &[AccountInfo]) -> ProgramResult {
-    let InitCtx {
-        mint,
-        authority,
-        standard,
-        token_program,
-        system_program,
-    } = InitCtx::load(accounts)?;
-    Ok(())
-}
-
-pub fn init_ix(
-    mint: &Pubkey,
-    authority: &Pubkey,
-    standard: &Pubkey,
-) -> Result<Instruction, ProgramError> {
-    Ok(Instruction {
-        program_id: crate::id(),
-        accounts: vec![
-            AccountMeta::new(*mint, false),
-            AccountMeta::new(*authority, true),
-            AccountMeta::new(*standard, true),
-            AccountMeta::new_readonly(spl_token::id(), false),
-            AccountMeta::new_readonly(system_program::id(), false),
+pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
+    let (mint_manager, _) = mint_manager_seeds(ctx.mint.key);
+    let space = spl_token::state::Mint::LEN;
+    invoke(
+        &system_instruction::create_account(
+            ctx.payer.key,
+            &mint_manager,
+            Rent::get()?.minimum_balance(space),
+            space as u64,
+            &crate::id(),
+        ),
+        &[
+            ctx.payer.clone(),
+            ctx.mint_manager.clone(),
+            ctx.system_program.clone(),
         ],
-        data: CreatorStandardInstruction::Init.try_to_vec()?,
-    })
+    )?;
+    let mut mint_manager = Mint::unpack_unchecked(&ctx.mint_manager.data.borrow())?;
+    Ok(())
 }
