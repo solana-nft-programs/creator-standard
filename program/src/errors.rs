@@ -8,4 +8,14 @@ pub enum ErrorCode {
     InvalidCollector,
     #[msg("Invalid authority address")]
     InvalidAuthority,
+    #[msg("Invalid mint")]
+    InvaldiMint,
+    #[msg("Invalid holder token account")]
+    InvlaidHolderTokenAccount,
+    #[msg("Invalid target token account")]
+    InvalidTargetTokenAccount,
+    #[msg("Invalid token account to close")]
+    InvalidCloseTokenAccount,
+    #[msg("Invalid holder token account")]
+    InvalidHolderTokenAccount,
 }
