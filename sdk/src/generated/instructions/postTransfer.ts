@@ -22,16 +22,16 @@ export const postTransferStruct = new beet.BeetArgsStruct<{
 /**
  * Accounts required by the _postTransfer_ instruction
  *
- * @property [] mintManager
- * @property [] ruleset
+ * @property [_writable_] accountBalances
+ * @property [_writable_] collector
  * @property [] instructions
  * @category Instructions
  * @category PostTransfer
  * @category generated
  */
 export type PostTransferInstructionAccounts = {
-  mintManager: web3.PublicKey
-  ruleset: web3.PublicKey
+  accountBalances: web3.PublicKey
+  collector: web3.PublicKey
   instructions: web3.PublicKey
 }
 
@@ -56,13 +56,13 @@ export function createPostTransferInstruction(
   })
   const keys: web3.AccountMeta[] = [
     {
-      pubkey: accounts.mintManager,
-      isWritable: false,
+      pubkey: accounts.accountBalances,
+      isWritable: true,
       isSigner: false,
     },
     {
-      pubkey: accounts.ruleset,
-      isWritable: false,
+      pubkey: accounts.collector,
+      isWritable: true,
       isSigner: false,
     },
     {

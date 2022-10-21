@@ -30,4 +30,6 @@ pub enum ErrorCode {
     ProgramNotAllowed,
     #[msg("Unknown account found in instruction")]
     UnknownAccount,
+    #[msg("Account not found in instruction")]
+    AccountNotFound,
 }

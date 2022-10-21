@@ -11,6 +11,7 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
 export type AccountBalance = {
   address: web3.PublicKey
   mint: web3.PublicKey
+  size: beet.bignum
   balance: beet.bignum
 }
 
@@ -22,6 +23,7 @@ export const accountBalanceBeet = new beet.BeetArgsStruct<AccountBalance>(
   [
     ['address', beetSolana.publicKey],
     ['mint', beetSolana.publicKey],
+    ['size', beet.u64],
     ['balance', beet.u64],
   ],
   'AccountBalance'

@@ -463,24 +463,14 @@ export type CardinalCreatorStandard = {
       "name": "preTransfer",
       "accounts": [
         {
-          "name": "mintManager",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "ruleset",
-          "isMut": false,
+          "name": "accountBalances",
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "payer",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "accountBalances",
-          "isMut": true,
-          "isSigner": false
         },
         {
           "name": "instructions",
@@ -494,13 +484,13 @@ export type CardinalCreatorStandard = {
       "name": "postTransfer",
       "accounts": [
         {
-          "name": "mintManager",
-          "isMut": false,
+          "name": "accountBalances",
+          "isMut": true,
           "isSigner": false
         },
         {
-          "name": "ruleset",
-          "isMut": false,
+          "name": "collector",
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -681,6 +671,10 @@ export type CardinalCreatorStandard = {
             "type": "publicKey"
           },
           {
+            "name": "size",
+            "type": "u64"
+          },
+          {
             "name": "balance",
             "type": "u64"
           }
@@ -758,6 +752,11 @@ export type CardinalCreatorStandard = {
       "code": 6013,
       "name": "UnknownAccount",
       "msg": "Unknown account found in instruction"
+    },
+    {
+      "code": 6014,
+      "name": "AccountNotFound",
+      "msg": "Account not found in instruction"
     }
   ]
 };
@@ -1227,24 +1226,14 @@ export const IDL: CardinalCreatorStandard = {
       "name": "preTransfer",
       "accounts": [
         {
-          "name": "mintManager",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "ruleset",
-          "isMut": false,
+          "name": "accountBalances",
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "payer",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "accountBalances",
-          "isMut": true,
-          "isSigner": false
         },
         {
           "name": "instructions",
@@ -1258,13 +1247,13 @@ export const IDL: CardinalCreatorStandard = {
       "name": "postTransfer",
       "accounts": [
         {
-          "name": "mintManager",
-          "isMut": false,
+          "name": "accountBalances",
+          "isMut": true,
           "isSigner": false
         },
         {
-          "name": "ruleset",
-          "isMut": false,
+          "name": "collector",
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -1445,6 +1434,10 @@ export const IDL: CardinalCreatorStandard = {
             "type": "publicKey"
           },
           {
+            "name": "size",
+            "type": "u64"
+          },
+          {
             "name": "balance",
             "type": "u64"
           }
@@ -1522,6 +1515,11 @@ export const IDL: CardinalCreatorStandard = {
       "code": 6013,
       "name": "UnknownAccount",
       "msg": "Unknown account found in instruction"
+    },
+    {
+      "code": 6014,
+      "name": "AccountNotFound",
+      "msg": "Account not found in instruction"
     }
   ]
 };
