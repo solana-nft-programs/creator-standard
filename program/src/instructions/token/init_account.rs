@@ -4,7 +4,7 @@ use anchor_spl::associated_token::{self};
 use anchor_spl::token::Token;
 
 #[derive(Accounts)]
-pub struct InitAccount<'info> {
+pub struct InitAccountCtx<'info> {
     /// CHECK: Account created or checked in handler
     mint: UncheckedAccount<'info>,
     /// CHECK: Account created or checked in handler
@@ -21,7 +21,7 @@ pub struct InitAccount<'info> {
     system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<InitAccount>) -> Result<()> {
+pub fn handler(ctx: Context<InitAccountCtx>) -> Result<()> {
     let cpi_accounts = associated_token::Create {
         payer: ctx.accounts.payer.to_account_info(),
         associated_token: ctx.accounts.token_account.to_account_info(),

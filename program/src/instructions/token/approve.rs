@@ -12,9 +12,8 @@ use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
 pub struct ApproveCtx<'info> {
-    #[account(mut)]
+    #[account(constraint = mint.key() == mint_manager.mint @ ErrorCode::InvalidMintManager)]
     mint_manager: Box<Account<'info, MintManager>>,
-    #[account(constraint = mint.key() == mint_manager.mint @ ErrorCode::InvalidMint)]
     mint: Box<Account<'info, Mint>>,
 
     #[account(mut, constraint =

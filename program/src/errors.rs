@@ -8,8 +8,8 @@ pub enum ErrorCode {
     InvalidCollector,
     #[msg("Invalid authority address")]
     InvalidAuthority,
-    #[msg("Invalid mint")]
-    InvaldiMint,
+    #[msg("Invalid mint manager")]
+    InvalidMintManager,
     #[msg("Invalid holder token account")]
     InvlaidHolderTokenAccount,
     #[msg("Invalid target token account")]
@@ -18,4 +18,14 @@ pub enum ErrorCode {
     InvalidCloseTokenAccount,
     #[msg("Invalid holder token account")]
     InvalidHolderTokenAccount,
+    #[msg("Invalid standard")]
+    InvalidStandard,
+    #[msg("Invalid pre transfer instruction")]
+    InvalidPreTransferInstruction,
+    #[msg("Invalid post transfer instruction")]
+    InvalidPostTransferInstruction,
+    #[msg("Disallowed program included in transfer")]
+    ProgramDisallowed,
+    #[msg("Program not allowed in allowed programs to transfer")]
+    ProgramNotAllowed,
 }

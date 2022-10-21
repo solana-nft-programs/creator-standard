@@ -78,24 +78,27 @@ createErrorFromNameLookup.set(
 )
 
 /**
- * InvaldiMint: 'Invalid mint'
+ * InvalidMintManager: 'Invalid mint manager'
  *
  * @category Errors
  * @category generated
  */
-export class InvaldiMintError extends Error {
+export class InvalidMintManagerError extends Error {
   readonly code: number = 0x1773
-  readonly name: string = 'InvaldiMint'
+  readonly name: string = 'InvalidMintManager'
   constructor() {
-    super('Invalid mint')
+    super('Invalid mint manager')
     if (typeof Error.captureStackTrace === 'function') {
-      Error.captureStackTrace(this, InvaldiMintError)
+      Error.captureStackTrace(this, InvalidMintManagerError)
     }
   }
 }
 
-createErrorFromCodeLookup.set(0x1773, () => new InvaldiMintError())
-createErrorFromNameLookup.set('InvaldiMint', () => new InvaldiMintError())
+createErrorFromCodeLookup.set(0x1773, () => new InvalidMintManagerError())
+createErrorFromNameLookup.set(
+  'InvalidMintManager',
+  () => new InvalidMintManagerError()
+)
 
 /**
  * InvlaidHolderTokenAccount: 'Invalid holder token account'
@@ -196,6 +199,127 @@ createErrorFromCodeLookup.set(
 createErrorFromNameLookup.set(
   'InvalidHolderTokenAccount',
   () => new InvalidHolderTokenAccountError()
+)
+
+/**
+ * InvalidStandard: 'Invalid standard'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidStandardError extends Error {
+  readonly code: number = 0x1778
+  readonly name: string = 'InvalidStandard'
+  constructor() {
+    super('Invalid standard')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidStandardError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1778, () => new InvalidStandardError())
+createErrorFromNameLookup.set(
+  'InvalidStandard',
+  () => new InvalidStandardError()
+)
+
+/**
+ * InvalidPreTransferInstruction: 'Invalid pre transfer instruction'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidPreTransferInstructionError extends Error {
+  readonly code: number = 0x1779
+  readonly name: string = 'InvalidPreTransferInstruction'
+  constructor() {
+    super('Invalid pre transfer instruction')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidPreTransferInstructionError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(
+  0x1779,
+  () => new InvalidPreTransferInstructionError()
+)
+createErrorFromNameLookup.set(
+  'InvalidPreTransferInstruction',
+  () => new InvalidPreTransferInstructionError()
+)
+
+/**
+ * InvalidPostTransferInstruction: 'Invalid post transfer instruction'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidPostTransferInstructionError extends Error {
+  readonly code: number = 0x177a
+  readonly name: string = 'InvalidPostTransferInstruction'
+  constructor() {
+    super('Invalid post transfer instruction')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidPostTransferInstructionError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(
+  0x177a,
+  () => new InvalidPostTransferInstructionError()
+)
+createErrorFromNameLookup.set(
+  'InvalidPostTransferInstruction',
+  () => new InvalidPostTransferInstructionError()
+)
+
+/**
+ * ProgramDisallowed: 'Disallowed program included in transfer'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class ProgramDisallowedError extends Error {
+  readonly code: number = 0x177b
+  readonly name: string = 'ProgramDisallowed'
+  constructor() {
+    super('Disallowed program included in transfer')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, ProgramDisallowedError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x177b, () => new ProgramDisallowedError())
+createErrorFromNameLookup.set(
+  'ProgramDisallowed',
+  () => new ProgramDisallowedError()
+)
+
+/**
+ * ProgramNotAllowed: 'Program not allowed in allowed programs to transfer'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class ProgramNotAllowedError extends Error {
+  readonly code: number = 0x177c
+  readonly name: string = 'ProgramNotAllowed'
+  constructor() {
+    super('Program not allowed in allowed programs to transfer')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, ProgramNotAllowedError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x177c, () => new ProgramNotAllowedError())
+createErrorFromNameLookup.set(
+  'ProgramNotAllowed',
+  () => new ProgramNotAllowedError()
 )
 
 /**

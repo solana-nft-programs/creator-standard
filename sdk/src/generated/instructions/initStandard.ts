@@ -5,9 +5,9 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from "@metaplex-foundation/beet";
-import * as web3 from "@solana/web3.js";
-import { InitStandardIx, initStandardIxBeet } from "../types/InitStandardIx";
+import * as beet from '@metaplex-foundation/beet'
+import * as web3 from '@solana/web3.js'
+import { InitStandardIx, initStandardIxBeet } from '../types/InitStandardIx'
 
 /**
  * @category Instructions
@@ -15,8 +15,8 @@ import { InitStandardIx, initStandardIxBeet } from "../types/InitStandardIx";
  * @category generated
  */
 export type InitStandardInstructionArgs = {
-  ix: InitStandardIx;
-};
+  ix: InitStandardIx
+}
 /**
  * @category Instructions
  * @category InitStandard
@@ -24,15 +24,15 @@ export type InitStandardInstructionArgs = {
  */
 export const initStandardStruct = new beet.FixableBeetArgsStruct<
   InitStandardInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */;
+    instructionDiscriminator: number[] /* size: 8 */
   }
 >(
   [
-    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
-    ["ix", initStandardIxBeet],
+    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
+    ['ix', initStandardIxBeet],
   ],
-  "InitStandardInstructionArgs"
-);
+  'InitStandardInstructionArgs'
+)
 /**
  * Accounts required by the _initStandard_ instruction
  *
@@ -44,15 +44,15 @@ export const initStandardStruct = new beet.FixableBeetArgsStruct<
  * @category generated
  */
 export type InitStandardInstructionAccounts = {
-  standard: web3.PublicKey;
-  authority: web3.PublicKey;
-  payer: web3.PublicKey;
-  systemProgram?: web3.PublicKey;
-};
+  standard: web3.PublicKey
+  authority: web3.PublicKey
+  payer: web3.PublicKey
+  systemProgram?: web3.PublicKey
+}
 
 export const initStandardInstructionDiscriminator = [
   85, 84, 110, 234, 166, 27, 75, 173,
-];
+]
 
 /**
  * Creates a _InitStandard_ instruction.
@@ -67,12 +67,12 @@ export const initStandardInstructionDiscriminator = [
 export function createInitStandardInstruction(
   accounts: InitStandardInstructionAccounts,
   args: InitStandardInstructionArgs,
-  programId = new web3.PublicKey("creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez")
+  programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
   const [data] = initStandardStruct.serialize({
     instructionDiscriminator: initStandardInstructionDiscriminator,
     ...args,
-  });
+  })
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.standard,
@@ -94,12 +94,12 @@ export function createInitStandardInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ];
+  ]
 
   const ix = new web3.TransactionInstruction({
     programId,
     keys,
     data,
-  });
-  return ix;
+  })
+  return ix
 }

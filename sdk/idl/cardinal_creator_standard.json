@@ -141,6 +141,355 @@
           }
         }
       ]
+    },
+    {
+      "name": "initMint",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "standard",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "targetTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "target",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "collector",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initAccount",
+      "accounts": [
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccountOwner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "associatedTokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "approve",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "holderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holder",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "delegate",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "revoke",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "holderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holder",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "burn",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holder",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "owner",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "transfer",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "standard",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "from",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "to",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "instructions",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "preTransfer",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "standard",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "instructions",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "postTransfer",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "standard",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "instructions",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -194,7 +543,7 @@
             "type": "bool"
           },
           {
-            "name": "standardName",
+            "name": "name",
             "type": "string"
           },
           {
@@ -236,7 +585,7 @@
             "type": "bool"
           },
           {
-            "name": "standardName",
+            "name": "name",
             "type": "string"
           },
           {
@@ -297,8 +646,8 @@
     },
     {
       "code": 6003,
-      "name": "InvaldiMint",
-      "msg": "Invalid mint"
+      "name": "InvalidMintManager",
+      "msg": "Invalid mint manager"
     },
     {
       "code": 6004,
@@ -319,6 +668,31 @@
       "code": 6007,
       "name": "InvalidHolderTokenAccount",
       "msg": "Invalid holder token account"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidStandard",
+      "msg": "Invalid standard"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidPreTransferInstruction",
+      "msg": "Invalid pre transfer instruction"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidPostTransferInstruction",
+      "msg": "Invalid post transfer instruction"
+    },
+    {
+      "code": 6011,
+      "name": "ProgramDisallowed",
+      "msg": "Disallowed program included in transfer"
+    },
+    {
+      "code": 6012,
+      "name": "ProgramNotAllowed",
+      "msg": "Program not allowed in allowed programs to transfer"
     }
   ],
   "metadata": {

@@ -31,4 +31,41 @@ pub mod cardinal_creator_standard {
     pub fn update_standard(ctx: Context<UpdateStandardCtx>, ix: UpdateStandardIx) -> Result<()> {
         standard::update_standard::handler(ctx, ix)
     }
+
+    // token
+    pub fn init_mint(ctx: Context<InitMintCtx>) -> Result<()> {
+        token::init_mint::handler(ctx)
+    }
+
+    pub fn init_account(ctx: Context<InitAccountCtx>) -> Result<()> {
+        token::init_account::handler(ctx)
+    }
+
+    pub fn approve(ctx: Context<ApproveCtx>) -> Result<()> {
+        token::approve::handler(ctx)
+    }
+
+    pub fn revoke(ctx: Context<RevokeCtx>) -> Result<()> {
+        token::revoke::handler(ctx)
+    }
+
+    pub fn burn(ctx: Context<BurnCtx>) -> Result<()> {
+        token::burn::handler(ctx)
+    }
+
+    pub fn close(ctx: Context<CloseCtx>) -> Result<()> {
+        token::close::handler(ctx)
+    }
+
+    pub fn transfer(ctx: Context<TransferCtx>) -> Result<()> {
+        token::transfer::handler(ctx)
+    }
+
+    pub fn pre_transfer(ctx: Context<PreTransferCtx>) -> Result<()> {
+        token::pre_transfer::handler(ctx)
+    }
+
+    pub fn post_transfer(ctx: Context<PostTransferCtx>) -> Result<()> {
+        token::post_transfer::handler(ctx)
+    }
 }
