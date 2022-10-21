@@ -25,7 +25,7 @@ pub struct InitMintCtx<'info> {
     /// CHECK: Account is not read from
     #[account(mut)]
     mint: UncheckedAccount<'info>,
-    standard: Account<'info, Standard>,
+    ruleset: Account<'info, Ruleset>,
 
     /// CHECK: Account created or checked in handler
     #[account(mut)]
@@ -51,7 +51,7 @@ pub fn handler(ctx: Context<InitMintCtx>) -> Result<()> {
     mint_manager.version = 0;
     mint_manager.authority = ctx.accounts.authority.key();
     mint_manager.mint = ctx.accounts.mint.key();
-    mint_manager.standard = ctx.accounts.standard.key();
+    mint_manager.ruleset = ctx.accounts.ruleset.key();
 
     // Create Mint
     invoke(

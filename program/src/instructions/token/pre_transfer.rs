@@ -7,7 +7,7 @@ pub const PRE_TRANSFER_DISCRIMINATOR: [u8; 8] = [158, 85, 53, 202, 155, 118, 19,
 #[derive(Accounts)]
 pub struct PreTransferCtx<'info> {
     mint_manager: Account<'info, MintManager>,
-    standard: Account<'info, Standard>,
+    ruleset: Account<'info, Ruleset>,
     /// CHECK: This is not dangerous because the ID is checked with instructions sysvar
     #[account(address = sysvar::instructions::id())]
     instructions: UncheckedAccount<'info>,

@@ -7,7 +7,7 @@ pub const POST_TRANSFER_DISCRIMINATOR: [u8; 8] = [195, 252, 43, 202, 149, 119, 1
 #[derive(Accounts)]
 pub struct PostTransferCtx<'info> {
     mint_manager: Account<'info, MintManager>,
-    standard: Account<'info, Standard>,
+    ruleset: Account<'info, Ruleset>,
     /// CHECK: This is not dangerous because the ID is checked with instructions sysvar
     #[account(address = sysvar::instructions::id())]
     instructions: UncheckedAccount<'info>,

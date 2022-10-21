@@ -22,8 +22,8 @@ use super::PRE_TRANSFER_DISCRIMINATOR;
 pub struct TransferCtx<'info> {
     #[account(constraint = mint.key() == mint_manager.mint @ ErrorCode::InvalidMintManager)]
     mint_manager: Box<Account<'info, MintManager>>,
-    #[account(constraint = standard.key() == mint_manager.standard @ ErrorCode::InvalidStandard)]
-    standard: Account<'info, Standard>,
+    #[account(constraint = ruleset.key() == mint_manager.ruleset @ ErrorCode::InvalidRuleset)]
+    ruleset: Account<'info, Ruleset>,
     mint: Box<Account<'info, Mint>>,
 
     #[account(mut)]
@@ -48,7 +48,7 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         read_u16(&mut current, &instruction_sysvar).expect("Invalid instruction");
 
     // check pre/post
-    if ctx.accounts.standard.check_seller_fee_basis_points {
+    if ctx.accounts.ruleset.check_seller_fee_basis_points {
         // check pre_transfer
         let first_ix = load_instruction_at_checked(0, &instructions_account_info)
             .expect("Failed to get first instruction");
@@ -71,12 +71,12 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
 
     // check allowed / disallowed
     let mut allowed_programs = HashSet::new();
-    for program_id in &ctx.accounts.standard.allowed_programs {
+    for program_id in &ctx.accounts.ruleset.allowed_programs {
         allowed_programs.insert(program_id);
     }
 
     let mut disallowed_addresses = HashSet::new();
-    for program_id in &ctx.accounts.standard.disallowed_addresses {
+    for program_id in &ctx.accounts.ruleset.disallowed_addresses {
         disallowed_addresses.insert(program_id);
     }
 

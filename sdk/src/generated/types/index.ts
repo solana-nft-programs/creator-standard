@@ -1,3 +1,3 @@
-export * from './InitStandardIx'
+export * from './InitRulesetIx'
 export * from './UpdateMintManagerIx'
-export * from './UpdateStandardIx'
+export * from './UpdateRulesetIx'

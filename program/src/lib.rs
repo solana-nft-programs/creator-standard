@@ -23,13 +23,13 @@ pub mod cardinal_creator_standard {
         mint_manager::update_mint_manager::handler(ctx, ix)
     }
 
-    // standard
-    pub fn init_standard(ctx: Context<InitStandardCtx>, ix: InitStandardIx) -> Result<()> {
-        standard::init_standard::handler(ctx, ix)
+    // ruleset
+    pub fn init_ruleset(ctx: Context<InitRulesetCtx>, ix: InitRulesetIx) -> Result<()> {
+        ruleset::init_ruleset::handler(ctx, ix)
     }
 
-    pub fn update_standard(ctx: Context<UpdateStandardCtx>, ix: UpdateStandardIx) -> Result<()> {
-        standard::update_standard::handler(ctx, ix)
+    pub fn update_ruleset(ctx: Context<UpdateRulesetCtx>, ix: UpdateRulesetIx) -> Result<()> {
+        ruleset::update_ruleset::handler(ctx, ix)
     }
 
     // token

@@ -23,7 +23,7 @@ export const postTransferStruct = new beet.BeetArgsStruct<{
  * Accounts required by the _postTransfer_ instruction
  *
  * @property [] mintManager
- * @property [] standard
+ * @property [] ruleset
  * @property [] instructions
  * @category Instructions
  * @category PostTransfer
@@ -31,7 +31,7 @@ export const postTransferStruct = new beet.BeetArgsStruct<{
  */
 export type PostTransferInstructionAccounts = {
   mintManager: web3.PublicKey
-  standard: web3.PublicKey
+  ruleset: web3.PublicKey
   instructions: web3.PublicKey
 }
 
@@ -61,7 +61,7 @@ export function createPostTransferInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.standard,
+      pubkey: accounts.ruleset,
       isWritable: false,
       isSigner: false,
     },
