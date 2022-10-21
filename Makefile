@@ -6,7 +6,7 @@ all: build start test stop
 
 build:
 	cd program && anchor build
-	cd sdk && yarn idl:generate
+	cd sdk && yarn idl:generate && yarn solita
 
 start:
 	pkill solana-test-validator || true

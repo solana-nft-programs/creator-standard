@@ -10,7 +10,7 @@ import * as beet from '@metaplex-foundation/beet'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
 export type InitStandardIx = {
   checkSellerFeeBasisPoints: boolean
-  standardName: string
+  name: string
   disallowedPrograms: web3.PublicKey[]
   allowedPrograms: web3.PublicKey[]
 }
@@ -23,7 +23,7 @@ export const initStandardIxBeet =
   new beet.FixableBeetArgsStruct<InitStandardIx>(
     [
       ['checkSellerFeeBasisPoints', beet.bool],
-      ['standardName', beet.utf8String],
+      ['name', beet.utf8String],
       ['disallowedPrograms', beet.array(beetSolana.publicKey)],
       ['allowedPrograms', beet.array(beetSolana.publicKey)],
     ],

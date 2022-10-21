@@ -14,6 +14,7 @@ import {
 let mint: PublicKey;
 
 const STANDARD_NAME = "global";
+const STANDARD_ID = findStandardId(STANDARD_NAME);
 
 beforeAll(async () => {
   const provider = await getProvider();
@@ -30,12 +31,11 @@ beforeAll(async () => {
 
 test("Create standard", async () => {
   const provider = await getProvider();
-  const standardId = findStandardId(STANDARD_NAME);
   const tx = new Transaction();
   tx.add(
     createInitStandardInstruction(
       {
-        standard: standardId,
+        standard: STANDARD_ID,
         authority: provider.wallet.publicKey,
         payer: provider.wallet.publicKey,
       },
@@ -52,7 +52,7 @@ test("Create standard", async () => {
   await executeTransaction(provider.connection, tx, provider.wallet);
   const standard = await Standard.fromAccountAddress(
     provider.connection,
-    standardId
+    STANDARD_ID
   );
   expect(standard.authority.toString()).toBe(
     provider.wallet.publicKey.toString()

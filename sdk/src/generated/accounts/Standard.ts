@@ -19,7 +19,7 @@ export type StandardArgs = {
   version: number
   authority: web3.PublicKey
   checkSellerFeeBasisPoints: boolean
-  standardName: string
+  name: string
   disallowedPrograms: web3.PublicKey[]
   allowedPrograms: web3.PublicKey[]
 }
@@ -38,7 +38,7 @@ export class Standard implements StandardArgs {
     readonly version: number,
     readonly authority: web3.PublicKey,
     readonly checkSellerFeeBasisPoints: boolean,
-    readonly standardName: string,
+    readonly name: string,
     readonly disallowedPrograms: web3.PublicKey[],
     readonly allowedPrograms: web3.PublicKey[]
   ) {}
@@ -52,7 +52,7 @@ export class Standard implements StandardArgs {
       args.version,
       args.authority,
       args.checkSellerFeeBasisPoints,
-      args.standardName,
+      args.name,
       args.disallowedPrograms,
       args.allowedPrograms
     )
@@ -163,7 +163,7 @@ export class Standard implements StandardArgs {
       version: this.version,
       authority: this.authority.toBase58(),
       checkSellerFeeBasisPoints: this.checkSellerFeeBasisPoints,
-      standardName: this.standardName,
+      name: this.name,
       disallowedPrograms: this.disallowedPrograms,
       allowedPrograms: this.allowedPrograms,
     }
@@ -186,7 +186,7 @@ export const standardBeet = new beet.FixableBeetStruct<
     ['version', beet.u8],
     ['authority', beetSolana.publicKey],
     ['checkSellerFeeBasisPoints', beet.bool],
-    ['standardName', beet.utf8String],
+    ['name', beet.utf8String],
     ['disallowedPrograms', beet.array(beetSolana.publicKey)],
     ['allowedPrograms', beet.array(beetSolana.publicKey)],
   ],

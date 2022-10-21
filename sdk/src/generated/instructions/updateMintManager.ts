@@ -5,12 +5,12 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from "@metaplex-foundation/beet";
-import * as web3 from "@solana/web3.js";
+import * as beet from '@metaplex-foundation/beet'
+import * as web3 from '@solana/web3.js'
 import {
   UpdateMintManagerIx,
   updateMintManagerIxBeet,
-} from "../types/UpdateMintManagerIx";
+} from '../types/UpdateMintManagerIx'
 
 /**
  * @category Instructions
@@ -18,8 +18,8 @@ import {
  * @category generated
  */
 export type UpdateMintManagerInstructionArgs = {
-  ix: UpdateMintManagerIx;
-};
+  ix: UpdateMintManagerIx
+}
 /**
  * @category Instructions
  * @category UpdateMintManager
@@ -27,15 +27,15 @@ export type UpdateMintManagerInstructionArgs = {
  */
 export const updateMintManagerStruct = new beet.BeetArgsStruct<
   UpdateMintManagerInstructionArgs & {
-    instructionDiscriminator: number[] /* size: 8 */;
+    instructionDiscriminator: number[] /* size: 8 */
   }
 >(
   [
-    ["instructionDiscriminator", beet.uniformFixedSizeArray(beet.u8, 8)],
-    ["ix", updateMintManagerIxBeet],
+    ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
+    ['ix', updateMintManagerIxBeet],
   ],
-  "UpdateMintManagerInstructionArgs"
-);
+  'UpdateMintManagerInstructionArgs'
+)
 /**
  * Accounts required by the _updateMintManager_ instruction
  *
@@ -47,15 +47,15 @@ export const updateMintManagerStruct = new beet.BeetArgsStruct<
  * @category generated
  */
 export type UpdateMintManagerInstructionAccounts = {
-  mintManager: web3.PublicKey;
-  standard: web3.PublicKey;
-  authority: web3.PublicKey;
-  systemProgram?: web3.PublicKey;
-};
+  mintManager: web3.PublicKey
+  standard: web3.PublicKey
+  authority: web3.PublicKey
+  systemProgram?: web3.PublicKey
+}
 
 export const updateMintManagerInstructionDiscriminator = [
   70, 171, 8, 198, 47, 206, 211, 164,
-];
+]
 
 /**
  * Creates a _UpdateMintManager_ instruction.
@@ -70,12 +70,12 @@ export const updateMintManagerInstructionDiscriminator = [
 export function createUpdateMintManagerInstruction(
   accounts: UpdateMintManagerInstructionAccounts,
   args: UpdateMintManagerInstructionArgs,
-  programId = new web3.PublicKey("creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez")
+  programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
   const [data] = updateMintManagerStruct.serialize({
     instructionDiscriminator: updateMintManagerInstructionDiscriminator,
     ...args,
-  });
+  })
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.mintManager,
@@ -97,12 +97,12 @@ export function createUpdateMintManagerInstruction(
       isWritable: false,
       isSigner: false,
     },
-  ];
+  ]
 
   const ix = new web3.TransactionInstruction({
     programId,
     keys,
     data,
-  });
-  return ix;
+  })
+  return ix
 }
