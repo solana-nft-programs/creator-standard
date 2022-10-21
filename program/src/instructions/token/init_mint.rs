@@ -59,9 +59,7 @@ pub fn handler(ctx: Context<InitMintCtx>) -> Result<()> {
         &create_account(
             ctx.accounts.payer.key,
             ctx.accounts.mint.key,
-            ctx.accounts
-                .rent
-                .minimum_balance(spl_token::state::Mint::LEN),
+            Rent::get()?.minimum_balance(spl_token::state::Mint::LEN),
             spl_token::state::Mint::LEN as u64,
             &spl_token::id(),
         ),
