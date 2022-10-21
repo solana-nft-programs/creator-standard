@@ -1,5 +1,4 @@
 use anchor_spl::token::{self, FreezeAccount, Mint, Revoke, ThawAccount, Token, TokenAccount};
-use mpl_token_metadata::utils::assert_derivation;
 
 use {
     crate::{errors::ErrorCode, state::*},
