@@ -5,6 +5,7 @@ use anchor_lang::prelude::*;
 pub struct InitRulesetIx {
     pub check_seller_fee_basis_points: bool,
     pub name: String,
+    pub collector: Pubkey,
     pub disallowed_addresses: Vec<Pubkey>,
     pub allowed_programs: Vec<Pubkey>,
 }
@@ -31,6 +32,7 @@ pub fn handler(ctx: Context<InitRulesetCtx>, ix: InitRulesetIx) -> Result<()> {
     ruleset.bump = *ctx.bumps.get("ruleset").unwrap();
     ruleset.version = 0;
     ruleset.authority = ctx.accounts.authority.key();
+    ruleset.collector = ix.collector;
     ruleset.check_seller_fee_basis_points = ix.check_seller_fee_basis_points;
     ruleset.name = ix.name;
     ruleset.allowed_programs = ix.allowed_programs;

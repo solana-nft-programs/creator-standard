@@ -10,9 +10,9 @@ export const findMintManagerId = (mintId: PublicKey) => {
   )[0];
 };
 
-export const findStandardId = (name: string) => {
+export const findRulesetId = (name: string) => {
   return findProgramAddressSync(
-    [utils.bytes.utf8.encode("standard"), utils.bytes.utf8.encode(name)],
+    [utils.bytes.utf8.encode("ruleset"), utils.bytes.utf8.encode(name)],
     PROGRAM_ID
   )[0];
 };

@@ -619,6 +619,10 @@ export type CardinalCreatorStandard = {
             "type": "string"
           },
           {
+            "name": "collector",
+            "type": "publicKey"
+          },
+          {
             "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
@@ -638,6 +642,14 @@ export type CardinalCreatorStandard = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "collector",
+            "type": "publicKey"
+          },
           {
             "name": "checkSellerFeeBasisPoints",
             "type": "bool"
@@ -1382,6 +1394,10 @@ export const IDL: CardinalCreatorStandard = {
             "type": "string"
           },
           {
+            "name": "collector",
+            "type": "publicKey"
+          },
+          {
             "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
@@ -1401,6 +1417,14 @@ export const IDL: CardinalCreatorStandard = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "collector",
+            "type": "publicKey"
+          },
           {
             "name": "checkSellerFeeBasisPoints",
             "type": "bool"
