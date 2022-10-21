@@ -10,6 +10,7 @@ use anchor_spl::token::TokenAccount;
 use anchor_spl::token::{self};
 use solana_program::program_pack::Pack;
 use solana_program::system_instruction::create_account;
+use solana_program::system_instruction::transfer;
 use spl_associated_token_account::get_associated_token_address;
 
 #[derive(Accounts)]
@@ -33,7 +34,7 @@ pub struct InitMintCtx<'info> {
     target: Signer<'info>,
 
     /// CHECK: Account is not read from
-    #[account(mut)]
+    #[account(mut, constraint = collector.key() == ruleset.collector @ ErrorCode::InvalidCollector)]
     collector: UncheckedAccount<'info>,
     authority: Signer<'info>,
     #[account(mut)]
@@ -132,5 +133,17 @@ pub fn handler(ctx: Context<InitMintCtx>) -> Result<()> {
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);
     token::mint_to(cpi_context, 1)?;
 
+    invoke(
+        &transfer(
+            &ctx.accounts.payer.key(),
+            &ctx.accounts.collector.key(),
+            CREATION_LAMPORTS,
+        ),
+        &[
+            ctx.accounts.payer.to_account_info(),
+            ctx.accounts.collector.to_account_info(),
+            ctx.accounts.system_program.to_account_info(),
+        ],
+    )?;
     Ok(())
 }
