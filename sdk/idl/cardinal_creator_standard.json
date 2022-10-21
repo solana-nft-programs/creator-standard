@@ -463,24 +463,14 @@
       "name": "preTransfer",
       "accounts": [
         {
-          "name": "mintManager",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "ruleset",
-          "isMut": false,
+          "name": "accountBalances",
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "payer",
           "isMut": true,
           "isSigner": true
-        },
-        {
-          "name": "accountBalances",
-          "isMut": true,
-          "isSigner": false
         },
         {
           "name": "instructions",
@@ -494,13 +484,13 @@
       "name": "postTransfer",
       "accounts": [
         {
-          "name": "mintManager",
-          "isMut": false,
+          "name": "accountBalances",
+          "isMut": true,
           "isSigner": false
         },
         {
-          "name": "ruleset",
-          "isMut": false,
+          "name": "collector",
+          "isMut": true,
           "isSigner": false
         },
         {
@@ -681,6 +671,10 @@
             "type": "publicKey"
           },
           {
+            "name": "size",
+            "type": "u64"
+          },
+          {
             "name": "balance",
             "type": "u64"
           }
@@ -758,6 +752,11 @@
       "code": 6013,
       "name": "UnknownAccount",
       "msg": "Unknown account found in instruction"
+    },
+    {
+      "code": 6014,
+      "name": "AccountNotFound",
+      "msg": "Account not found in instruction"
     }
   ],
   "metadata": {

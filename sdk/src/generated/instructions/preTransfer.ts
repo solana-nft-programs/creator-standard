@@ -22,20 +22,16 @@ export const preTransferStruct = new beet.BeetArgsStruct<{
 /**
  * Accounts required by the _preTransfer_ instruction
  *
- * @property [] mintManager
- * @property [] ruleset
- * @property [_writable_, **signer**] payer
  * @property [_writable_] accountBalances
+ * @property [_writable_, **signer**] payer
  * @property [] instructions
  * @category Instructions
  * @category PreTransfer
  * @category generated
  */
 export type PreTransferInstructionAccounts = {
-  mintManager: web3.PublicKey
-  ruleset: web3.PublicKey
-  payer: web3.PublicKey
   accountBalances: web3.PublicKey
+  payer: web3.PublicKey
   instructions: web3.PublicKey
 }
 
@@ -60,24 +56,14 @@ export function createPreTransferInstruction(
   })
   const keys: web3.AccountMeta[] = [
     {
-      pubkey: accounts.mintManager,
-      isWritable: false,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.ruleset,
-      isWritable: false,
+      pubkey: accounts.accountBalances,
+      isWritable: true,
       isSigner: false,
     },
     {
       pubkey: accounts.payer,
       isWritable: true,
       isSigner: true,
-    },
-    {
-      pubkey: accounts.accountBalances,
-      isWritable: true,
-      isSigner: false,
     },
     {
       pubkey: accounts.instructions,

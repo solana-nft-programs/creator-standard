@@ -53,6 +53,14 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
             .expect("Failed to get first instruction");
         let data: &[u8] = &first_ix.data;
         let disc_bytes = array_ref![data, 0, 8];
+        // check first account is account balances for this mint
+        let mint = ctx.accounts.mint_manager.mint;
+        let path = &[ACCOUNT_BALANCES_SEED.as_bytes(), mint.as_ref()];
+        let (account_balances_address, _bump) = Pubkey::find_program_address(path, ctx.program_id);
+        if account_balances_address != first_ix.accounts[0].pubkey {
+            return Err(error!(ErrorCode::InvalidPreTransferInstruction));
+        }
+        // check instruction
         if first_ix.program_id != *ctx.program_id || disc_bytes != &PRE_TRANSFER_DISCRIMINATOR {
             return Err(error!(ErrorCode::InvalidPreTransferInstruction));
         }
@@ -61,6 +69,11 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         let last_ix =
             load_instruction_at_checked(num_instructions.into(), &instructions_account_info)
                 .expect("Failed to get last instruction");
+        // check first account is account balances for this mint
+        if account_balances_address != last_ix.accounts[0].pubkey {
+            return Err(error!(ErrorCode::InvalidPreTransferInstruction));
+        }
+        // check instruction
         let data: &[u8] = &last_ix.data;
         let disc_bytes = array_ref![data, 0, 8];
         if last_ix.program_id != *ctx.program_id || disc_bytes != &POST_TRANSFER_DISCRIMINATOR {

@@ -340,6 +340,29 @@ createErrorFromCodeLookup.set(0x177d, () => new UnknownAccountError())
 createErrorFromNameLookup.set('UnknownAccount', () => new UnknownAccountError())
 
 /**
+ * AccountNotFound: 'Account not found in instruction'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class AccountNotFoundError extends Error {
+  readonly code: number = 0x177e
+  readonly name: string = 'AccountNotFound'
+  constructor() {
+    super('Account not found in instruction')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, AccountNotFoundError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x177e, () => new AccountNotFoundError())
+createErrorFromNameLookup.set(
+  'AccountNotFound',
+  () => new AccountNotFoundError()
+)
+
+/**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors
  * @category generated

@@ -36,6 +36,7 @@ pub const ACCOUNT_BALANCES_SEED: &str = "account-balances";
 pub struct AccountBalance {
     pub address: Pubkey,
     pub mint: Pubkey,
+    pub size: u64,
     pub balance: u64,
 }
 
