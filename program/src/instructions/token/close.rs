@@ -2,7 +2,11 @@
 use crate::errors::ErrorCode;
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_spl::token::{self, CloseAccount, ThawAccount, Token, TokenAccount};
+use anchor_spl::token::CloseAccount;
+use anchor_spl::token::ThawAccount;
+use anchor_spl::token::Token;
+use anchor_spl::token::TokenAccount;
+use anchor_spl::token::{self};
 
 #[derive(Accounts)]
 pub struct CloseCtx<'info> {
