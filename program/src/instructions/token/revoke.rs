@@ -8,7 +8,7 @@ use {
 
 #[derive(Accounts)]
 pub struct RevokeCtx<'info> {
-    #[account(mut, seeds = [MINT_MANAGER_SEED.as_bytes(), mint.key().as_ref()], bump)]
+    #[account(mut)]
     mint_manager: Account<'info, MintManager>,
     #[account(constraint = mint.key() == mint_manager.mint @ ErrorCode::InvalidMint)]
     mint: Box<Account<'info, Mint>>,
@@ -29,13 +29,11 @@ pub struct RevokeCtx<'info> {
 
 pub fn handler(ctx: Context<RevokeCtx>) -> Result<()> {
     let mint = ctx.accounts.mint.key();
-    let path = &[MINT_MANAGER_SEED.as_bytes(), mint.as_ref()];
-    let bump_seed = assert_derivation(
-        ctx.program_id,
-        &ctx.accounts.mint_manager.to_account_info(),
-        path,
-    )?;
-    let mint_manager_seeds = &[MINT_MANAGER_SEED.as_bytes(), mint.as_ref(), &[bump_seed]];
+    let mint_manager_seeds = &[
+        MINT_MANAGER_SEED.as_bytes(),
+        mint.as_ref(),
+        &[ctx.accounts.mint_manager.bump],
+    ];
     let mint_manager_signer = &[&mint_manager_seeds[..]];
 
     let cpi_accounts = ThawAccount {
