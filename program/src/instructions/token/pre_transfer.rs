@@ -79,7 +79,7 @@ pub fn handler(ctx: Context<PreTransferCtx>) -> Result<()> {
             ctx.accounts.account_balances.key,
             Rent::get()?.minimum_balance(space),
             space.try_into().expect("Error allocating space"),
-            &spl_token::id(),
+            ctx.program_id,
         ),
         &[
             ctx.accounts.payer.to_account_info(),
