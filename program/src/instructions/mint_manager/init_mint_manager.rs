@@ -11,8 +11,6 @@ use spl_token::instruction::AuthorityType;
 
 #[derive(Accounts)]
 pub struct InitMintManagerCtx<'info> {
-    #[account(mut)]
-    mint: Account<'info, Mint>,
     #[account(
         init,
         payer = payer,
@@ -21,6 +19,8 @@ pub struct InitMintManagerCtx<'info> {
         bump,
     )]
     mint_manager: Account<'info, MintManager>,
+    #[account(mut)]
+    mint: Account<'info, Mint>,
     standard: Account<'info, Standard>,
 
     /// CHECK: Account is not read from
