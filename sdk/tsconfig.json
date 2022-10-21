@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "./lib",
-    "rootDir": "./src",
 
     // target
     "target": "ES2019",
@@ -36,5 +35,5 @@
     "declarationMap": true,
     "inlineSources": true
   },
-  "include": ["src/", "tests/", "src/utils.ts"]
+  "include": ["src/", "tests/"]
 }
