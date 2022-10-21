@@ -40,7 +40,7 @@ export const updateMintManagerStruct = new beet.BeetArgsStruct<
  * Accounts required by the _updateMintManager_ instruction
  *
  * @property [] mintManager
- * @property [] standard
+ * @property [] ruleset
  * @property [**signer**] authority
  * @category Instructions
  * @category UpdateMintManager
@@ -48,7 +48,7 @@ export const updateMintManagerStruct = new beet.BeetArgsStruct<
  */
 export type UpdateMintManagerInstructionAccounts = {
   mintManager: web3.PublicKey
-  standard: web3.PublicKey
+  ruleset: web3.PublicKey
   authority: web3.PublicKey
   systemProgram?: web3.PublicKey
 }
@@ -83,7 +83,7 @@ export function createUpdateMintManagerInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.standard,
+      pubkey: accounts.ruleset,
       isWritable: false,
       isSigner: false,
     },

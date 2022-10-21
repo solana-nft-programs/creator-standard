@@ -24,7 +24,7 @@ export const transferStruct = new beet.BeetArgsStruct<{
  * Accounts required by the _transfer_ instruction
  *
  * @property [] mintManager
- * @property [] standard
+ * @property [] ruleset
  * @property [] mint
  * @property [_writable_] from
  * @property [_writable_] to
@@ -36,7 +36,7 @@ export const transferStruct = new beet.BeetArgsStruct<{
  */
 export type TransferInstructionAccounts = {
   mintManager: web3.PublicKey
-  standard: web3.PublicKey
+  ruleset: web3.PublicKey
   mint: web3.PublicKey
   from: web3.PublicKey
   to: web3.PublicKey
@@ -73,7 +73,7 @@ export function createTransferInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.standard,
+      pubkey: accounts.ruleset,
       isWritable: false,
       isSigner: false,
     },

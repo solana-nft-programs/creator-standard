@@ -19,7 +19,7 @@ export type MintManagerArgs = {
   version: number
   mint: web3.PublicKey
   authority: web3.PublicKey
-  standard: web3.PublicKey
+  ruleset: web3.PublicKey
 }
 
 export const mintManagerDiscriminator = [202, 47, 44, 178, 55, 215, 117, 40]
@@ -36,7 +36,7 @@ export class MintManager implements MintManagerArgs {
     readonly version: number,
     readonly mint: web3.PublicKey,
     readonly authority: web3.PublicKey,
-    readonly standard: web3.PublicKey
+    readonly ruleset: web3.PublicKey
   ) {}
 
   /**
@@ -48,7 +48,7 @@ export class MintManager implements MintManagerArgs {
       args.version,
       args.mint,
       args.authority,
-      args.standard
+      args.ruleset
     )
   }
 
@@ -155,7 +155,7 @@ export class MintManager implements MintManagerArgs {
       version: this.version,
       mint: this.mint.toBase58(),
       authority: this.authority.toBase58(),
-      standard: this.standard.toBase58(),
+      ruleset: this.ruleset.toBase58(),
     }
   }
 }
@@ -176,7 +176,7 @@ export const mintManagerBeet = new beet.BeetStruct<
     ['version', beet.u8],
     ['mint', beetSolana.publicKey],
     ['authority', beetSolana.publicKey],
-    ['standard', beetSolana.publicKey],
+    ['ruleset', beetSolana.publicKey],
   ],
   MintManager.fromArgs,
   'MintManager'

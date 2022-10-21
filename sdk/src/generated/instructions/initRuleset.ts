@@ -7,75 +7,75 @@
 
 import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
-import { InitStandardIx, initStandardIxBeet } from '../types/InitStandardIx'
+import { InitRulesetIx, initRulesetIxBeet } from '../types/InitRulesetIx'
 
 /**
  * @category Instructions
- * @category InitStandard
+ * @category InitRuleset
  * @category generated
  */
-export type InitStandardInstructionArgs = {
-  ix: InitStandardIx
+export type InitRulesetInstructionArgs = {
+  ix: InitRulesetIx
 }
 /**
  * @category Instructions
- * @category InitStandard
+ * @category InitRuleset
  * @category generated
  */
-export const initStandardStruct = new beet.FixableBeetArgsStruct<
-  InitStandardInstructionArgs & {
+export const initRulesetStruct = new beet.FixableBeetArgsStruct<
+  InitRulesetInstructionArgs & {
     instructionDiscriminator: number[] /* size: 8 */
   }
 >(
   [
     ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['ix', initStandardIxBeet],
+    ['ix', initRulesetIxBeet],
   ],
-  'InitStandardInstructionArgs'
+  'InitRulesetInstructionArgs'
 )
 /**
- * Accounts required by the _initStandard_ instruction
+ * Accounts required by the _initRuleset_ instruction
  *
- * @property [_writable_] standard
+ * @property [_writable_] ruleset
  * @property [**signer**] authority
  * @property [_writable_, **signer**] payer
  * @category Instructions
- * @category InitStandard
+ * @category InitRuleset
  * @category generated
  */
-export type InitStandardInstructionAccounts = {
-  standard: web3.PublicKey
+export type InitRulesetInstructionAccounts = {
+  ruleset: web3.PublicKey
   authority: web3.PublicKey
   payer: web3.PublicKey
   systemProgram?: web3.PublicKey
 }
 
-export const initStandardInstructionDiscriminator = [
-  85, 84, 110, 234, 166, 27, 75, 173,
+export const initRulesetInstructionDiscriminator = [
+  172, 10, 116, 39, 103, 94, 225, 194,
 ]
 
 /**
- * Creates a _InitStandard_ instruction.
+ * Creates a _InitRuleset_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @param args to provide as instruction data to the program
  *
  * @category Instructions
- * @category InitStandard
+ * @category InitRuleset
  * @category generated
  */
-export function createInitStandardInstruction(
-  accounts: InitStandardInstructionAccounts,
-  args: InitStandardInstructionArgs,
+export function createInitRulesetInstruction(
+  accounts: InitRulesetInstructionAccounts,
+  args: InitRulesetInstructionArgs,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
-  const [data] = initStandardStruct.serialize({
-    instructionDiscriminator: initStandardInstructionDiscriminator,
+  const [data] = initRulesetStruct.serialize({
+    instructionDiscriminator: initRulesetInstructionDiscriminator,
     ...args,
   })
   const keys: web3.AccountMeta[] = [
     {
-      pubkey: accounts.standard,
+      pubkey: accounts.ruleset,
       isWritable: true,
       isSigner: false,
     },

@@ -21,10 +21,10 @@ pub struct InitMintManagerCtx<'info> {
     mint_manager: Account<'info, MintManager>,
     #[account(mut)]
     mint: Account<'info, Mint>,
-    standard: Account<'info, Standard>,
+    ruleset: Account<'info, Ruleset>,
 
     /// CHECK: Account is not read from
-    #[account(mut, constraint = collector.key() == standard.authority @ ErrorCode::InvalidCollector)]
+    #[account(mut, constraint = collector.key() == ruleset.collector @ ErrorCode::InvalidCollector)]
     collector: UncheckedAccount<'info>,
     authority: Signer<'info>,
     #[account(mut)]
@@ -39,7 +39,7 @@ pub fn handler(ctx: Context<InitMintManagerCtx>) -> Result<()> {
     mint_manager.version = 0;
     mint_manager.authority = ctx.accounts.authority.key();
     mint_manager.mint = ctx.accounts.mint.key();
-    mint_manager.standard = ctx.accounts.standard.key();
+    mint_manager.ruleset = ctx.accounts.ruleset.key();
 
     if ctx.accounts.mint.supply != 1 || ctx.accounts.mint.decimals != 0 {
         return Err(error!(ErrorCode::InvalidMint));

@@ -12,17 +12,18 @@ pub struct MintManager {
     pub version: u8,
     pub mint: Pubkey,
     pub authority: Pubkey,
-    pub standard: Pubkey,
+    pub ruleset: Pubkey,
 }
 
-pub const STANDARD_SEED: &str = "standard";
-pub const STANDARD_SIZE: usize = 8 + 1 + 1 + 1 + 24 + (32 * 10) + (32 * 10);
+pub const RULESET_SEED: &str = "ruleset";
+pub const RULESET_SIZE: usize = 8 + 1 + 1 + 1 + 24 + (32 * 10) + (32 * 10);
 
 #[account]
-pub struct Standard {
+pub struct Ruleset {
     pub bump: u8,
     pub version: u8,
     pub authority: Pubkey,
+    pub collector: Pubkey,
     pub check_seller_fee_basis_points: bool,
     pub name: String,
     pub disallowed_addresses: Vec<Pubkey>,

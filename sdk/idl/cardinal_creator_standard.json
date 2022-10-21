@@ -16,7 +16,7 @@
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -57,7 +57,7 @@
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -82,10 +82,10 @@
       ]
     },
     {
-      "name": "initStandard",
+      "name": "initRuleset",
       "accounts": [
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": true,
           "isSigner": false
         },
@@ -109,16 +109,16 @@
         {
           "name": "ix",
           "type": {
-            "defined": "InitStandardIx"
+            "defined": "InitRulesetIx"
           }
         }
       ]
     },
     {
-      "name": "updateStandard",
+      "name": "updateRuleset",
       "accounts": [
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": true,
           "isSigner": false
         },
@@ -137,7 +137,7 @@
         {
           "name": "ix",
           "type": {
-            "defined": "UpdateStandardIx"
+            "defined": "UpdateRulesetIx"
           }
         }
       ]
@@ -156,7 +156,7 @@
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -402,7 +402,7 @@
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -458,7 +458,7 @@
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -479,7 +479,7 @@
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -515,14 +515,14 @@
             "type": "publicKey"
           },
           {
-            "name": "standard",
+            "name": "ruleset",
             "type": "publicKey"
           }
         ]
       }
     },
     {
-      "name": "Standard",
+      "name": "Ruleset",
       "type": {
         "kind": "struct",
         "fields": [
@@ -539,6 +539,10 @@
             "type": "publicKey"
           },
           {
+            "name": "collector",
+            "type": "publicKey"
+          },
+          {
             "name": "checkSellerFeeBasisPoints",
             "type": "bool"
           },
@@ -547,7 +551,7 @@
             "type": "string"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -576,7 +580,7 @@
       }
     },
     {
-      "name": "InitStandardIx",
+      "name": "InitRulesetIx",
       "type": {
         "kind": "struct",
         "fields": [
@@ -589,7 +593,7 @@
             "type": "string"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -604,7 +608,7 @@
       }
     },
     {
-      "name": "UpdateStandardIx",
+      "name": "UpdateRulesetIx",
       "type": {
         "kind": "struct",
         "fields": [
@@ -613,7 +617,7 @@
             "type": "bool"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -671,8 +675,8 @@
     },
     {
       "code": 6008,
-      "name": "InvalidStandard",
-      "msg": "Invalid standard"
+      "name": "InvalidRuleset",
+      "msg": "Invalid ruleset"
     },
     {
       "code": 6009,

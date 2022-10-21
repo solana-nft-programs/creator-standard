@@ -16,7 +16,7 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -57,7 +57,7 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -82,10 +82,10 @@ export type CardinalCreatorStandard = {
       ]
     },
     {
-      "name": "initStandard",
+      "name": "initRuleset",
       "accounts": [
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": true,
           "isSigner": false
         },
@@ -109,16 +109,16 @@ export type CardinalCreatorStandard = {
         {
           "name": "ix",
           "type": {
-            "defined": "InitStandardIx"
+            "defined": "InitRulesetIx"
           }
         }
       ]
     },
     {
-      "name": "updateStandard",
+      "name": "updateRuleset",
       "accounts": [
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": true,
           "isSigner": false
         },
@@ -137,7 +137,7 @@ export type CardinalCreatorStandard = {
         {
           "name": "ix",
           "type": {
-            "defined": "UpdateStandardIx"
+            "defined": "UpdateRulesetIx"
           }
         }
       ]
@@ -156,7 +156,7 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -402,7 +402,7 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -458,7 +458,7 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -479,7 +479,7 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -515,14 +515,14 @@ export type CardinalCreatorStandard = {
             "type": "publicKey"
           },
           {
-            "name": "standard",
+            "name": "ruleset",
             "type": "publicKey"
           }
         ]
       }
     },
     {
-      "name": "standard",
+      "name": "ruleset",
       "type": {
         "kind": "struct",
         "fields": [
@@ -539,6 +539,10 @@ export type CardinalCreatorStandard = {
             "type": "publicKey"
           },
           {
+            "name": "collector",
+            "type": "publicKey"
+          },
+          {
             "name": "checkSellerFeeBasisPoints",
             "type": "bool"
           },
@@ -547,7 +551,7 @@ export type CardinalCreatorStandard = {
             "type": "string"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -576,7 +580,7 @@ export type CardinalCreatorStandard = {
       }
     },
     {
-      "name": "InitStandardIx",
+      "name": "InitRulesetIx",
       "type": {
         "kind": "struct",
         "fields": [
@@ -589,7 +593,7 @@ export type CardinalCreatorStandard = {
             "type": "string"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -604,7 +608,7 @@ export type CardinalCreatorStandard = {
       }
     },
     {
-      "name": "UpdateStandardIx",
+      "name": "UpdateRulesetIx",
       "type": {
         "kind": "struct",
         "fields": [
@@ -613,7 +617,7 @@ export type CardinalCreatorStandard = {
             "type": "bool"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -671,8 +675,8 @@ export type CardinalCreatorStandard = {
     },
     {
       "code": 6008,
-      "name": "InvalidStandard",
-      "msg": "Invalid standard"
+      "name": "InvalidRuleset",
+      "msg": "Invalid ruleset"
     },
     {
       "code": 6009,
@@ -715,7 +719,7 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -756,7 +760,7 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -781,10 +785,10 @@ export const IDL: CardinalCreatorStandard = {
       ]
     },
     {
-      "name": "initStandard",
+      "name": "initRuleset",
       "accounts": [
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": true,
           "isSigner": false
         },
@@ -808,16 +812,16 @@ export const IDL: CardinalCreatorStandard = {
         {
           "name": "ix",
           "type": {
-            "defined": "InitStandardIx"
+            "defined": "InitRulesetIx"
           }
         }
       ]
     },
     {
-      "name": "updateStandard",
+      "name": "updateRuleset",
       "accounts": [
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": true,
           "isSigner": false
         },
@@ -836,7 +840,7 @@ export const IDL: CardinalCreatorStandard = {
         {
           "name": "ix",
           "type": {
-            "defined": "UpdateStandardIx"
+            "defined": "UpdateRulesetIx"
           }
         }
       ]
@@ -855,7 +859,7 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -1101,7 +1105,7 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -1157,7 +1161,7 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -1178,7 +1182,7 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
-          "name": "standard",
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -1214,14 +1218,14 @@ export const IDL: CardinalCreatorStandard = {
             "type": "publicKey"
           },
           {
-            "name": "standard",
+            "name": "ruleset",
             "type": "publicKey"
           }
         ]
       }
     },
     {
-      "name": "standard",
+      "name": "ruleset",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1238,6 +1242,10 @@ export const IDL: CardinalCreatorStandard = {
             "type": "publicKey"
           },
           {
+            "name": "collector",
+            "type": "publicKey"
+          },
+          {
             "name": "checkSellerFeeBasisPoints",
             "type": "bool"
           },
@@ -1246,7 +1254,7 @@ export const IDL: CardinalCreatorStandard = {
             "type": "string"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -1275,7 +1283,7 @@ export const IDL: CardinalCreatorStandard = {
       }
     },
     {
-      "name": "InitStandardIx",
+      "name": "InitRulesetIx",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1288,7 +1296,7 @@ export const IDL: CardinalCreatorStandard = {
             "type": "string"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -1303,7 +1311,7 @@ export const IDL: CardinalCreatorStandard = {
       }
     },
     {
-      "name": "UpdateStandardIx",
+      "name": "UpdateRulesetIx",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1312,7 +1320,7 @@ export const IDL: CardinalCreatorStandard = {
             "type": "bool"
           },
           {
-            "name": "disallowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }
@@ -1370,8 +1378,8 @@ export const IDL: CardinalCreatorStandard = {
     },
     {
       "code": 6008,
-      "name": "InvalidStandard",
-      "msg": "Invalid standard"
+      "name": "InvalidRuleset",
+      "msg": "Invalid ruleset"
     },
     {
       "code": 6009,

@@ -7,76 +7,73 @@
 
 import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
-import {
-  UpdateStandardIx,
-  updateStandardIxBeet,
-} from '../types/UpdateStandardIx'
+import { UpdateRulesetIx, updateRulesetIxBeet } from '../types/UpdateRulesetIx'
 
 /**
  * @category Instructions
- * @category UpdateStandard
+ * @category UpdateRuleset
  * @category generated
  */
-export type UpdateStandardInstructionArgs = {
-  ix: UpdateStandardIx
+export type UpdateRulesetInstructionArgs = {
+  ix: UpdateRulesetIx
 }
 /**
  * @category Instructions
- * @category UpdateStandard
+ * @category UpdateRuleset
  * @category generated
  */
-export const updateStandardStruct = new beet.FixableBeetArgsStruct<
-  UpdateStandardInstructionArgs & {
+export const updateRulesetStruct = new beet.FixableBeetArgsStruct<
+  UpdateRulesetInstructionArgs & {
     instructionDiscriminator: number[] /* size: 8 */
   }
 >(
   [
     ['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)],
-    ['ix', updateStandardIxBeet],
+    ['ix', updateRulesetIxBeet],
   ],
-  'UpdateStandardInstructionArgs'
+  'UpdateRulesetInstructionArgs'
 )
 /**
- * Accounts required by the _updateStandard_ instruction
+ * Accounts required by the _updateRuleset_ instruction
  *
- * @property [_writable_] standard
+ * @property [_writable_] ruleset
  * @property [**signer**] authority
  * @category Instructions
- * @category UpdateStandard
+ * @category UpdateRuleset
  * @category generated
  */
-export type UpdateStandardInstructionAccounts = {
-  standard: web3.PublicKey
+export type UpdateRulesetInstructionAccounts = {
+  ruleset: web3.PublicKey
   authority: web3.PublicKey
   systemProgram?: web3.PublicKey
 }
 
-export const updateStandardInstructionDiscriminator = [
-  235, 132, 19, 152, 47, 247, 75, 20,
+export const updateRulesetInstructionDiscriminator = [
+  163, 247, 48, 173, 18, 174, 20, 154,
 ]
 
 /**
- * Creates a _UpdateStandard_ instruction.
+ * Creates a _UpdateRuleset_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @param args to provide as instruction data to the program
  *
  * @category Instructions
- * @category UpdateStandard
+ * @category UpdateRuleset
  * @category generated
  */
-export function createUpdateStandardInstruction(
-  accounts: UpdateStandardInstructionAccounts,
-  args: UpdateStandardInstructionArgs,
+export function createUpdateRulesetInstruction(
+  accounts: UpdateRulesetInstructionAccounts,
+  args: UpdateRulesetInstructionArgs,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
-  const [data] = updateStandardStruct.serialize({
-    instructionDiscriminator: updateStandardInstructionDiscriminator,
+  const [data] = updateRulesetStruct.serialize({
+    instructionDiscriminator: updateRulesetInstructionDiscriminator,
     ...args,
   })
   const keys: web3.AccountMeta[] = [
     {
-      pubkey: accounts.standard,
+      pubkey: accounts.ruleset,
       isWritable: true,
       isSigner: false,
     },

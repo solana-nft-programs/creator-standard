@@ -202,27 +202,24 @@ createErrorFromNameLookup.set(
 )
 
 /**
- * InvalidStandard: 'Invalid standard'
+ * InvalidRuleset: 'Invalid ruleset'
  *
  * @category Errors
  * @category generated
  */
-export class InvalidStandardError extends Error {
+export class InvalidRulesetError extends Error {
   readonly code: number = 0x1778
-  readonly name: string = 'InvalidStandard'
+  readonly name: string = 'InvalidRuleset'
   constructor() {
-    super('Invalid standard')
+    super('Invalid ruleset')
     if (typeof Error.captureStackTrace === 'function') {
-      Error.captureStackTrace(this, InvalidStandardError)
+      Error.captureStackTrace(this, InvalidRulesetError)
     }
   }
 }
 
-createErrorFromCodeLookup.set(0x1778, () => new InvalidStandardError())
-createErrorFromNameLookup.set(
-  'InvalidStandard',
-  () => new InvalidStandardError()
-)
+createErrorFromCodeLookup.set(0x1778, () => new InvalidRulesetError())
+createErrorFromNameLookup.set('InvalidRuleset', () => new InvalidRulesetError())
 
 /**
  * InvalidPreTransferInstruction: 'Invalid pre transfer instruction'

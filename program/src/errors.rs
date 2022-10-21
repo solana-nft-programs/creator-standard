@@ -18,8 +18,8 @@ pub enum ErrorCode {
     InvalidCloseTokenAccount,
     #[msg("Invalid holder token account")]
     InvalidHolderTokenAccount,
-    #[msg("Invalid standard")]
-    InvalidStandard,
+    #[msg("Invalid ruleset")]
+    InvalidRuleset,
     #[msg("Invalid pre transfer instruction")]
     InvalidPreTransferInstruction,
     #[msg("Invalid post transfer instruction")]

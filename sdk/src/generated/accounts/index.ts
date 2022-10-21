@@ -1,7 +1,7 @@
 export * from './MintManager'
-export * from './Standard'
+export * from './Ruleset'
 
 import { MintManager } from './MintManager'
-import { Standard } from './Standard'
+import { Ruleset } from './Ruleset'
 
-export const accountProviders = { MintManager, Standard }
+export const accountProviders = { MintManager, Ruleset }

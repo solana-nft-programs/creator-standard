@@ -10,7 +10,7 @@ pub struct UpdateMintManagerIx {
 #[derive(Accounts)]
 pub struct UpdateMintManagerCtx<'info> {
     mint_manager: Account<'info, MintManager>,
-    standard: Account<'info, Standard>,
+    ruleset: Account<'info, Ruleset>,
     #[account(constraint = authority.key() == mint_manager.authority @ ErrorCode::InvalidAuthority)]
     authority: Signer<'info>,
     system_program: Program<'info, System>,
@@ -19,6 +19,6 @@ pub struct UpdateMintManagerCtx<'info> {
 pub fn handler(ctx: Context<UpdateMintManagerCtx>, ix: UpdateMintManagerIx) -> Result<()> {
     let mint_manager = &mut ctx.accounts.mint_manager;
     mint_manager.authority = ix.authority;
-    mint_manager.standard = ctx.accounts.standard.key();
+    mint_manager.ruleset = ctx.accounts.ruleset.key();
     Ok(())
 }
