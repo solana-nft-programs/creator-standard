@@ -1,9 +1,11 @@
 {
   "plugins": ["jest", "@typescript-eslint"],
-  "extends": ["plugin:github/recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 9,
+    "ecmaFeatures": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
     "sourceType": "module",
     "project": "./tsconfig.json"
   },

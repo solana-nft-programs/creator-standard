@@ -1,11 +1,19 @@
 import { test, beforeAll, expect } from "@jest/globals";
-import { getProvider } from "../utils";
+import { executeTransaction, getProvider } from "../utils";
 import type { PublicKey } from "@solana/web3.js";
-import { Keypair } from "@solana/web3.js";
+import { Keypair, Transaction } from "@solana/web3.js";
 import { createMint } from "@solana/spl-token";
-import { CreatorStandard } from "../src";
-
+import {
+  findMintManagerId,
+  createInitMintManagerInstruction,
+  MintManager,
+  createInitStandardInstruction,
+  findStandardId,
+  Standard,
+} from "../src";
 let mint: PublicKey;
+
+const STANDARD_NAME = "global";
 
 beforeAll(async () => {
   const provider = await getProvider();
@@ -20,11 +28,65 @@ beforeAll(async () => {
   );
 });
 
+test("Create standard", async () => {
+  const provider = await getProvider();
+  const standardId = findStandardId(STANDARD_NAME);
+  const tx = new Transaction();
+  tx.add(
+    createInitStandardInstruction(
+      {
+        standard: standardId,
+        authority: provider.wallet.publicKey,
+        payer: provider.wallet.publicKey,
+      },
+      {
+        ix: {
+          standardName: STANDARD_NAME,
+          checkSellerFeeBasisPoints: true,
+          disallowedPrograms: [],
+          allowedPrograms: [],
+        },
+      }
+    )
+  );
+  await executeTransaction(provider.connection, tx, provider.wallet);
+  const standard = await Standard.fromAccountAddress(
+    provider.connection,
+    standardId
+  );
+  expect(standard.authority.toString()).toBe(
+    provider.wallet.publicKey.toString()
+  );
+  expect(standard.checkSellerFeeBasisPoints).toBe(true);
+  expect(standard.disallowedPrograms).toBe([]);
+  expect(standard.allowedPrograms).toBe([]);
+});
+
 test("Init", async () => {
-  await CreatorStandard.methods
-    .initMintManager()
-    .accounts({
+  const provider = await getProvider();
+  const mintManagerId = findMintManagerId(mint);
+  const tx = new Transaction();
+  tx.add(
+    createInitMintManagerInstruction({
       mint: mint,
+      mintManager: mintManagerId,
+      authority: provider.wallet.publicKey,
+      payer: provider.wallet.publicKey,
+      collector: provider.wallet.publicKey,
+      standard: Keypair.generate().publicKey,
     })
-    .rpc();
+  );
+  await executeTransaction(provider.connection, tx, provider.wallet);
+
+  const mintManager = await MintManager.fromAccountAddress(
+    provider.connection,
+    mintManagerId
+  );
+  expect(mintManager.mint.toString()).toBe(mint.toString());
+  expect(mintManager.authority.toString()).toBe(
+    provider.wallet.publicKey.toString()
+  );
+  expect(mintManager.standard.toString()).toBe(
+    findStandardId(STANDARD_NAME).toString()
+  );
 });

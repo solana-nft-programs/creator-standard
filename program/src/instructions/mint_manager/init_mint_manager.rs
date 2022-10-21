@@ -24,7 +24,7 @@ pub struct InitMintManagerCtx<'info> {
     standard: Account<'info, Standard>,
 
     /// CHECK: Account is not read from
-    #[account(mut)]
+    #[account(mut, constraint = collector.key() == standard.authority @ ErrorCode::InvalidCollector)]
     collector: UncheckedAccount<'info>,
     authority: Signer<'info>,
     #[account(mut)]
@@ -71,9 +71,6 @@ pub fn handler(ctx: Context<InitMintManagerCtx>) -> Result<()> {
     )?;
 
     // creation
-    if ctx.accounts.collector.key().to_string() != CREATION_COLLECTOR {
-        return Err(error!(ErrorCode::InvalidCollector));
-    }
     invoke(
         &transfer(
             &ctx.accounts.payer.key(),

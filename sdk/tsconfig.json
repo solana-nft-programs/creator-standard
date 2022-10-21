@@ -24,7 +24,6 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
@@ -37,5 +36,5 @@
     "declarationMap": true,
     "inlineSources": true
   },
-  "include": ["src/"]
+  "include": ["src/", "tests/"]
 }
