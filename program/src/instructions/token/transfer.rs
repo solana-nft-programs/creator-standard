@@ -75,19 +75,23 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         allowed_programs.insert(program_id);
     }
 
-    let mut disallowed_programs = HashSet::new();
-    for program_id in &ctx.accounts.standard.disallowed_programs {
-        disallowed_programs.insert(program_id);
+    let mut disallowed_addresses = HashSet::new();
+    for program_id in &ctx.accounts.standard.disallowed_addresses {
+        disallowed_addresses.insert(program_id);
     }
 
     for i in 0..num_instructions {
         let ix = load_instruction_at_checked(i.into(), &instructions_account_info)
             .expect("Failed to get instruction");
+
         if allowed_programs.len() > 0 && !allowed_programs.contains(&ix.program_id) {
             return Err(error!(ErrorCode::ProgramNotAllowed));
         }
-        if disallowed_programs.len() > 0 && disallowed_programs.contains(&ix.program_id) {
-            return Err(error!(ErrorCode::ProgramDisallowed));
+
+        for account in ix.accounts {
+            if disallowed_addresses.len() > 0 && disallowed_addresses.contains(&account.pubkey) {
+                return Err(error!(ErrorCode::ProgramDisallowed));
+            }
         }
     }
 

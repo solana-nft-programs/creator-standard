@@ -5,7 +5,7 @@ use anchor_lang::prelude::*;
 pub struct InitStandardIx {
     pub check_seller_fee_basis_points: bool,
     pub name: String,
-    pub disallowed_programs: Vec<Pubkey>,
+    pub disallowed_addresses: Vec<Pubkey>,
     pub allowed_programs: Vec<Pubkey>,
 }
 
@@ -34,6 +34,6 @@ pub fn handler(ctx: Context<InitStandardCtx>, ix: InitStandardIx) -> Result<()> 
     standard.check_seller_fee_basis_points = ix.check_seller_fee_basis_points;
     standard.name = ix.name;
     standard.allowed_programs = ix.allowed_programs;
-    standard.disallowed_programs = ix.disallowed_programs;
+    standard.disallowed_addresses = ix.disallowed_addresses;
     Ok(())
 }

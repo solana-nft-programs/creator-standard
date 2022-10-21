@@ -25,6 +25,6 @@ pub struct Standard {
     pub authority: Pubkey,
     pub check_seller_fee_basis_points: bool,
     pub name: String,
-    pub disallowed_programs: Vec<Pubkey>,
+    pub disallowed_addresses: Vec<Pubkey>,
     pub allowed_programs: Vec<Pubkey>,
 }
