@@ -2,10 +2,13 @@ import {
   Connection,
   Transaction,
   sendAndConfirmRawTransaction,
+  SendTransactionError,
 } from "@solana/web3.js";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { PROGRAM_ADDRESS } from "./src/generated";
+import { PROGRAM_ADDRESS } from "./generated";
 import { utils, Wallet } from "@project-serum/anchor";
+import { parseProgramLogs } from "./errors/parseTransactionLogs";
+import { formatInstructionLogsForConsole } from "./errors/formatLogs";
 
 export async function newAccountWithLamports(
   connection: Connection,
@@ -36,10 +39,16 @@ export async function executeTransaction(
   tx.recentBlockhash = await (await connection.getLatestBlockhash()).blockhash;
   tx.feePayer = wallet.publicKey;
   await wallet.signTransaction(tx);
-  return sendAndConfirmRawTransaction(connection, tx.serialize());
+  try {
+    const txid = await sendAndConfirmRawTransaction(connection, tx.serialize());
+    return txid;
+  } catch (e) {
+    handleError(e);
+    throw e;
+  }
 }
 
-type CardinalProvider = {
+export type CardinalProvider = {
   connection: Connection;
   wallet: Wallet;
   keypair: Keypair;
@@ -94,5 +103,21 @@ export const keypairFrom = (s: string, n?: string): Keypair => {
       process.stdout.write(`${n ?? "keypair"} is not valid keypair`);
       process.exit(1);
     }
+  }
+};
+
+export const handleError = (e: any) => {
+  const message = (e as SendTransactionError).message ?? "";
+  const logs =
+    (e as SendTransactionError).logs ?? [
+      (e as SendTransactionError).message ?? "",
+    ] ?? [(e as Error).toString()] ??
+    [];
+  if (logs) {
+    const parsed = parseProgramLogs(logs, message);
+    const fmt = formatInstructionLogsForConsole(parsed);
+    console.log(fmt);
+  } else {
+    console.log(e);
   }
 };

@@ -47,7 +47,7 @@ pub fn handler(ctx: Context<InitMintManagerCtx>) -> Result<()> {
     // set mint authoriy
     let cpi_accounts = SetAuthority {
         account_or_mint: ctx.accounts.mint.to_account_info(),
-        current_authority: ctx.accounts.mint_manager.to_account_info(),
+        current_authority: ctx.accounts.authority.to_account_info(),
     };
     let cpi_program = ctx.accounts.token_program.to_account_info();
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts);
@@ -60,7 +60,7 @@ pub fn handler(ctx: Context<InitMintManagerCtx>) -> Result<()> {
     // set freeze authoriy
     let cpi_accounts = SetAuthority {
         account_or_mint: ctx.accounts.mint.to_account_info(),
-        current_authority: ctx.accounts.mint_manager.to_account_info(),
+        current_authority: ctx.accounts.authority.to_account_info(),
     };
     let cpi_program = ctx.accounts.token_program.to_account_info();
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts);

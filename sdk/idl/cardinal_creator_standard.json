@@ -619,6 +619,10 @@
             "type": "string"
           },
           {
+            "name": "collector",
+            "type": "publicKey"
+          },
+          {
             "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
@@ -638,6 +642,14 @@
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "collector",
+            "type": "publicKey"
+          },
           {
             "name": "checkSellerFeeBasisPoints",
             "type": "bool"
