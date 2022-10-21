@@ -4,13 +4,9 @@ import {
   executeTransaction,
   getProvider,
 } from "../src/utils";
-import type { PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import { Keypair, Transaction } from "@solana/web3.js";
-import {
-  createMint,
-  getOrCreateAssociatedTokenAccount,
-  mintTo,
-} from "@solana/spl-token";
+
 import {
   findMintManagerId,
   createInitMintManagerInstruction,
@@ -19,6 +15,7 @@ import {
   findRulesetId,
   Ruleset,
 } from "../src";
+import { createMintTx } from "./utils";
 let mint: PublicKey;
 
 const RULESET_NAME = `global-${Math.random()}`;
@@ -28,27 +25,12 @@ let provider: CardinalProvider;
 beforeAll(async () => {
   provider = await getProvider();
   const mintKeypair = Keypair.generate();
-  mint = await createMint(
+  mint = mintKeypair.publicKey;
+  executeTransaction(
     provider.connection,
-    provider.keypair,
-    provider.wallet.publicKey,
-    provider.wallet.publicKey,
-    0,
-    mintKeypair
-  );
-  const ata = await getOrCreateAssociatedTokenAccount(
-    provider.connection,
-    provider.keypair,
-    mint,
-    provider.wallet.publicKey
-  );
-  await mintTo(
-    provider.connection,
-    provider.keypair,
-    mint,
-    ata.address,
-    provider.wallet.publicKey,
-    1
+    await createMintTx(provider.connection, mint, provider.wallet.publicKey),
+    provider.wallet,
+    [mintKeypair]
   );
 });
 

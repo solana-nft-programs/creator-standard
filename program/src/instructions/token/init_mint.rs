@@ -6,7 +6,6 @@ use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::associated_token::{self};
 use anchor_spl::token::MintTo;
 use anchor_spl::token::Token;
-use anchor_spl::token::TokenAccount;
 use anchor_spl::token::{self};
 use solana_program::program_pack::Pack;
 use solana_program::system_instruction::create_account;
@@ -30,7 +29,7 @@ pub struct InitMintCtx<'info> {
 
     /// CHECK: Account created or checked in handler
     #[account(mut)]
-    target_token_account: Account<'info, TokenAccount>,
+    target_token_account: UncheckedAccount<'info>,
     target: Signer<'info>,
 
     /// CHECK: Account is not read from
@@ -107,11 +106,6 @@ pub fn handler(ctx: Context<InitMintCtx>) -> Result<()> {
         let cpi_program = ctx.accounts.token_program.to_account_info();
         let cpi_context = CpiContext::new(cpi_program, cpi_accounts);
         associated_token::create(cpi_context)?;
-    } else if ctx.accounts.target_token_account.mint != ctx.accounts.mint_manager.mint
-        || ctx.accounts.target_token_account.owner != ctx.accounts.target.key()
-        || ctx.accounts.target_token_account.amount != 0
-    {
-        return Err(error!(ErrorCode::InvalidTargetTokenAccount));
     }
 
     // mint to

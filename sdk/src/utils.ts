@@ -3,6 +3,7 @@ import {
   Transaction,
   sendAndConfirmRawTransaction,
   SendTransactionError,
+  Signer,
 } from "@solana/web3.js";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { PROGRAM_ADDRESS } from "./generated";
@@ -34,11 +35,13 @@ export async function getConnection(): Promise<Connection> {
 export async function executeTransaction(
   connection: Connection,
   tx: Transaction,
-  wallet: Wallet
+  wallet: Wallet,
+  signers?: Signer[]
 ): Promise<String> {
   tx.recentBlockhash = await (await connection.getLatestBlockhash()).blockhash;
   tx.feePayer = wallet.publicKey;
   await wallet.signTransaction(tx);
+  signers && tx.partialSign(...signers);
   try {
     const txid = await sendAndConfirmRawTransaction(connection, tx.serialize());
     return txid;
