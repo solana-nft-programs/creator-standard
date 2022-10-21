@@ -5,10 +5,10 @@
 rm -rf src/idl/
 mkdir -p src/idl/
 
-for PROGRAM in $(find programs/ -maxdepth 3 -name lib.rs); do
-    PROGRAM_NAME=$(dirname $PROGRAM | xargs dirname | xargs basename | tr '-' '_')
+for PROGRAM in $(find ../program/ -maxdepth 3 -name lib.rs); do
+    PROGRAM_NAME="cardinal_creator_standard"
     echo "Parsing IDL for $PROGRAM_NAME"
-    anchor idl parse --file $PROGRAM --out-ts src/idl/$PROGRAM_NAME.ts || {
+    anchor idl parse --file $PROGRAM --out-ts idl/$PROGRAM_NAME.ts || {
         echo "Could not parse IDL"
         exit 1
     }
