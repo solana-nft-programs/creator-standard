@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 use crate::errors::ErrorCode;
 use crate::state::*;
 use anchor_lang::prelude::*;
@@ -14,6 +12,7 @@ use arrayref::array_ref;
 use solana_program::serialize_utils::read_u16;
 use solana_program::sysvar::instructions::load_instruction_at_checked;
 use solana_program::sysvar::{self};
+use std::collections::HashSet;
 
 use super::POST_TRANSFER_DISCRIMINATOR;
 use super::PRE_TRANSFER_DISCRIMINATOR;

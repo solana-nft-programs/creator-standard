@@ -29,3 +29,17 @@ pub struct Ruleset {
     pub disallowed_addresses: Vec<Pubkey>,
     pub allowed_programs: Vec<Pubkey>,
 }
+
+pub const ACCOUNT_BALANCES_SEED: &str = "account-balances";
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, Default, Debug)]
+pub struct AccountBalance {
+    pub address: Pubkey,
+    pub mint: Pubkey,
+    pub balance: u64,
+}
+
+#[account]
+pub struct AccountBalances {
+    pub balances: Vec<AccountBalance>,
+}

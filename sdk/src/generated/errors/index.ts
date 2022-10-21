@@ -320,6 +320,26 @@ createErrorFromNameLookup.set(
 )
 
 /**
+ * UnknownAccount: 'Unknown account found in instruction'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class UnknownAccountError extends Error {
+  readonly code: number = 0x177d
+  readonly name: string = 'UnknownAccount'
+  constructor() {
+    super('Unknown account found in instruction')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, UnknownAccountError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x177d, () => new UnknownAccountError())
+createErrorFromNameLookup.set('UnknownAccount', () => new UnknownAccountError())
+
+/**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors
  * @category generated

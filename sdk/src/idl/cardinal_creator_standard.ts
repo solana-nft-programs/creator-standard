@@ -62,8 +62,18 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
+          "name": "collector",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "authority",
           "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
           "isSigner": true
         },
         {
@@ -463,6 +473,16 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBalances",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "instructions",
           "isMut": false,
           "isSigner": false
@@ -564,6 +584,22 @@ export type CardinalCreatorStandard = {
           }
         ]
       }
+    },
+    {
+      "name": "accountBalances",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "balances",
+            "type": {
+              "vec": {
+                "defined": "AccountBalance"
+              }
+            }
+          }
+        ]
+      }
     }
   ],
   "types": [
@@ -627,6 +663,26 @@ export type CardinalCreatorStandard = {
             "type": {
               "vec": "publicKey"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccountBalance",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "address",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "balance",
+            "type": "u64"
           }
         ]
       }
@@ -697,6 +753,11 @@ export type CardinalCreatorStandard = {
       "code": 6012,
       "name": "ProgramNotAllowed",
       "msg": "Program not allowed in allowed programs to transfer"
+    },
+    {
+      "code": 6013,
+      "name": "UnknownAccount",
+      "msg": "Unknown account found in instruction"
     }
   ]
 };
@@ -765,8 +826,18 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
+          "name": "collector",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "authority",
           "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
           "isSigner": true
         },
         {
@@ -1166,6 +1237,16 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBalances",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "instructions",
           "isMut": false,
           "isSigner": false
@@ -1267,6 +1348,22 @@ export const IDL: CardinalCreatorStandard = {
           }
         ]
       }
+    },
+    {
+      "name": "accountBalances",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "balances",
+            "type": {
+              "vec": {
+                "defined": "AccountBalance"
+              }
+            }
+          }
+        ]
+      }
     }
   ],
   "types": [
@@ -1330,6 +1427,26 @@ export const IDL: CardinalCreatorStandard = {
             "type": {
               "vec": "publicKey"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccountBalance",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "address",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "balance",
+            "type": "u64"
           }
         ]
       }
@@ -1400,6 +1517,11 @@ export const IDL: CardinalCreatorStandard = {
       "code": 6012,
       "name": "ProgramNotAllowed",
       "msg": "Program not allowed in allowed programs to transfer"
+    },
+    {
+      "code": 6013,
+      "name": "UnknownAccount",
+      "msg": "Unknown account found in instruction"
     }
   ]
 };

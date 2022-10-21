@@ -28,4 +28,6 @@ pub enum ErrorCode {
     ProgramDisallowed,
     #[msg("Program not allowed in allowed programs to transfer")]
     ProgramNotAllowed,
+    #[msg("Unknown account found in instruction")]
+    UnknownAccount,
 }

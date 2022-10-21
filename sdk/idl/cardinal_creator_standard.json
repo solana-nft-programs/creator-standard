@@ -62,8 +62,18 @@
           "isSigner": false
         },
         {
+          "name": "collector",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "authority",
           "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
           "isSigner": true
         },
         {
@@ -463,6 +473,16 @@
           "isSigner": false
         },
         {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "accountBalances",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "instructions",
           "isMut": false,
           "isSigner": false
@@ -564,6 +584,22 @@
           }
         ]
       }
+    },
+    {
+      "name": "AccountBalances",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "balances",
+            "type": {
+              "vec": {
+                "defined": "AccountBalance"
+              }
+            }
+          }
+        ]
+      }
     }
   ],
   "types": [
@@ -627,6 +663,26 @@
             "type": {
               "vec": "publicKey"
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "AccountBalance",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "address",
+            "type": "publicKey"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "balance",
+            "type": "u64"
           }
         ]
       }
@@ -697,6 +753,11 @@
       "code": 6012,
       "name": "ProgramNotAllowed",
       "msg": "Program not allowed in allowed programs to transfer"
+    },
+    {
+      "code": 6013,
+      "name": "UnknownAccount",
+      "msg": "Unknown account found in instruction"
     }
   ],
   "metadata": {
