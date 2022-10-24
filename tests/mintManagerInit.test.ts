@@ -10,7 +10,7 @@ import {
   createInitRulesetInstruction,
   findRulesetId,
   Ruleset,
-} from "../src";
+} from "../sdk";
 import { createMintTx } from "./mint";
 let mint: PublicKey;
 
