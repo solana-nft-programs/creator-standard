@@ -41,7 +41,9 @@ export async function executeTransaction(
   tx.recentBlockhash = await (await connection.getLatestBlockhash()).blockhash;
   tx.feePayer = wallet.publicKey;
   await wallet.signTransaction(tx);
-  signers && tx.partialSign(...signers);
+  if (signers) {
+    tx.partialSign(...signers);
+  }
   try {
     const txid = await sendAndConfirmRawTransaction(connection, tx.serialize());
     return txid;
