@@ -163,7 +163,7 @@
         {
           "name": "mint",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "ruleset",

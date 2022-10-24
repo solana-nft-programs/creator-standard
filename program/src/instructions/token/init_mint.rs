@@ -24,7 +24,7 @@ pub struct InitMintCtx<'info> {
     mint_manager: Account<'info, MintManager>,
     /// CHECK: Account is not read from
     #[account(mut)]
-    mint: UncheckedAccount<'info>,
+    mint: Signer<'info>,
     ruleset: Account<'info, Ruleset>,
 
     /// CHECK: Account created or checked in handler
