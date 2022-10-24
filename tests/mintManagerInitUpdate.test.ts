@@ -11,7 +11,7 @@ import {
   findRulesetId,
   Ruleset,
   createUpdateMintManagerInstruction,
-} from "../src";
+} from "../sdk";
 import { createMintTx } from "./mint";
 let mint: PublicKey;
 

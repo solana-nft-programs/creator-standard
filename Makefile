@@ -1,12 +1,12 @@
 .PHONY: build
 
-TEST_KEY := $(shell solana-keygen pubkey ./sdk/tests/test-keypairs/test-key.json)
+TEST_KEY := $(shell solana-keygen pubkey ./tests/test-keypairs/test-key.json)
 
 all: build start test stop
 
 build:
-	cd program && anchor build
-	cd sdk && yarn idl:generate && yarn solita
+	anchor build
+	yarn idl:generate && yarn solita
 
 start:
 	pkill solana-test-validator || true
@@ -18,7 +18,7 @@ start:
 	solana airdrop 1000 $(TEST_KEY) --url http://localhost:8899
 
 test:
-	cd sdk && yarn test
+	yarn test
 
 stop:
 	pkill solana-test-validator

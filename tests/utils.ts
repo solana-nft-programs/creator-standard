@@ -6,10 +6,10 @@ import {
   Signer,
 } from "@solana/web3.js";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { PROGRAM_ADDRESS } from "../src/generated";
+import { PROGRAM_ADDRESS } from "../sdk/generated";
 import { utils, Wallet } from "@project-serum/anchor";
-import { parseProgramLogs } from "../src/errors/parseTransactionLogs";
-import { formatInstructionLogsForConsole } from "../src/errors/formatLogs";
+import { parseProgramLogs } from "../sdk/errors/parseTransactionLogs";
+import { formatInstructionLogsForConsole } from "../sdk/errors/formatLogs";
 
 export async function newAccountWithLamports(
   connection: Connection,

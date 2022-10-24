@@ -9,7 +9,7 @@ import {
   findRulesetId,
   Ruleset,
   createInitMintInstruction,
-} from "../src";
+} from "../sdk";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAssociatedTokenAddressSync,

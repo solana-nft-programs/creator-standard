@@ -1,14 +1,6 @@
-[features]
-seeds = false
-
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
 cluster = "localnet"
 wallet = "./tests/test-key.json"
-
-[workspace]
-members = [
-  "program",
-]

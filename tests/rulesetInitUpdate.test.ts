@@ -7,7 +7,7 @@ import {
   findRulesetId,
   Ruleset,
   createUpdateRulesetInstruction,
-} from "../src";
+} from "../sdk";
 
 const RULESET_NAME = `global-${Math.random()}`;
 const RULESET_ID = findRulesetId(RULESET_NAME);
