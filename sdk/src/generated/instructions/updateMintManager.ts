@@ -39,7 +39,7 @@ export const updateMintManagerStruct = new beet.BeetArgsStruct<
 /**
  * Accounts required by the _updateMintManager_ instruction
  *
- * @property [] mintManager
+ * @property [_writable_] mintManager
  * @property [] ruleset
  * @property [_writable_] collector
  * @property [**signer**] authority
@@ -83,7 +83,7 @@ export function createUpdateMintManagerInstruction(
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.mintManager,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {

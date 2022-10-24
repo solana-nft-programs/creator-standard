@@ -1,30 +1,36 @@
-import { test, expect } from "@jest/globals";
-import {
-  CardinalProvider,
-  executeTransaction,
-  getProvider,
-} from "../src/utils";
+import { test, beforeAll, expect } from "@jest/globals";
+import { CardinalProvider, executeTransaction, getProvider } from "./utils";
+import { PublicKey } from "@solana/web3.js";
 import { Keypair, Transaction } from "@solana/web3.js";
 
 import {
   findMintManagerId,
+  createInitMintManagerInstruction,
   MintManager,
   createInitRulesetInstruction,
   findRulesetId,
   Ruleset,
-  createInitMintInstruction,
 } from "../src";
-import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  getAssociatedTokenAddressSync,
-} from "@solana/spl-token";
+import { createMintTx } from "./mint";
+let mint: PublicKey;
 
 const RULESET_NAME = `global-${Math.random()}`;
 const RULESET_ID = findRulesetId(RULESET_NAME);
 let provider: CardinalProvider;
 
-test("Create ruleset", async () => {
+beforeAll(async () => {
   provider = await getProvider();
+  const mintKeypair = Keypair.generate();
+  mint = mintKeypair.publicKey;
+  executeTransaction(
+    provider.connection,
+    await createMintTx(provider.connection, mint, provider.wallet.publicKey),
+    provider.wallet,
+    [mintKeypair]
+  );
+});
+
+test("Create ruleset", async () => {
   const tx = new Transaction();
   tx.add(
     createInitRulesetInstruction(
@@ -58,35 +64,24 @@ test("Create ruleset", async () => {
 });
 
 test("Init", async () => {
-  const mintKeypair = Keypair.generate();
-  const mint = mintKeypair.publicKey;
   const mintManagerId = findMintManagerId(mint);
+  const tx = new Transaction();
   const ruleset = await Ruleset.fromAccountAddress(
     provider.connection,
     RULESET_ID
   );
 
-  const tx = new Transaction();
   tx.add(
-    createInitMintInstruction({
-      mintManager: mintManagerId,
+    createInitMintManagerInstruction({
       mint: mint,
-      ruleset: RULESET_ID,
-      targetTokenAccount: getAssociatedTokenAddressSync(
-        mintKeypair.publicKey,
-        provider.wallet.publicKey
-      ),
-      target: provider.wallet.publicKey,
+      mintManager: mintManagerId,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
       collector: ruleset.collector,
-      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      ruleset: RULESET_ID,
     })
   );
-  console.log("----------");
-  await executeTransaction(provider.connection, tx, provider.wallet, [
-    mintKeypair,
-  ]);
+  await executeTransaction(provider.connection, tx, provider.wallet);
 
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,

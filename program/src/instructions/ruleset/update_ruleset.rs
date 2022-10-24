@@ -12,7 +12,6 @@ pub struct UpdateRulesetIx {
 }
 
 #[derive(Accounts)]
-#[instruction(ix: UpdateRulesetIx)]
 pub struct UpdateRulesetCtx<'info> {
     #[account(mut)]
     ruleset: Account<'info, Ruleset>,
