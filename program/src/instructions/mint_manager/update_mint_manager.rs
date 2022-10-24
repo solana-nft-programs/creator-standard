@@ -11,6 +11,7 @@ pub struct UpdateMintManagerIx {
 
 #[derive(Accounts)]
 pub struct UpdateMintManagerCtx<'info> {
+    #[account(mut)]
     mint_manager: Account<'info, MintManager>,
     ruleset: Account<'info, Ruleset>,
     /// CHECK: Account is not read from

@@ -2,8 +2,8 @@
 
 # This script generates the IDL JSONs without buildling the full packages.
 
-rm -rf sdk/idl/
-mkdir -p sdk/idl/
+rm -rf sdk/src/idl
+mkdir -p sdk/src/idl
 
 for PROGRAM in $(find ../program/ -maxdepth 3 -name lib.rs); do
     PROGRAM_NAME="cardinal_creator_standard"

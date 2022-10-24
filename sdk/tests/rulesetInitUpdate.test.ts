@@ -1,10 +1,5 @@
 import { test, beforeAll, expect } from "@jest/globals";
-import {
-  CardinalProvider,
-  executeTransaction,
-  getProvider,
-} from "../src/utils";
-import { PublicKey } from "@solana/web3.js";
+import { CardinalProvider, executeTransaction, getProvider } from "./utils";
 import { Keypair, Transaction } from "@solana/web3.js";
 
 import {
@@ -13,8 +8,6 @@ import {
   Ruleset,
   createUpdateRulesetInstruction,
 } from "../src";
-import { createMintTx } from "./utils";
-let mint: PublicKey;
 
 const RULESET_NAME = `global-${Math.random()}`;
 const RULESET_ID = findRulesetId(RULESET_NAME);
@@ -22,14 +15,6 @@ let provider: CardinalProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
-  const mintKeypair = Keypair.generate();
-  mint = mintKeypair.publicKey;
-  executeTransaction(
-    provider.connection,
-    await createMintTx(provider.connection, mint, provider.wallet.publicKey),
-    provider.wallet,
-    [mintKeypair]
-  );
 });
 
 test("Create ruleset", async () => {
@@ -67,6 +52,7 @@ test("Create ruleset", async () => {
 
 test("Update ruleset", async () => {
   const tx = new Transaction();
+  const newAuthority = Keypair.generate();
   tx.add(
     createUpdateRulesetInstruction(
       {
@@ -75,7 +61,7 @@ test("Update ruleset", async () => {
       },
       {
         ix: {
-          authority: provider.wallet.publicKey,
+          authority: newAuthority.publicKey,
           collector: provider.wallet.publicKey,
           checkSellerFeeBasisPoints: true,
           disallowedAddresses: [provider.wallet.publicKey],
@@ -89,9 +75,7 @@ test("Update ruleset", async () => {
     provider.connection,
     RULESET_ID
   );
-  expect(ruleset.authority.toString()).toBe(
-    provider.wallet.publicKey.toString()
-  );
+  expect(ruleset.authority.toString()).toBe(newAuthority.publicKey.toString());
   expect(ruleset.checkSellerFeeBasisPoints).toBe(true);
   expect(ruleset.disallowedAddresses.length).toBe(1);
   expect(ruleset.allowedPrograms.length).toBe(0);
