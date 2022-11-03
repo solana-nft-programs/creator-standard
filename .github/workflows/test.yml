@@ -51,7 +51,7 @@ jobs:
       - name: Run fmt
         uses: actions-rs/cargo@v1
         with:
-          command: fmt
+          command: +nightly fmt
           args: --all --manifest-path ./Cargo.toml -- --check
 
   soteria-scan:

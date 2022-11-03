@@ -3,11 +3,11 @@ use anchor_lang::prelude::*;
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct InitRulesetIx {
-    pub check_seller_fee_basis_points: bool,
     pub name: String,
     pub collector: Pubkey,
     pub disallowed_addresses: Vec<Pubkey>,
     pub allowed_programs: Vec<Pubkey>,
+    pub check_seller_fee_basis_points: bool,
 }
 
 #[derive(Accounts)]

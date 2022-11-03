@@ -1,6 +1,7 @@
 use crate::errors::ErrorCode;
 use crate::state::*;
 use anchor_lang::prelude::*;
+use anchor_spl::token::CloseAccount;
 use anchor_spl::token::FreezeAccount;
 use anchor_spl::token::Mint;
 use anchor_spl::token::ThawAccount;
@@ -45,7 +46,7 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
     let num_instructions =
         read_u16(&mut current, &instruction_sysvar).expect("Invalid instruction");
 
-    // check pre/post
+    /////////////// check pre/post ///////////////
     if ctx.accounts.ruleset.check_seller_fee_basis_points {
         // check pre_transfer
         let first_ix = load_instruction_at_checked(0, &instructions_account_info)
@@ -86,7 +87,7 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         }
     }
 
-    // check allowed / disallowed
+    /////////////// check allowed / disallowed ///////////////
     let mut allowed_programs = HashSet::new();
     for program_id in &ctx.accounts.ruleset.allowed_programs {
         allowed_programs.insert(program_id);
@@ -111,6 +112,7 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
             }
         }
     }
+    ////////////////////////////////////////////////////////////
 
     let mint = ctx.accounts.mint.key();
     let mint_manager_seeds = &[
@@ -129,8 +131,6 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);
     token::thaw_account(cpi_context)?;
 
-    // todo close from token account if you are the authority?
-
     let cpi_accounts = Transfer {
         from: ctx.accounts.from.to_account_info(),
         to: ctx.accounts.to.to_account_info(),
@@ -148,5 +148,25 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
     let cpi_program = ctx.accounts.token_program.to_account_info();
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);
     token::freeze_account(cpi_context)?;
+
+    // close from token account
+    if ctx.accounts.authority.key() == ctx.accounts.from.owner
+        || ctx.accounts.from.close_authority.is_some()
+            && ctx.accounts.authority.key()
+                == ctx
+                    .accounts
+                    .from
+                    .close_authority
+                    .expect("Invalid close authority")
+    {
+        let cpi_accounts = CloseAccount {
+            account: ctx.accounts.from.to_account_info(),
+            destination: ctx.accounts.authority.to_account_info(),
+            authority: ctx.accounts.authority.to_account_info(),
+        };
+        let cpi_program = ctx.accounts.token_program.to_account_info();
+        let cpi_context = CpiContext::new(cpi_program, cpi_accounts);
+        token::close_account(cpi_context)?;
+    }
     Ok(())
 }

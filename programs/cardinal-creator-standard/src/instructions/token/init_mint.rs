@@ -4,9 +4,10 @@ use anchor_lang::prelude::*;
 use anchor_lang::solana_program::program::invoke;
 use anchor_spl::associated_token::AssociatedToken;
 use anchor_spl::associated_token::{self};
+use anchor_spl::token::FreezeAccount;
+use anchor_spl::token::MintTo;
 use anchor_spl::token::Token;
 use anchor_spl::token::{self};
-use anchor_spl::token::{FreezeAccount, MintTo};
 use solana_program::program_pack::Pack;
 use solana_program::system_instruction::create_account;
 use solana_program::system_instruction::transfer;
@@ -125,6 +126,15 @@ pub fn handler(ctx: Context<InitMintCtx>) -> Result<()> {
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);
     token::mint_to(cpi_context, 1)?;
 
+    let cpi_accounts = FreezeAccount {
+        account: ctx.accounts.target_token_account.to_account_info(),
+        mint: ctx.accounts.mint.to_account_info(),
+        authority: ctx.accounts.mint_manager.to_account_info(),
+    };
+    let cpi_program = ctx.accounts.token_program.to_account_info();
+    let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);
+    token::freeze_account(cpi_context)?;
+
     invoke(
         &transfer(
             &ctx.accounts.payer.key(),
@@ -137,14 +147,5 @@ pub fn handler(ctx: Context<InitMintCtx>) -> Result<()> {
             ctx.accounts.system_program.to_account_info(),
         ],
     )?;
-
-    let cpi_accounts = FreezeAccount {
-        account: ctx.accounts.target_token_account.to_account_info(),
-        mint: ctx.accounts.mint.to_account_info(),
-        authority: ctx.accounts.mint_manager.to_account_info(),
-    };
-    let cpi_program = ctx.accounts.token_program.to_account_info();
-    let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);
-    token::freeze_account(cpi_context)?;
     Ok(())
 }
