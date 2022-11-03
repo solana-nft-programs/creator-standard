@@ -134,10 +134,9 @@ test("Transfer", async () => {
     })
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
-  const fromAtaCheck = await getAccount(provider.connection, fromAtaId);
-  expect(fromAtaCheck.isFrozen).toBe(false);
-  expect(fromAtaCheck.mint.toString()).toBe(mint.toString());
-  expect(fromAtaCheck.amount.toString()).toBe("0");
+  await expect(async () => {
+    await getAccount(provider.connection, fromAtaId);
+  }).rejects.toThrow();
 
   const toAtaCheck = await getAccount(provider.connection, toAtaId);
   expect(toAtaCheck.isFrozen).toBe(true);
