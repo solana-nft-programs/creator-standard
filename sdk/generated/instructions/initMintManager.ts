@@ -26,6 +26,7 @@ export const initMintManagerStruct = new beet.BeetArgsStruct<{
  * @property [_writable_] mintManager
  * @property [_writable_] mint
  * @property [] ruleset
+ * @property [_writable_] holderTokenAccount
  * @property [_writable_] collector
  * @property [**signer**] authority
  * @property [_writable_, **signer**] payer
@@ -37,6 +38,7 @@ export type InitMintManagerInstructionAccounts = {
   mintManager: web3.PublicKey
   mint: web3.PublicKey
   ruleset: web3.PublicKey
+  holderTokenAccount: web3.PublicKey
   collector: web3.PublicKey
   authority: web3.PublicKey
   payer: web3.PublicKey
@@ -77,6 +79,11 @@ export function createInitMintManagerInstruction(
     {
       pubkey: accounts.ruleset,
       isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.holderTokenAccount,
+      isWritable: true,
       isSigner: false,
     },
     {

@@ -21,6 +21,11 @@ export type CardinalCreatorStandard = {
           "isSigner": false
         },
         {
+          "name": "holderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "collector",
           "isMut": true,
           "isSigner": false
@@ -435,11 +440,6 @@ export type CardinalCreatorStandard = {
           "name": "authority",
           "isMut": false,
           "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "tokenProgram",
@@ -796,6 +796,11 @@ export const IDL: CardinalCreatorStandard = {
           "isSigner": false
         },
         {
+          "name": "holderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "collector",
           "isMut": true,
           "isSigner": false
@@ -1210,11 +1215,6 @@ export const IDL: CardinalCreatorStandard = {
           "name": "authority",
           "isMut": false,
           "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "tokenProgram",
