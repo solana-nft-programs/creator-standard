@@ -611,10 +611,6 @@ export type CardinalCreatorStandard = {
         "kind": "struct",
         "fields": [
           {
-            "name": "checkSellerFeeBasisPoints",
-            "type": "bool"
-          },
-          {
             "name": "name",
             "type": "string"
           },
@@ -633,6 +629,10 @@ export type CardinalCreatorStandard = {
             "type": {
               "vec": "publicKey"
             }
+          },
+          {
+            "name": "checkSellerFeeBasisPoints",
+            "type": "bool"
           }
         ]
       }
@@ -1386,10 +1386,6 @@ export const IDL: CardinalCreatorStandard = {
         "kind": "struct",
         "fields": [
           {
-            "name": "checkSellerFeeBasisPoints",
-            "type": "bool"
-          },
-          {
             "name": "name",
             "type": "string"
           },
@@ -1408,6 +1404,10 @@ export const IDL: CardinalCreatorStandard = {
             "type": {
               "vec": "publicKey"
             }
+          },
+          {
+            "name": "checkSellerFeeBasisPoints",
+            "type": "bool"
           }
         ]
       }

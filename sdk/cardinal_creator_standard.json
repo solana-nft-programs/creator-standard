@@ -611,10 +611,6 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "checkSellerFeeBasisPoints",
-            "type": "bool"
-          },
-          {
             "name": "name",
             "type": "string"
           },
@@ -633,6 +629,10 @@
             "type": {
               "vec": "publicKey"
             }
+          },
+          {
+            "name": "checkSellerFeeBasisPoints",
+            "type": "bool"
           }
         ]
       }
