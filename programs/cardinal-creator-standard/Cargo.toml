@@ -1,12 +1,14 @@
 [package]
 name = "cardinal-creator-standard"
 version = "0.1.0"
+description = "Cardinal creator standard"
 edition = "2021"
 homepage = "https://cardinal.so"
 repository = "https://github.com/cardinal-labs/cardinal-creator-standard"
 authors = ["Cardinal <team@cardinal.so>"]
 license = "AGPL-3.0"
 keywords = ["solana", "cardinal"]
+
 
 [lib]
 crate-type = ["cdylib", "lib"]
