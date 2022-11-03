@@ -49,10 +49,7 @@ jobs:
           profile: minimal
           toolchain: ${{ env.RUST_TOOLCHAIN }}
       - name: Run fmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: +nightly fmt
-          args: --all --manifest-path ./Cargo.toml -- --check
+        run: cargo +nightly fmt
 
   soteria-scan:
     runs-on: ubuntu-latest
