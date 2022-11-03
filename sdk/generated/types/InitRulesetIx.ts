@@ -9,11 +9,11 @@ import * as web3 from '@solana/web3.js'
 import * as beet from '@metaplex-foundation/beet'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
 export type InitRulesetIx = {
-  checkSellerFeeBasisPoints: boolean
   name: string
   collector: web3.PublicKey
   disallowedAddresses: web3.PublicKey[]
   allowedPrograms: web3.PublicKey[]
+  checkSellerFeeBasisPoints: boolean
 }
 
 /**
@@ -22,11 +22,11 @@ export type InitRulesetIx = {
  */
 export const initRulesetIxBeet = new beet.FixableBeetArgsStruct<InitRulesetIx>(
   [
-    ['checkSellerFeeBasisPoints', beet.bool],
     ['name', beet.utf8String],
     ['collector', beetSolana.publicKey],
     ['disallowedAddresses', beet.array(beetSolana.publicKey)],
     ['allowedPrograms', beet.array(beetSolana.publicKey)],
+    ['checkSellerFeeBasisPoints', beet.bool],
   ],
   'InitRulesetIx'
 )
