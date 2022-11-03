@@ -21,6 +21,11 @@
           "isSigner": false
         },
         {
+          "name": "holderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "collector",
           "isMut": true,
           "isSigner": false
@@ -435,11 +440,6 @@
           "name": "authority",
           "isMut": false,
           "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
         },
         {
           "name": "tokenProgram",

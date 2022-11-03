@@ -12,6 +12,7 @@ import {
   Ruleset,
 } from "../sdk";
 import { createMintTx } from "./mint";
+import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 let mint: PublicKey;
 
 const RULESET_NAME = `global-${Math.random()}`;
@@ -71,11 +72,13 @@ test("Init", async () => {
     RULESET_ID
   );
 
+  const ata = getAssociatedTokenAddressSync(mint, provider.wallet.publicKey);
   tx.add(
     createInitMintManagerInstruction({
       mint: mint,
       mintManager: mintManagerId,
       authority: provider.wallet.publicKey,
+      holderTokenAccount: ata,
       payer: provider.wallet.publicKey,
       collector: ruleset.collector,
       ruleset: RULESET_ID,

@@ -9,7 +9,6 @@ build:
 	yarn idl:generate && yarn solita
 
 start:
-	pkill solana-test-validator || true
 	solana-test-validator --url https://api.mainnet-beta.solana.com \
 		--clone metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s --clone PwDiXFxQsGra4sFFTT8r1QWRMd4vfumiWC1jfWNfdYT \
 		--bpf-program creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez ./target/deploy/cardinal_creator_standard.so \

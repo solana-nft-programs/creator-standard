@@ -31,7 +31,6 @@ pub struct TransferCtx<'info> {
     to: Account<'info, TokenAccount>,
 
     authority: Signer<'info>,
-    rent: Sysvar<'info, Rent>,
     token_program: Program<'info, Token>,
     system_program: Program<'info, System>,
     /// CHECK: This is not dangerous because the ID is checked with instructions sysvar
@@ -52,6 +51,9 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         let first_ix = load_instruction_at_checked(0, &instructions_account_info)
             .expect("Failed to get first instruction");
         let data: &[u8] = &first_ix.data;
+        if data.is_empty() {
+            return Err(error!(ErrorCode::InvalidPreTransferInstruction));
+        }
         let disc_bytes = array_ref![data, 0, 8];
         // check first account is account balances for this mint
         let mint = ctx.accounts.mint_manager.mint;
@@ -75,6 +77,9 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         }
         // check instruction
         let data: &[u8] = &last_ix.data;
+        if data.is_empty() {
+            return Err(error!(ErrorCode::InvalidPostTransferInstruction));
+        }
         let disc_bytes = array_ref![data, 0, 8];
         if last_ix.program_id != *ctx.program_id || disc_bytes != &POST_TRANSFER_DISCRIMINATOR {
             return Err(error!(ErrorCode::InvalidPostTransferInstruction));
@@ -123,6 +128,8 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
     let cpi_program = ctx.accounts.token_program.to_account_info();
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);
     token::thaw_account(cpi_context)?;
+
+    // todo close from token account if you are the authority?
 
     let cpi_accounts = Transfer {
         from: ctx.accounts.from.to_account_info(),

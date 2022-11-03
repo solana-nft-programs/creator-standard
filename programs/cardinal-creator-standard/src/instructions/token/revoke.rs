@@ -20,7 +20,7 @@ pub struct RevokeCtx<'info> {
     #[account(mut, constraint =
         holder_token_account.owner == holder.key()
         && holder_token_account.mint == mint_manager.mint
-        && holder_token_account.amount > 1
+        && holder_token_account.amount >= 1
         && holder_token_account.delegate.is_some()
         @ ErrorCode::InvalidHolderTokenAccount
     )]

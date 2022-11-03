@@ -21,7 +21,7 @@ export async function newAccountWithLamports(
     account.publicKey,
     lamports
   );
-  await connection.confirmTransaction(signature);
+  await connection.confirmTransaction(signature, "confirmed");
   return account;
 }
 
@@ -111,16 +111,13 @@ export const keypairFrom = (s: string, n?: string): Keypair => {
 
 export const handleError = (e: any) => {
   const message = (e as SendTransactionError).message ?? "";
-  const logs =
-    (e as SendTransactionError).logs ?? [
-      (e as SendTransactionError).message ?? "",
-    ] ?? [(e as Error).toString()] ??
-    [];
+  const logs = (e as SendTransactionError).logs;
   if (logs) {
-    const parsed = parseProgramLogs(logs, message);
-    const fmt = formatInstructionLogsForConsole(parsed);
-    console.log(fmt);
+    console.log(logs);
+    // const parsed = parseProgramLogs(logs, message);
+    // const fmt = formatInstructionLogsForConsole(parsed);
+    // console.log(fmt);
   } else {
-    console.log(e);
+    console.log(e, message);
   }
 };

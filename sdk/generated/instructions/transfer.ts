@@ -41,7 +41,6 @@ export type TransferInstructionAccounts = {
   from: web3.PublicKey
   to: web3.PublicKey
   authority: web3.PublicKey
-  rent?: web3.PublicKey
   tokenProgram?: web3.PublicKey
   systemProgram?: web3.PublicKey
   instructions: web3.PublicKey
@@ -96,11 +95,6 @@ export function createTransferInstruction(
       pubkey: accounts.authority,
       isWritable: false,
       isSigner: true,
-    },
-    {
-      pubkey: accounts.rent ?? web3.SYSVAR_RENT_PUBKEY,
-      isWritable: false,
-      isSigner: false,
     },
     {
       pubkey: accounts.tokenProgram ?? splToken.TOKEN_PROGRAM_ID,
