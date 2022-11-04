@@ -114,6 +114,10 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
     }
     ////////////////////////////////////////////////////////////
 
+    if ctx.accounts.mint_manager.in_use_by.is_some() {
+        return Err(error!(ErrorCode::TokenCurentlyInUse));
+    }
+
     let mint = ctx.accounts.mint.key();
     let mint_manager_seeds = &[
         MINT_MANAGER_SEED.as_bytes(),

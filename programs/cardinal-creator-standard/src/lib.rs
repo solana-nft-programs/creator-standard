@@ -9,6 +9,8 @@ solana_program::declare_id!("creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez");
 
 #[program]
 pub mod cardinal_creator_standard {
+    use crate::instructions::mint_manager::{RemoveInUseByCtx, SetInUseByCtx, SetInUseByIx};
+
     use super::*;
 
     // mint_manager
@@ -21,6 +23,14 @@ pub mod cardinal_creator_standard {
         ix: UpdateMintManagerIx,
     ) -> Result<()> {
         mint_manager::update_mint_manager::handler(ctx, ix)
+    }
+
+    pub fn set_in_use_by(ctx: Context<SetInUseByCtx>, ix: SetInUseByIx) -> Result<()> {
+        mint_manager::set_in_use_by::handler(ctx, ix)
+    }
+
+    pub fn remove_in_use_by(ctx: Context<RemoveInUseByCtx>) -> Result<()> {
+        mint_manager::remove_in_use_by::handler(ctx)
     }
 
     // ruleset

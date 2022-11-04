@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.5",
   "name": "cardinal_creator_standard",
   "instructions": [
     {
@@ -95,6 +95,50 @@
           }
         }
       ]
+    },
+    {
+      "name": "setInUseBy",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holder",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "holderTokenAccount",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "ix",
+          "type": {
+            "defined": "SetInUseByIx"
+          }
+        }
+      ]
+    },
+    {
+      "name": "removeInUseBy",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": []
     },
     {
       "name": "initRuleset",
@@ -527,6 +571,12 @@
           {
             "name": "ruleset",
             "type": "publicKey"
+          },
+          {
+            "name": "inUseBy",
+            "type": {
+              "option": "publicKey"
+            }
           }
         ]
       }
@@ -593,6 +643,18 @@
     }
   ],
   "types": [
+    {
+      "name": "SetInUseByIx",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "inUseBy",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
     {
       "name": "UpdateMintManagerIx",
       "type": {
@@ -769,6 +831,21 @@
       "code": 6014,
       "name": "AccountNotFound",
       "msg": "Account not found in instruction"
+    },
+    {
+      "code": 6015,
+      "name": "TokenAlreadyInUse",
+      "msg": "Token already in use"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidTokenUser",
+      "msg": "Invalid token user"
+    },
+    {
+      "code": 6017,
+      "name": "TokenCurentlyInUse",
+      "msg": "Token currently in use"
     }
   ],
   "metadata": {

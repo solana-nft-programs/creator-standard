@@ -20,6 +20,7 @@ export type MintManagerArgs = {
   mint: web3.PublicKey
   authority: web3.PublicKey
   ruleset: web3.PublicKey
+  inUseBy: beet.COption<web3.PublicKey>
 }
 
 export const mintManagerDiscriminator = [202, 47, 44, 178, 55, 215, 117, 40]
@@ -36,7 +37,8 @@ export class MintManager implements MintManagerArgs {
     readonly version: number,
     readonly mint: web3.PublicKey,
     readonly authority: web3.PublicKey,
-    readonly ruleset: web3.PublicKey
+    readonly ruleset: web3.PublicKey,
+    readonly inUseBy: beet.COption<web3.PublicKey>
   ) {}
 
   /**
@@ -48,7 +50,8 @@ export class MintManager implements MintManagerArgs {
       args.version,
       args.mint,
       args.authority,
-      args.ruleset
+      args.ruleset,
+      args.inUseBy
     )
   }
 
@@ -115,34 +118,36 @@ export class MintManager implements MintManagerArgs {
 
   /**
    * Returns the byteSize of a {@link Buffer} holding the serialized data of
-   * {@link MintManager}
+   * {@link MintManager} for the provided args.
+   *
+   * @param args need to be provided since the byte size for this account
+   * depends on them
    */
-  static get byteSize() {
-    return mintManagerBeet.byteSize
+  static byteSize(args: MintManagerArgs) {
+    const instance = MintManager.fromArgs(args)
+    return mintManagerBeet.toFixedFromValue({
+      accountDiscriminator: mintManagerDiscriminator,
+      ...instance,
+    }).byteSize
   }
 
   /**
    * Fetches the minimum balance needed to exempt an account holding
    * {@link MintManager} data from rent
    *
+   * @param args need to be provided since the byte size for this account
+   * depends on them
    * @param connection used to retrieve the rent exemption information
    */
   static async getMinimumBalanceForRentExemption(
+    args: MintManagerArgs,
     connection: web3.Connection,
     commitment?: web3.Commitment
   ): Promise<number> {
     return connection.getMinimumBalanceForRentExemption(
-      MintManager.byteSize,
+      MintManager.byteSize(args),
       commitment
     )
-  }
-
-  /**
-   * Determines if the provided {@link Buffer} has the correct byte size to
-   * hold {@link MintManager} data.
-   */
-  static hasCorrectByteSize(buf: Buffer, offset = 0) {
-    return buf.byteLength - offset === MintManager.byteSize
   }
 
   /**
@@ -156,6 +161,7 @@ export class MintManager implements MintManagerArgs {
       mint: this.mint.toBase58(),
       authority: this.authority.toBase58(),
       ruleset: this.ruleset.toBase58(),
+      inUseBy: this.inUseBy,
     }
   }
 }
@@ -164,7 +170,7 @@ export class MintManager implements MintManagerArgs {
  * @category Accounts
  * @category generated
  */
-export const mintManagerBeet = new beet.BeetStruct<
+export const mintManagerBeet = new beet.FixableBeetStruct<
   MintManager,
   MintManagerArgs & {
     accountDiscriminator: number[] /* size: 8 */
@@ -177,6 +183,7 @@ export const mintManagerBeet = new beet.BeetStruct<
     ['mint', beetSolana.publicKey],
     ['authority', beetSolana.publicKey],
     ['ruleset', beetSolana.publicKey],
+    ['inUseBy', beet.coption(beetSolana.publicKey)],
   ],
   MintManager.fromArgs,
   'MintManager'

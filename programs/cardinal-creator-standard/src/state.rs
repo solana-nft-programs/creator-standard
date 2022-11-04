@@ -13,7 +13,7 @@ pub struct MintManager {
     pub mint: Pubkey,
     pub authority: Pubkey,
     pub ruleset: Pubkey,
-    pub in_use_by: Pubkey,
+    pub in_use_by: Option<Pubkey>,
 }
 
 pub const RULESET_SEED: &str = "ruleset";
