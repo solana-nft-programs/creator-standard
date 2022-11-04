@@ -5,6 +5,7 @@ pub const CREATION_LAMPORTS: u64 = 5_000_000;
 
 pub const MINT_MANAGER_SEED: &str = "mint-manager";
 pub const MINT_MANAGER_SIZE: usize = 8 + std::mem::size_of::<MintManager>() + 8;
+pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 
 #[account]
 pub struct MintManager {
