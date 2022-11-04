@@ -1,11 +1,5 @@
 import { test, expect } from "@jest/globals";
-import {
-  CardinalProvider,
-  executeTransaction,
-  getProvider,
-  newAccountWithLamports,
-} from "./utils";
-import { SYSVAR_INSTRUCTIONS_PUBKEY } from "@solana/web3.js";
+import { CardinalProvider, executeTransaction, getProvider } from "../utils";
 import { Keypair, Transaction } from "@solana/web3.js";
 
 import {
@@ -14,19 +8,18 @@ import {
   createInitRulesetInstruction,
   findRulesetId,
   Ruleset,
-  createTransferInstruction,
   createApproveInstruction,
-  createInitMintInstruction,
-} from "../sdk";
+  createRevokeInstruction,
+  createInitializeMintInstruction,
+} from "../../sdk";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
-  createAssociatedTokenAccountInstruction,
   getAccount,
   getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
-import { Wallet } from "@project-serum/anchor";
 const mintKeypair = Keypair.generate();
 const mint = mintKeypair.publicKey;
+const checkSellerFeeBasisPoints = true;
 let delegate: Keypair;
 
 const RULESET_NAME = `global-${Math.random()}`;
@@ -35,7 +28,6 @@ let provider: CardinalProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
-  delegate = await newAccountWithLamports(provider.connection);
 });
 
 test("Create ruleset", async () => {
@@ -51,7 +43,7 @@ test("Create ruleset", async () => {
         ix: {
           name: RULESET_NAME,
           collector: provider.wallet.publicKey,
-          checkSellerFeeBasisPoints: false,
+          checkSellerFeeBasisPoints: checkSellerFeeBasisPoints,
           disallowedAddresses: [],
           allowedPrograms: [],
         },
@@ -66,7 +58,7 @@ test("Create ruleset", async () => {
   expect(ruleset.authority.toString()).toBe(
     provider.wallet.publicKey.toString()
   );
-  expect(ruleset.checkSellerFeeBasisPoints).toBe(false);
+  expect(ruleset.checkSellerFeeBasisPoints).toBe(true);
   expect(ruleset.disallowedAddresses.length).toBe(0);
   expect(ruleset.allowedPrograms.length).toBe(0);
 });
@@ -80,7 +72,7 @@ test("Init", async () => {
 
   const tx = new Transaction();
   tx.add(
-    createInitMintInstruction({
+    createInitializeMintInstruction({
       mintManager: mintManagerId,
       mint: mint,
       ruleset: RULESET_ID,
@@ -115,6 +107,7 @@ test("Init", async () => {
 test("Delegate", async () => {
   const mintManagerId = findMintManagerId(mint);
   const tx = new Transaction();
+  delegate = Keypair.generate();
   const fromAtaId = getAssociatedTokenAddressSync(
     mint,
     provider.wallet.publicKey
@@ -123,7 +116,6 @@ test("Delegate", async () => {
   expect(fromAta.isFrozen).toBe(true);
   expect(fromAta.mint.toString()).toBe(mint.toString());
   expect(fromAta.amount.toString()).toBe("1");
-
   tx.add(
     createApproveInstruction({
       mintManager: mintManagerId,
@@ -134,7 +126,6 @@ test("Delegate", async () => {
     })
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
-
   const fromAtaCheck = await getAccount(provider.connection, fromAtaId);
   expect(fromAtaCheck.isFrozen).toBe(true);
   expect(fromAtaCheck.mint.toString()).toBe(mint.toString());
@@ -143,47 +134,31 @@ test("Delegate", async () => {
   expect(fromAtaCheck.delegatedAmount.toString()).toBe("1");
 });
 
-test("Transfer", async () => {
+test("Revoke", async () => {
   const mintManagerId = findMintManagerId(mint);
   const tx = new Transaction();
-  const recipient = Keypair.generate();
   const fromAtaId = getAssociatedTokenAddressSync(
     mint,
     provider.wallet.publicKey
   );
-  const toAtaId = getAssociatedTokenAddressSync(mint, recipient.publicKey);
   const fromAta = await getAccount(provider.connection, fromAtaId);
-
   expect(fromAta.isFrozen).toBe(true);
   expect(fromAta.mint.toString()).toBe(mint.toString());
   expect(fromAta.amount.toString()).toBe("1");
-
+  expect(fromAta.delegate?.toString()).toBe(delegate.publicKey.toString());
+  expect(fromAta.delegatedAmount.toString()).toBe("1");
   tx.add(
-    createAssociatedTokenAccountInstruction(
-      delegate.publicKey,
-      toAtaId,
-      recipient.publicKey,
-      mint
-    ),
-    createTransferInstruction({
+    createRevokeInstruction({
       mintManager: mintManagerId,
-      ruleset: RULESET_ID,
       mint: mint,
-      from: fromAtaId,
-      to: toAtaId,
-      authority: delegate.publicKey,
-      instructions: SYSVAR_INSTRUCTIONS_PUBKEY,
+      holderTokenAccount: fromAtaId,
+      holder: provider.wallet.publicKey,
     })
   );
-  await executeTransaction(provider.connection, tx, new Wallet(delegate));
-
+  await executeTransaction(provider.connection, tx, provider.wallet);
   const fromAtaCheck = await getAccount(provider.connection, fromAtaId);
-  expect(fromAtaCheck.isFrozen).toBe(false);
+  expect(fromAtaCheck.isFrozen).toBe(true);
   expect(fromAtaCheck.mint.toString()).toBe(mint.toString());
-  expect(fromAtaCheck.amount.toString()).toBe("0");
-
-  const toAtaCheck = await getAccount(provider.connection, toAtaId);
-  expect(toAtaCheck.isFrozen).toBe(true);
-  expect(toAtaCheck.mint.toString()).toBe(mint.toString());
-  expect(toAtaCheck.amount.toString()).toBe("1");
+  expect(fromAtaCheck.amount.toString()).toBe("1");
+  expect(fromAtaCheck.delegate).toBe(null);
 });

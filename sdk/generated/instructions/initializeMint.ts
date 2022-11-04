@@ -11,17 +11,17 @@ import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category InitMint
+ * @category InitializeMint
  * @category generated
  */
-export const initMintStruct = new beet.BeetArgsStruct<{
+export const initializeMintStruct = new beet.BeetArgsStruct<{
   instructionDiscriminator: number[] /* size: 8 */
 }>(
   [['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)]],
-  'InitMintInstructionArgs'
+  'InitializeMintInstructionArgs'
 )
 /**
- * Accounts required by the _initMint_ instruction
+ * Accounts required by the _initializeMint_ instruction
  *
  * @property [_writable_] mintManager
  * @property [_writable_, **signer**] mint
@@ -33,10 +33,10 @@ export const initMintStruct = new beet.BeetArgsStruct<{
  * @property [_writable_, **signer**] payer
  * @property [] associatedTokenProgram
  * @category Instructions
- * @category InitMint
+ * @category InitializeMint
  * @category generated
  */
-export type InitMintInstructionAccounts = {
+export type InitializeMintInstructionAccounts = {
   mintManager: web3.PublicKey
   mint: web3.PublicKey
   ruleset: web3.PublicKey
@@ -51,24 +51,24 @@ export type InitMintInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const initMintInstructionDiscriminator = [
-  126, 176, 233, 16, 66, 117, 209, 125,
+export const initializeMintInstructionDiscriminator = [
+  209, 42, 195, 4, 129, 85, 209, 44,
 ]
 
 /**
- * Creates a _InitMint_ instruction.
+ * Creates a _InitializeMint_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @category Instructions
- * @category InitMint
+ * @category InitializeMint
  * @category generated
  */
-export function createInitMintInstruction(
-  accounts: InitMintInstructionAccounts,
+export function createInitializeMintInstruction(
+  accounts: InitializeMintInstructionAccounts,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
-  const [data] = initMintStruct.serialize({
-    instructionDiscriminator: initMintInstructionDiscriminator,
+  const [data] = initializeMintStruct.serialize({
+    instructionDiscriminator: initializeMintInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {

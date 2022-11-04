@@ -11,17 +11,17 @@ import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category InitAccount
+ * @category InitializeAccount
  * @category generated
  */
-export const initAccountStruct = new beet.BeetArgsStruct<{
+export const initializeAccountStruct = new beet.BeetArgsStruct<{
   instructionDiscriminator: number[] /* size: 8 */
 }>(
   [['instructionDiscriminator', beet.uniformFixedSizeArray(beet.u8, 8)]],
-  'InitAccountInstructionArgs'
+  'InitializeAccountInstructionArgs'
 )
 /**
- * Accounts required by the _initAccount_ instruction
+ * Accounts required by the _initializeAccount_ instruction
  *
  * @property [] mint
  * @property [_writable_] tokenAccount
@@ -29,10 +29,10 @@ export const initAccountStruct = new beet.BeetArgsStruct<{
  * @property [_writable_, **signer**] payer
  * @property [] associatedTokenProgram
  * @category Instructions
- * @category InitAccount
+ * @category InitializeAccount
  * @category generated
  */
-export type InitAccountInstructionAccounts = {
+export type InitializeAccountInstructionAccounts = {
   mint: web3.PublicKey
   tokenAccount: web3.PublicKey
   tokenAccountOwner: web3.PublicKey
@@ -43,24 +43,24 @@ export type InitAccountInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const initAccountInstructionDiscriminator = [
-  169, 188, 158, 199, 9, 151, 101, 125,
+export const initializeAccountInstructionDiscriminator = [
+  74, 115, 99, 93, 197, 69, 103, 7,
 ]
 
 /**
- * Creates a _InitAccount_ instruction.
+ * Creates a _InitializeAccount_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @category Instructions
- * @category InitAccount
+ * @category InitializeAccount
  * @category generated
  */
-export function createInitAccountInstruction(
-  accounts: InitAccountInstructionAccounts,
+export function createInitializeAccountInstruction(
+  accounts: InitializeAccountInstructionAccounts,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
-  const [data] = initAccountStruct.serialize({
-    instructionDiscriminator: initAccountInstructionDiscriminator,
+  const [data] = initializeAccountStruct.serialize({
+    instructionDiscriminator: initializeAccountInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {

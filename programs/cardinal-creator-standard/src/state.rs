@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use solana_program::pubkey::Pubkey;
 
-pub const CREATION_LAMPORTS: u64 = 5_000_000;
+pub const CREATION_LAMPORTS: u64 = 10_000_000;
 
 pub const MINT_MANAGER_SEED: &str = "mint-manager";
 pub const MINT_MANAGER_SIZE: usize = 8 + std::mem::size_of::<MintManager>() + 8;

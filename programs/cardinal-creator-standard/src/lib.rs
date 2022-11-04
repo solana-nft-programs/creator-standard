@@ -43,12 +43,12 @@ pub mod cardinal_creator_standard {
     }
 
     // token
-    pub fn init_mint(ctx: Context<InitMintCtx>) -> Result<()> {
-        token::init_mint::handler(ctx)
+    pub fn initialize_mint(ctx: Context<InitializeMintCtx>) -> Result<()> {
+        token::initialize_mint::handler(ctx)
     }
 
-    pub fn init_account(ctx: Context<InitAccountCtx>) -> Result<()> {
-        token::init_account::handler(ctx)
+    pub fn initialize_account(ctx: Context<InitializeAccountCtx>) -> Result<()> {
+        token::initialize_account::handler(ctx)
     }
 
     pub fn approve(ctx: Context<ApproveCtx>) -> Result<()> {

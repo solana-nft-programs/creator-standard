@@ -1,5 +1,5 @@
 import { test, expect } from "@jest/globals";
-import { CardinalProvider, executeTransaction, getProvider } from "./utils";
+import { CardinalProvider, executeTransaction, getProvider } from "../utils";
 import { SYSVAR_INSTRUCTIONS_PUBKEY } from "@solana/web3.js";
 import { Keypair, Transaction } from "@solana/web3.js";
 
@@ -10,14 +10,15 @@ import {
   findRulesetId,
   Ruleset,
   createTransferInstruction,
-  createInitMintInstruction,
-} from "../sdk";
+  createInitializeMintInstruction,
+} from "../../sdk";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
   getAccount,
   getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
+const checkSellerFeeBasisPoints = false;
 const mintKeypair = Keypair.generate();
 const mint = mintKeypair.publicKey;
 
@@ -42,7 +43,7 @@ test("Create ruleset", async () => {
         ix: {
           name: RULESET_NAME,
           collector: provider.wallet.publicKey,
-          checkSellerFeeBasisPoints: false,
+          checkSellerFeeBasisPoints: checkSellerFeeBasisPoints,
           disallowedAddresses: [],
           allowedPrograms: [],
         },
@@ -71,7 +72,7 @@ test("Init", async () => {
 
   const tx = new Transaction();
   tx.add(
-    createInitMintInstruction({
+    createInitializeMintInstruction({
       mintManager: mintManagerId,
       mint: mint,
       ruleset: RULESET_ID,

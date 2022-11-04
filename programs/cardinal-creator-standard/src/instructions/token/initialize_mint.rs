@@ -14,7 +14,7 @@ use solana_program::system_instruction::transfer;
 use spl_associated_token_account::get_associated_token_address;
 
 #[derive(Accounts)]
-pub struct InitMintCtx<'info> {
+pub struct InitializeMintCtx<'info> {
     #[account(
         init,
         payer = payer,
@@ -46,7 +46,7 @@ pub struct InitMintCtx<'info> {
     system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<InitMintCtx>) -> Result<()> {
+pub fn handler(ctx: Context<InitializeMintCtx>) -> Result<()> {
     let mint_manager = &mut ctx.accounts.mint_manager;
     mint_manager.bump = *ctx.bumps.get("mint_manager").unwrap();
     mint_manager.version = 0;
@@ -135,6 +135,7 @@ pub fn handler(ctx: Context<InitMintCtx>) -> Result<()> {
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);
     token::freeze_account(cpi_context)?;
 
+    // creation fee
     invoke(
         &transfer(
             &ctx.accounts.payer.key(),
