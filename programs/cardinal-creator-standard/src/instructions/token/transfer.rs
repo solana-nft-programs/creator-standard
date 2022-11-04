@@ -103,7 +103,7 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
             .expect("Failed to get instruction");
 
         if allowed_programs.len() > 0
-            && ix.program_id != *ctx.program_id
+            && !is_default_program(ix.program_id)
             && !allowed_programs.contains(&ix.program_id)
         {
             return Err(error!(ErrorCode::ProgramNotAllowed));

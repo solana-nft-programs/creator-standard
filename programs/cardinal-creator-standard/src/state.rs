@@ -30,8 +30,8 @@ pub struct Ruleset {
     pub collector: Pubkey,
     pub check_seller_fee_basis_points: bool,
     pub name: String,
-    pub disallowed_addresses: Vec<Pubkey>,
     pub allowed_programs: Vec<Pubkey>,
+    pub disallowed_addresses: Vec<Pubkey>,
 }
 
 pub const ACCOUNT_BALANCES_SEED: &str = "account-balances";
@@ -47,4 +47,9 @@ pub struct AccountBalance {
 #[account]
 pub struct AccountBalances {
     pub balances: Vec<AccountBalance>,
+}
+
+pub const DEFAULT_PROGRAMS: [&str; 1] = ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"];
+pub fn is_default_program(program_id: Pubkey) -> bool {
+    DEFAULT_PROGRAMS.contains(&&program_id.to_string()[..])
 }
