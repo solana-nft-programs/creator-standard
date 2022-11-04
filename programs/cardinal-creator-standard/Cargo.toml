@@ -14,6 +14,12 @@ keywords = ["solana", "cardinal"]
 crate-type = ["cdylib", "lib"]
 name = "cardinal_creator_standard"
 
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
+
 [dependencies]
 solana-program = "1.10.41"
 anchor-lang = { version = "0.25.0", features = ["init-if-needed"] }
