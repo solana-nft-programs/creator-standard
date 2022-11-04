@@ -32,4 +32,10 @@ pub enum ErrorCode {
     UnknownAccount,
     #[msg("Account not found in instruction")]
     AccountNotFound,
+    #[msg("Token already in use")]
+    TokenAlreadyInUse,
+    #[msg("Invalid token user")]
+    InvalidTokenUser,
+    #[msg("Token currently in use")]
+    TokenCurentlyInUse,
 }

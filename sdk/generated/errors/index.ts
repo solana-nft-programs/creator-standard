@@ -363,6 +363,75 @@ createErrorFromNameLookup.set(
 )
 
 /**
+ * TokenAlreadyInUse: 'Token already in use'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class TokenAlreadyInUseError extends Error {
+  readonly code: number = 0x177f
+  readonly name: string = 'TokenAlreadyInUse'
+  constructor() {
+    super('Token already in use')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, TokenAlreadyInUseError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x177f, () => new TokenAlreadyInUseError())
+createErrorFromNameLookup.set(
+  'TokenAlreadyInUse',
+  () => new TokenAlreadyInUseError()
+)
+
+/**
+ * InvalidTokenUser: 'Invalid token user'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidTokenUserError extends Error {
+  readonly code: number = 0x1780
+  readonly name: string = 'InvalidTokenUser'
+  constructor() {
+    super('Invalid token user')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidTokenUserError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1780, () => new InvalidTokenUserError())
+createErrorFromNameLookup.set(
+  'InvalidTokenUser',
+  () => new InvalidTokenUserError()
+)
+
+/**
+ * TokenCurentlyInUse: 'Token currently in use'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class TokenCurentlyInUseError extends Error {
+  readonly code: number = 0x1781
+  readonly name: string = 'TokenCurentlyInUse'
+  constructor() {
+    super('Token currently in use')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, TokenCurentlyInUseError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1781, () => new TokenCurentlyInUseError())
+createErrorFromNameLookup.set(
+  'TokenCurentlyInUse',
+  () => new TokenCurentlyInUseError()
+)
+
+/**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors
  * @category generated
