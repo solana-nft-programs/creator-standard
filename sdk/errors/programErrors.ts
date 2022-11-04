@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /**
  * Adapted from explorer.solana.com code written by @jstarry.
  */
 
-import { TransactionError } from "@solana/web3.js";
+import type { TransactionError } from "@solana/web3.js";
 
 const instructionErrorMessage: Map<string, string> = new Map([
   ["GenericError", "generic instruction error"],
@@ -141,6 +143,7 @@ function getInstructionError(error: any): string {
   }
 
   if (out && value) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return out.replace("{0}", value);
   }
 

@@ -621,13 +621,13 @@
             "type": "string"
           },
           {
-            "name": "disallowedAddresses",
+            "name": "allowedPrograms",
             "type": {
               "vec": "publicKey"
             }
           },
           {
-            "name": "allowedPrograms",
+            "name": "disallowedAddresses",
             "type": {
               "vec": "publicKey"
             }

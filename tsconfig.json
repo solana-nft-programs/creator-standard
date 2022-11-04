@@ -35,5 +35,5 @@
     "declarationMap": true,
     "inlineSources": true
   },
-  "include": ["sdk/", "tests/", "tools/"]
+  "include": ["sdk/", "tests/", "tools/", "target/"]
 }

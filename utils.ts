@@ -1,13 +1,7 @@
-import {
-  Connection,
-  Transaction,
-  sendAndConfirmRawTransaction,
-  SendTransactionError,
-  Signer,
-  SystemProgram,
-} from "@solana/web3.js";
-import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { PROGRAM_ADDRESS } from "./sdk/generated";
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { utils, Wallet } from "@project-serum/anchor";
 import {
   createAssociatedTokenAccountInstruction,
@@ -18,6 +12,18 @@ import {
   MINT_SIZE,
   TOKEN_PROGRAM_ID,
 } from "@solana/spl-token";
+import type { SendTransactionError, Signer } from "@solana/web3.js";
+import {
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  sendAndConfirmRawTransaction,
+  SystemProgram,
+  Transaction,
+} from "@solana/web3.js";
+
+import { PROGRAM_ADDRESS } from "./sdk/generated";
 
 export async function newAccountWithLamports(
   connection: Connection,
@@ -44,7 +50,7 @@ export async function executeTransaction(
   wallet: Wallet,
   signers?: Signer[]
 ): Promise<string> {
-  tx.recentBlockhash = await (await connection.getLatestBlockhash()).blockhash;
+  tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
   tx.feePayer = wallet.publicKey;
   await wallet.signTransaction(tx);
   if (signers) {

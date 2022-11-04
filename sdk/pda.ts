@@ -4,14 +4,14 @@ import type { PublicKey } from "@solana/web3.js";
 
 import { PROGRAM_ID } from "./generated";
 
-export const findMintManagerId = (mintId: PublicKey) => {
+export const findMintManagerId = (mintId: PublicKey): PublicKey => {
   return findProgramAddressSync(
     [utils.bytes.utf8.encode("mint-manager"), mintId.toBuffer()],
     PROGRAM_ID
   )[0];
 };
 
-export const findRulesetId = (name: string) => {
+export const findRulesetId = (name: string): PublicKey => {
   return findProgramAddressSync(
     [utils.bytes.utf8.encode("ruleset"), utils.bytes.utf8.encode(name)],
     PROGRAM_ID

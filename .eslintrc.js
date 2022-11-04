@@ -17,7 +17,7 @@ module.exports = {
     node: true,
   },
   rules: {
-    eqeqeq: "error",
+    eqeqeq: "warn",
     "@typescript-eslint/explicit-member-accessibility": [
       "error",
       { accessibility: "no-public" },

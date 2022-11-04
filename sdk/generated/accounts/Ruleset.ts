@@ -21,8 +21,8 @@ export type RulesetArgs = {
   collector: web3.PublicKey
   checkSellerFeeBasisPoints: boolean
   name: string
-  disallowedAddresses: web3.PublicKey[]
   allowedPrograms: web3.PublicKey[]
+  disallowedAddresses: web3.PublicKey[]
 }
 
 export const rulesetDiscriminator = [123, 92, 136, 166, 160, 236, 248, 180]
@@ -41,8 +41,8 @@ export class Ruleset implements RulesetArgs {
     readonly collector: web3.PublicKey,
     readonly checkSellerFeeBasisPoints: boolean,
     readonly name: string,
-    readonly disallowedAddresses: web3.PublicKey[],
-    readonly allowedPrograms: web3.PublicKey[]
+    readonly allowedPrograms: web3.PublicKey[],
+    readonly disallowedAddresses: web3.PublicKey[]
   ) {}
 
   /**
@@ -56,8 +56,8 @@ export class Ruleset implements RulesetArgs {
       args.collector,
       args.checkSellerFeeBasisPoints,
       args.name,
-      args.disallowedAddresses,
-      args.allowedPrograms
+      args.allowedPrograms,
+      args.disallowedAddresses
     )
   }
 
@@ -168,8 +168,8 @@ export class Ruleset implements RulesetArgs {
       collector: this.collector.toBase58(),
       checkSellerFeeBasisPoints: this.checkSellerFeeBasisPoints,
       name: this.name,
-      disallowedAddresses: this.disallowedAddresses,
       allowedPrograms: this.allowedPrograms,
+      disallowedAddresses: this.disallowedAddresses,
     }
   }
 }
@@ -192,8 +192,8 @@ export const rulesetBeet = new beet.FixableBeetStruct<
     ['collector', beetSolana.publicKey],
     ['checkSellerFeeBasisPoints', beet.bool],
     ['name', beet.utf8String],
-    ['disallowedAddresses', beet.array(beetSolana.publicKey)],
     ['allowedPrograms', beet.array(beetSolana.publicKey)],
+    ['disallowedAddresses', beet.array(beetSolana.publicKey)],
   ],
   Ruleset.fromArgs,
   'Ruleset'

@@ -2,10 +2,11 @@
  * Adapted from explorer.solana.com code written by @jstarry.
  */
 
-import { TransactionError } from "@solana/web3.js";
+import type { TransactionError } from "@solana/web3.js";
+
 import {
-  getTransactionInstructionError,
   getProgramName,
+  getTransactionInstructionError,
 } from "./programErrors";
 
 export type LogMessage = {
@@ -27,7 +28,7 @@ export function parseProgramLogs(
   error: TransactionError | null
 ): InstructionLogs[] {
   let depth = 0;
-  let prettyLogs: InstructionLogs[] = [];
+  const prettyLogs: InstructionLogs[] = [];
   function prefixBuilder(
     // Indent level starts at 1.
     indentLevel: number
@@ -54,6 +55,7 @@ export function parseProgramLogs(
     if (log.startsWith("Program log:")) {
       // Use passive tense
       log = log.replace(/Program log: (.*)/g, (_match, p1) => {
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
         return `Program logged: "${p1}"`;
       });
 
@@ -125,9 +127,11 @@ export function parseProgramLogs(
             // because they include inner ix compute units as well.
             if (depth === 1) {
               prettyLogs[prettyLogs.length - 1]!.computeUnits +=
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 Number.parseInt(p1);
             }
 
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
             return `Program consumed: ${p1} ${p2}`;
           }
         );

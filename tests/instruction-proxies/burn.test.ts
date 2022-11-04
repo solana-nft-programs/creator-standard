@@ -7,7 +7,7 @@ import {
 import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
 
 import {
-  createApproveInstruction,
+  createBurnInstruction,
   createInitializeMintInstruction,
   findMintManagerId,
   findRulesetId,
@@ -15,11 +15,7 @@ import {
   Ruleset,
 } from "../../sdk";
 import type { CardinalProvider } from "../../utils";
-import {
-  executeTransaction,
-  getProvider,
-  newAccountWithLamports,
-} from "../../utils";
+import { executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 const mint = mintKeypair.publicKey;
@@ -31,14 +27,12 @@ const RULESET_COLLECTOR = new PublicKey(
 );
 
 let provider: CardinalProvider;
-let delegate: Keypair;
 
 beforeAll(async () => {
   provider = await getProvider();
-  delegate = await newAccountWithLamports(provider.connection);
 });
 
-test("Init mint manager", async () => {
+test("Initialize mint", async () => {
   const mintManagerId = findMintManagerId(mint);
   const ruleset = await Ruleset.fromAccountAddress(
     provider.connection,
@@ -80,33 +74,32 @@ test("Init mint manager", async () => {
   );
 });
 
-test("Delegate", async () => {
+test("Burn mint", async () => {
   const mintManagerId = findMintManagerId(mint);
   const tx = new Transaction();
-  const fromAtaId = getAssociatedTokenAddressSync(
+  const holderAtaId = getAssociatedTokenAddressSync(
     mint,
     provider.wallet.publicKey
   );
-  const fromAta = await getAccount(provider.connection, fromAtaId);
-  expect(fromAta.isFrozen).toBe(true);
-  expect(fromAta.mint.toString()).toBe(mint.toString());
-  expect(fromAta.amount.toString()).toBe("1");
+  const holderAta = await getAccount(provider.connection, holderAtaId);
+  expect(holderAta.isFrozen).toBe(true);
+  expect(holderAta.mint.toString()).toBe(mint.toString());
+  expect(holderAta.amount.toString()).toBe("1");
 
   tx.add(
-    createApproveInstruction({
+    createBurnInstruction({
       mintManager: mintManagerId,
-      mint: mint,
-      holderTokenAccount: fromAtaId,
+      mint: mintKeypair.publicKey,
+      holderTokenAccount: holderAtaId,
       holder: provider.wallet.publicKey,
-      delegate: delegate.publicKey,
     })
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
-  const fromAtaCheck = await getAccount(provider.connection, fromAtaId);
-  expect(fromAtaCheck.isFrozen).toBe(true);
-  expect(fromAtaCheck.mint.toString()).toBe(mint.toString());
-  expect(fromAtaCheck.amount.toString()).toBe("1");
-  expect(fromAtaCheck.delegate?.toString()).toBe(delegate.publicKey.toString());
-  expect(fromAtaCheck.delegatedAmount.toString()).toBe("1");
+  // const fromAtaCheck = await getAccount(provider.connection, fromAtaId);
+  // expect(fromAtaCheck.isFrozen).toBe(true);
+  // expect(fromAtaCheck.mint.toString()).toBe(mint.toString());
+  // expect(fromAtaCheck.amount.toString()).toBe("1");
+  // expect(fromAtaCheck.delegate?.toString()).toBe(delegate.publicKey.toString());
+  // expect(fromAtaCheck.delegatedAmount.toString()).toBe("1");
 });

@@ -621,13 +621,13 @@ export type CardinalCreatorStandard = {
             type: "string";
           },
           {
-            name: "disallowedAddresses";
+            name: "allowedPrograms";
             type: {
               vec: "publicKey";
             };
           },
           {
-            name: "allowedPrograms";
+            name: "disallowedAddresses";
             type: {
               vec: "publicKey";
             };
@@ -1493,13 +1493,13 @@ export const IDL: CardinalCreatorStandard = {
             type: "string",
           },
           {
-            name: "disallowedAddresses",
+            name: "allowedPrograms",
             type: {
               vec: "publicKey",
             },
           },
           {
-            name: "allowedPrograms",
+            name: "disallowedAddresses",
             type: {
               vec: "publicKey",
             },

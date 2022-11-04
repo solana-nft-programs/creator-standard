@@ -1,10 +1,8 @@
 import type { SendTransactionError } from "@solana/web3.js";
 import { default as colors } from "colors/safe.js";
-import {
-  InstructionLogs,
-  LogMessage,
-  parseProgramLogs,
-} from "./parseTransactionLogs";
+
+import type { InstructionLogs, LogMessage } from "./parseTransactionLogs";
+import { parseProgramLogs } from "./parseTransactionLogs";
 
 /**
  * Formats a log entry to be printed out.

@@ -6,7 +6,7 @@ all: build start test stop
 
 build:
 	anchor build
-	yarn idl:generate && yarn solita
+	yarn idl:generate && yarn solita && yarn lint
 
 start:
 	solana-test-validator --url https://api.devnet.solana.com \
