@@ -46,6 +46,41 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
     let num_instructions =
         read_u16(&mut current, &instruction_sysvar).expect("Invalid instruction");
 
+    // check if the token is currenlty being used
+    if ctx.accounts.mint_manager.in_use_by.is_some() {
+        return Err(error!(ErrorCode::TokenCurentlyInUse));
+    }
+
+    /////////////// check allowed / disallowed ///////////////
+    let mut allowed_programs = HashSet::new();
+    for program_id in &ctx.accounts.ruleset.allowed_programs {
+        allowed_programs.insert(program_id);
+    }
+
+    let mut disallowed_addresses = HashSet::new();
+    for program_id in &ctx.accounts.ruleset.disallowed_addresses {
+        disallowed_addresses.insert(program_id);
+    }
+
+    for i in 0..num_instructions {
+        let ix = load_instruction_at_checked(i.into(), &instructions_account_info)
+            .expect("Failed to get instruction");
+
+        if allowed_programs.len() > 0
+            && !is_default_program(ix.program_id)
+            && !allowed_programs.contains(&ix.program_id)
+        {
+            return Err(error!(ErrorCode::ProgramNotAllowed));
+        }
+
+        for account in ix.accounts {
+            if disallowed_addresses.len() > 0 && disallowed_addresses.contains(&account.pubkey) {
+                return Err(error!(ErrorCode::ProgramDisallowed));
+            }
+        }
+    }
+    ////////////////////////////////////////////////////////////
+
     /////////////// check pre/post ///////////////
     if ctx.accounts.ruleset.check_seller_fee_basis_points {
         // check pre_transfer
@@ -85,42 +120,12 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         if last_ix.program_id != *ctx.program_id || disc_bytes != &POST_TRANSFER_DISCRIMINATOR {
             return Err(error!(ErrorCode::InvalidPostTransferInstruction));
         }
+
+        // TODO balance checks
     }
+    //////////////////////////////////////////////
 
-    /////////////// check allowed / disallowed ///////////////
-    let mut allowed_programs = HashSet::new();
-    for program_id in &ctx.accounts.ruleset.allowed_programs {
-        allowed_programs.insert(program_id);
-    }
-
-    let mut disallowed_addresses = HashSet::new();
-    for program_id in &ctx.accounts.ruleset.disallowed_addresses {
-        disallowed_addresses.insert(program_id);
-    }
-
-    for i in 0..num_instructions {
-        let ix = load_instruction_at_checked(i.into(), &instructions_account_info)
-            .expect("Failed to get instruction");
-
-        if allowed_programs.len() > 0
-            && !is_default_program(ix.program_id)
-            && !allowed_programs.contains(&ix.program_id)
-        {
-            return Err(error!(ErrorCode::ProgramNotAllowed));
-        }
-
-        for account in ix.accounts {
-            if disallowed_addresses.len() > 0 && disallowed_addresses.contains(&account.pubkey) {
-                return Err(error!(ErrorCode::ProgramDisallowed));
-            }
-        }
-    }
-    ////////////////////////////////////////////////////////////
-
-    if ctx.accounts.mint_manager.in_use_by.is_some() {
-        return Err(error!(ErrorCode::TokenCurentlyInUse));
-    }
-
+    ///////////////// handle transfer /////////////////
     let mint = ctx.accounts.mint.key();
     let mint_manager_seeds = &[
         MINT_MANAGER_SEED.as_bytes(),
@@ -175,5 +180,6 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         let cpi_context = CpiContext::new(cpi_program, cpi_accounts);
         token::close_account(cpi_context)?;
     }
+    ///////////////////////////////////////////////////
     Ok(())
 }
