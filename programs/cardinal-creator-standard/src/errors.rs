@@ -6,6 +6,8 @@ pub enum ErrorCode {
     InvalidMint,
     #[msg("Invalid collector address")]
     InvalidCollector,
+    #[msg("Invalid ruleset collector address")]
+    InvalidRulesetCollector,
     #[msg("Invalid authority address")]
     InvalidAuthority,
     #[msg("Invalid mint manager")]
@@ -38,4 +40,6 @@ pub enum ErrorCode {
     InvalidTokenUser,
     #[msg("Token currently in use")]
     TokenCurentlyInUse,
+    #[msg("Invalid ruleset authority")]
+    InvalidRulesetAuthority,
 }
