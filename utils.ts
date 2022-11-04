@@ -6,7 +6,7 @@ import {
   Signer,
 } from "@solana/web3.js";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { PROGRAM_ADDRESS } from "../sdk/generated";
+import { PROGRAM_ADDRESS } from "./sdk/generated";
 import { utils, Wallet } from "@project-serum/anchor";
 
 export async function newAccountWithLamports(
@@ -33,7 +33,7 @@ export async function executeTransaction(
   tx: Transaction,
   wallet: Wallet,
   signers?: Signer[]
-): Promise<String> {
+): Promise<string> {
   tx.recentBlockhash = await (await connection.getLatestBlockhash()).blockhash;
   tx.feePayer = wallet.publicKey;
   await wallet.signTransaction(tx);
@@ -118,4 +118,43 @@ export const handleError = (e: any) => {
   } else {
     console.log(e, message);
   }
+};
+
+const networkURLs: { [key: string]: { primary: string; secondary?: string } } =
+  {
+    ["mainnet-beta"]: {
+      primary:
+        process.env.MAINNET_PRIMARY || "https://solana-api.projectserum.com",
+      secondary: "https://solana-api.projectserum.com",
+    },
+    mainnet: {
+      primary:
+        process.env.MAINNET_PRIMARY || "https://solana-api.projectserum.com",
+      secondary: "https://solana-api.projectserum.com",
+    },
+    devnet: { primary: "https://api.devnet.solana.com/" },
+    testnet: { primary: "https://api.testnet.solana.com/" },
+    localnet: { primary: "http://localhost:8899/" },
+  };
+
+export const connectionFor = (
+  cluster: string | null,
+  defaultCluster = "mainnet"
+) => {
+  return new Connection(
+    process.env.RPC_URL || networkURLs[cluster || defaultCluster]!.primary,
+    "recent"
+  );
+};
+
+export const secondaryConnectionFor = (
+  cluster: string | null,
+  defaultCluster = "mainnet"
+) => {
+  return new Connection(
+    process.env.RPC_URL ||
+      networkURLs[cluster || defaultCluster]?.secondary ||
+      networkURLs[cluster || defaultCluster]!.primary,
+    "recent"
+  );
 };

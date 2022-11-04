@@ -1,3 +1,4 @@
+use crate::errors::ErrorCode;
 use crate::state::*;
 use anchor_lang::prelude::*;
 
@@ -21,6 +22,7 @@ pub struct InitRulesetCtx<'info> {
         bump,
     )]
     ruleset: Account<'info, Ruleset>,
+    #[account(constraint = authority.key().to_string() == RULESET_AUTHORITY @ ErrorCode::InvalidRulesetAuthority)]
     authority: Signer<'info>,
     #[account(mut)]
     payer: Signer<'info>,

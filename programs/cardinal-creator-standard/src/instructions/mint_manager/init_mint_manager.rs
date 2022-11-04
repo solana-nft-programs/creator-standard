@@ -30,8 +30,12 @@ pub struct InitMintManagerCtx<'info> {
     holder_token_account: Box<Account<'info, TokenAccount>>,
 
     /// CHECK: Account is not read from
-    #[account(mut, constraint = collector.key() == ruleset.collector @ ErrorCode::InvalidCollector)]
+    #[account(mut, constraint = ruleset_collector.key() == ruleset.collector @ ErrorCode::InvalidRulesetCollector)]
+    ruleset_collector: UncheckedAccount<'info>,
+    /// CHECK: Account is not read from
+    #[account(mut, constraint = collector.key().to_string() == COLLECTOR @ ErrorCode::InvalidCollector)]
     collector: UncheckedAccount<'info>,
+
     authority: Signer<'info>,
     #[account(mut)]
     payer: Signer<'info>,
@@ -94,11 +98,30 @@ pub fn handler(ctx: Context<InitMintManagerCtx>) -> Result<()> {
     token::freeze_account(cpi_context)?;
 
     // creation
+    let ruleset_collector_amount = CREATION_LAMPORTS
+        .checked_mul(COLLECTOR_SHARE)
+        .expect("Invalid multiplication")
+        .checked_div(100)
+        .expect("Invalid div");
+    invoke(
+        &transfer(
+            &ctx.accounts.payer.key(),
+            &ctx.accounts.ruleset_collector.key(),
+            ruleset_collector_amount,
+        ),
+        &[
+            ctx.accounts.payer.to_account_info(),
+            ctx.accounts.ruleset_collector.to_account_info(),
+            ctx.accounts.system_program.to_account_info(),
+        ],
+    )?;
     invoke(
         &transfer(
             &ctx.accounts.payer.key(),
             &ctx.accounts.collector.key(),
-            CREATION_LAMPORTS,
+            CREATION_LAMPORTS
+                .checked_sub(ruleset_collector_amount)
+                .expect("Invalid sub"),
         ),
         &[
             ctx.accounts.payer.to_account_info(),

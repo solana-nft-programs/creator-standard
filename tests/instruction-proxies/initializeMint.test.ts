@@ -1,11 +1,10 @@
 import { test, expect } from "@jest/globals";
-import { CardinalProvider, executeTransaction, getProvider } from "../utils";
-import { Keypair, Transaction } from "@solana/web3.js";
+import { CardinalProvider, executeTransaction, getProvider } from "../../utils";
+import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
 
 import {
   findMintManagerId,
   MintManager,
-  createInitRulesetInstruction,
   findRulesetId,
   Ruleset,
   createInitializeMintInstruction,
@@ -15,47 +14,16 @@ import {
   getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
 
-const RULESET_NAME = `global-${Math.random()}`;
+const RULESET_NAME = "cardinal-no-check";
 const RULESET_ID = findRulesetId(RULESET_NAME);
-const checkSellerFeeBasisPoints = true;
+const RULESET_COLLECTOR = new PublicKey(
+  "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
+);
+
 let provider: CardinalProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
-});
-
-test("Create ruleset", async () => {
-  provider = await getProvider();
-  const tx = new Transaction();
-  tx.add(
-    createInitRulesetInstruction(
-      {
-        ruleset: RULESET_ID,
-        authority: provider.wallet.publicKey,
-        payer: provider.wallet.publicKey,
-      },
-      {
-        ix: {
-          name: RULESET_NAME,
-          collector: provider.wallet.publicKey,
-          checkSellerFeeBasisPoints: checkSellerFeeBasisPoints,
-          disallowedAddresses: [],
-          allowedPrograms: [],
-        },
-      }
-    )
-  );
-  await executeTransaction(provider.connection, tx, provider.wallet);
-  const ruleset = await Ruleset.fromAccountAddress(
-    provider.connection,
-    RULESET_ID
-  );
-  expect(ruleset.authority.toString()).toBe(
-    provider.wallet.publicKey.toString()
-  );
-  expect(ruleset.checkSellerFeeBasisPoints).toBe(true);
-  expect(ruleset.disallowedAddresses.length).toBe(0);
-  expect(ruleset.allowedPrograms.length).toBe(0);
 });
 
 test("Init", async () => {
@@ -66,6 +34,7 @@ test("Init", async () => {
     provider.connection,
     RULESET_ID
   );
+  console.log(ruleset.collector.toString());
 
   const tx = new Transaction();
   tx.add(
@@ -78,6 +47,7 @@ test("Init", async () => {
         provider.wallet.publicKey
       ),
       target: provider.wallet.publicKey,
+      rulesetCollector: ruleset.collector,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
       collector: ruleset.collector,

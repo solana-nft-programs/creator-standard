@@ -26,6 +26,11 @@
           "isSigner": false
         },
         {
+          "name": "rulesetCollector",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "collector",
           "isMut": true,
           "isSigner": false
@@ -228,6 +233,11 @@
           "name": "target",
           "isMut": false,
           "isSigner": true
+        },
+        {
+          "name": "rulesetCollector",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "collector",
@@ -769,83 +779,93 @@
     },
     {
       "code": 6002,
+      "name": "InvalidRulesetCollector",
+      "msg": "Invalid ruleset collector address"
+    },
+    {
+      "code": 6003,
       "name": "InvalidAuthority",
       "msg": "Invalid authority address"
     },
     {
-      "code": 6003,
+      "code": 6004,
       "name": "InvalidMintManager",
       "msg": "Invalid mint manager"
     },
     {
-      "code": 6004,
+      "code": 6005,
       "name": "InvlaidHolderTokenAccount",
       "msg": "Invalid holder token account"
     },
     {
-      "code": 6005,
+      "code": 6006,
       "name": "InvalidTargetTokenAccount",
       "msg": "Invalid target token account"
     },
     {
-      "code": 6006,
+      "code": 6007,
       "name": "InvalidCloseTokenAccount",
       "msg": "Invalid token account to close"
     },
     {
-      "code": 6007,
+      "code": 6008,
       "name": "InvalidHolderTokenAccount",
       "msg": "Invalid holder token account"
     },
     {
-      "code": 6008,
+      "code": 6009,
       "name": "InvalidRuleset",
       "msg": "Invalid ruleset"
     },
     {
-      "code": 6009,
+      "code": 6010,
       "name": "InvalidPreTransferInstruction",
       "msg": "Invalid pre transfer instruction"
     },
     {
-      "code": 6010,
+      "code": 6011,
       "name": "InvalidPostTransferInstruction",
       "msg": "Invalid post transfer instruction"
     },
     {
-      "code": 6011,
+      "code": 6012,
       "name": "ProgramDisallowed",
       "msg": "Disallowed program included in transfer"
     },
     {
-      "code": 6012,
+      "code": 6013,
       "name": "ProgramNotAllowed",
       "msg": "Program not allowed in allowed programs to transfer"
     },
     {
-      "code": 6013,
+      "code": 6014,
       "name": "UnknownAccount",
       "msg": "Unknown account found in instruction"
     },
     {
-      "code": 6014,
+      "code": 6015,
       "name": "AccountNotFound",
       "msg": "Account not found in instruction"
     },
     {
-      "code": 6015,
+      "code": 6016,
       "name": "TokenAlreadyInUse",
       "msg": "Token already in use"
     },
     {
-      "code": 6016,
+      "code": 6017,
       "name": "InvalidTokenUser",
       "msg": "Invalid token user"
     },
     {
-      "code": 6017,
+      "code": 6018,
       "name": "TokenCurentlyInUse",
       "msg": "Token currently in use"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidRulesetAuthority",
+      "msg": "Invalid ruleset authority"
     }
   ],
   "metadata": {

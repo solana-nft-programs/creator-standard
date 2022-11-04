@@ -1,11 +1,10 @@
 import { test, expect } from "@jest/globals";
-import { CardinalProvider, executeTransaction, getProvider } from "../utils";
-import { Keypair, Transaction } from "@solana/web3.js";
+import { CardinalProvider, executeTransaction, getProvider } from "../../utils";
+import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
 
 import {
   findMintManagerId,
   MintManager,
-  createInitRulesetInstruction,
   findRulesetId,
   Ruleset,
   createApproveInstruction,
@@ -17,50 +16,21 @@ import {
   getAccount,
   getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
+
 const mintKeypair = Keypair.generate();
 const mint = mintKeypair.publicKey;
-const checkSellerFeeBasisPoints = true;
-let delegate: Keypair;
 
-const RULESET_NAME = `global-${Math.random()}`;
+const RULESET_NAME = "cardinal-no-check";
 const RULESET_ID = findRulesetId(RULESET_NAME);
+const RULESET_COLLECTOR = new PublicKey(
+  "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
+);
+
 let provider: CardinalProvider;
+let delegate: Keypair;
 
 beforeAll(async () => {
   provider = await getProvider();
-});
-
-test("Create ruleset", async () => {
-  const tx = new Transaction();
-  tx.add(
-    createInitRulesetInstruction(
-      {
-        ruleset: RULESET_ID,
-        authority: provider.wallet.publicKey,
-        payer: provider.wallet.publicKey,
-      },
-      {
-        ix: {
-          name: RULESET_NAME,
-          collector: provider.wallet.publicKey,
-          checkSellerFeeBasisPoints: checkSellerFeeBasisPoints,
-          disallowedAddresses: [],
-          allowedPrograms: [],
-        },
-      }
-    )
-  );
-  await executeTransaction(provider.connection, tx, provider.wallet);
-  const ruleset = await Ruleset.fromAccountAddress(
-    provider.connection,
-    RULESET_ID
-  );
-  expect(ruleset.authority.toString()).toBe(
-    provider.wallet.publicKey.toString()
-  );
-  expect(ruleset.checkSellerFeeBasisPoints).toBe(true);
-  expect(ruleset.disallowedAddresses.length).toBe(0);
-  expect(ruleset.allowedPrograms.length).toBe(0);
 });
 
 test("Init", async () => {
@@ -81,6 +51,7 @@ test("Init", async () => {
         provider.wallet.publicKey
       ),
       target: provider.wallet.publicKey,
+      rulesetCollector: RULESET_COLLECTOR,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
       collector: ruleset.collector,

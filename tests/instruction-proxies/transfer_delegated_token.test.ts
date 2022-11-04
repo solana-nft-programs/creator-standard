@@ -4,9 +4,10 @@ import {
   executeTransaction,
   getProvider,
   newAccountWithLamports,
-} from "../utils";
+} from "../../utils";
 import {
   Keypair,
+  PublicKey,
   SYSVAR_INSTRUCTIONS_PUBKEY,
   Transaction,
 } from "@solana/web3.js";
@@ -14,7 +15,6 @@ import {
 import {
   findMintManagerId,
   MintManager,
-  createInitRulesetInstruction,
   findRulesetId,
   Ruleset,
   createApproveInstruction,
@@ -31,49 +31,19 @@ import { Wallet } from "@project-serum/anchor";
 
 const mintKeypair = Keypair.generate();
 const mint = mintKeypair.publicKey;
-let delegate: Keypair;
 
-const RULESET_NAME = `global-${Math.random()}`;
+const RULESET_NAME = "cardinal-no-check";
 const RULESET_ID = findRulesetId(RULESET_NAME);
-const checkSellerFeeBasisPoints = false;
+const RULESET_COLLECTOR = new PublicKey(
+  "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
+);
+
 let provider: CardinalProvider;
+let delegate: Keypair;
 
 beforeAll(async () => {
   provider = await getProvider();
   delegate = await newAccountWithLamports(provider.connection);
-});
-
-test("Create ruleset", async () => {
-  const tx = new Transaction();
-  tx.add(
-    createInitRulesetInstruction(
-      {
-        ruleset: RULESET_ID,
-        authority: provider.wallet.publicKey,
-        payer: provider.wallet.publicKey,
-      },
-      {
-        ix: {
-          name: RULESET_NAME,
-          collector: provider.wallet.publicKey,
-          checkSellerFeeBasisPoints: checkSellerFeeBasisPoints,
-          disallowedAddresses: [],
-          allowedPrograms: [],
-        },
-      }
-    )
-  );
-  await executeTransaction(provider.connection, tx, provider.wallet);
-  const ruleset = await Ruleset.fromAccountAddress(
-    provider.connection,
-    RULESET_ID
-  );
-  expect(ruleset.authority.toString()).toBe(
-    provider.wallet.publicKey.toString()
-  );
-  expect(ruleset.checkSellerFeeBasisPoints).toBe(checkSellerFeeBasisPoints);
-  expect(ruleset.disallowedAddresses.length).toBe(0);
-  expect(ruleset.allowedPrograms.length).toBe(0);
 });
 
 test("Init mint manager", async () => {
@@ -94,6 +64,7 @@ test("Init mint manager", async () => {
         provider.wallet.publicKey
       ),
       target: provider.wallet.publicKey,
+      rulesetCollector: RULESET_COLLECTOR,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
       collector: ruleset.collector,
