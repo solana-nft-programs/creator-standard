@@ -1,6 +1,6 @@
 [package]
 name = "cardinal-creator-standard"
-version = "0.1.6"
+version = "0.1.7"
 description = "Cardinal creator standard"
 edition = "2021"
 homepage = "https://cardinal.so"
@@ -13,6 +13,12 @@ keywords = ["solana", "cardinal"]
 [lib]
 crate-type = ["cdylib", "lib"]
 name = "cardinal_creator_standard"
+
+[features]
+no-entrypoint = []
+no-idl = []
+cpi = ["no-entrypoint"]
+default = []
 
 [dependencies]
 solana-program = "1.10.41"
