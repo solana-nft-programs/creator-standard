@@ -58,7 +58,7 @@ pub fn handler(ctx: Context<BurnCtx>) -> Result<()> {
     let cpi_accounts = Burn {
         mint: ctx.accounts.mint.to_account_info(),
         from: ctx.accounts.holder_token_account.to_account_info(),
-        authority: ctx.accounts.mint_manager.to_account_info(),
+        authority: ctx.accounts.holder.to_account_info(),
     };
     let cpi_program = ctx.accounts.token_program.to_account_info();
     let cpi_context = CpiContext::new(cpi_program, cpi_accounts).with_signer(mint_manager_signer);

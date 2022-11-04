@@ -194,3 +194,12 @@ export const createMintTx = async (
     createMintToInstruction(mint, ata, authority, 1)
   );
 };
+
+type AccountFn<T> = () => Promise<T>;
+export async function tryGetAccount<T>(fn: AccountFn<T>) {
+  try {
+    return await fn();
+  } catch {
+    return null;
+  }
+}

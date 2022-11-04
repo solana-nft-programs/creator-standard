@@ -9,28 +9,27 @@ import {
   findRulesetId,
   MintManager,
   Ruleset,
-} from "../sdk";
-import type { CardinalProvider } from "../utils";
-import { createMintTx, executeTransaction, getProvider } from "../utils";
+} from "../../sdk";
+import type { CardinalProvider } from "../../utils";
+import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
-const RULESET_NAME = "cardinal-no-check";
+const RULESET_NAME_1 = "cardinal-no-check";
 const RULESET_NAME_2 = "cardinal-no-check-2";
-const RULESET_ID = findRulesetId(RULESET_NAME);
+const RULESET_ID_1 = findRulesetId(RULESET_NAME_1);
+const RULESET_ID_2 = findRulesetId(RULESET_NAME_2);
 let provider: CardinalProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
-  await executeTransaction(
+  const splMintIx = await createMintTx(
     provider.connection,
-    await createMintTx(
-      provider.connection,
-      mintKeypair.publicKey,
-      provider.wallet.publicKey
-    ),
-    provider.wallet,
-    [mintKeypair]
+    mintKeypair.publicKey,
+    provider.wallet.publicKey
   );
+  await executeTransaction(provider.connection, splMintIx, provider.wallet, [
+    mintKeypair,
+  ]);
 });
 
 test("Init mint manager", async () => {
@@ -38,7 +37,7 @@ test("Init mint manager", async () => {
   const tx = new Transaction();
   const ruleset = await Ruleset.fromAccountAddress(
     provider.connection,
-    RULESET_ID
+    RULESET_ID_1
   );
 
   const ata = getAssociatedTokenAddressSync(
@@ -49,7 +48,7 @@ test("Init mint manager", async () => {
     createInitMintManagerInstruction({
       mintManager: mintManagerId,
       mint: mintKeypair.publicKey,
-      ruleset: RULESET_ID,
+      ruleset: RULESET_ID_1,
       holderTokenAccount: ata,
       rulesetCollector: ruleset.collector,
       collector: ruleset.collector,
@@ -59,6 +58,7 @@ test("Init mint manager", async () => {
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
+  // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
     mintManagerId
@@ -68,7 +68,7 @@ test("Init mint manager", async () => {
     provider.wallet.publicKey.toString()
   );
   expect(mintManager.ruleset.toString()).toBe(
-    findRulesetId(RULESET_NAME).toString()
+    findRulesetId(RULESET_NAME_1).toString()
   );
 });
 
@@ -78,7 +78,7 @@ test("Update mint manager", async () => {
   const tx = new Transaction();
   const ruleset = await Ruleset.fromAccountAddress(
     provider.connection,
-    RULESET_ID
+    RULESET_ID_1
   );
 
   tx.add(
@@ -95,6 +95,7 @@ test("Update mint manager", async () => {
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
+  // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
     mintManagerId
@@ -103,7 +104,5 @@ test("Update mint manager", async () => {
   expect(mintManager.authority.toString()).toBe(
     newAuthority.publicKey.toString()
   );
-  expect(mintManager.ruleset.toString()).toBe(
-    findRulesetId(RULESET_NAME_2).toString()
-  );
+  expect(mintManager.ruleset.toString()).toBe(RULESET_ID_2.toString());
 });

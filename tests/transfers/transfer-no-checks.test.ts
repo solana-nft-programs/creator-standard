@@ -1,5 +1,4 @@
 import { expect, test } from "@jest/globals";
-import { Wallet } from "@project-serum/anchor";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
@@ -9,14 +8,14 @@ import {
 } from "@solana/spl-token";
 import {
   Keypair,
-  LAMPORTS_PER_SOL,
   PublicKey,
+  SYSVAR_INSTRUCTIONS_PUBKEY,
   Transaction,
 } from "@solana/web3.js";
 
 import {
-  createCloseInstruction,
   createInitializeMintInstruction,
+  createTransferInstruction,
   findMintManagerId,
   findRulesetId,
   MintManager,
@@ -32,20 +31,14 @@ const RULESET_ID = findRulesetId(RULESET_NAME);
 const RULESET_COLLECTOR = new PublicKey(
   "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
 );
-const user = Keypair.generate();
 
 let provider: CardinalProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
-  const signature = await provider.connection.requestAirdrop(
-    user.publicKey,
-    LAMPORTS_PER_SOL
-  );
-  await provider.connection.confirmTransaction(signature, "confirmed");
 });
 
-test("Init mint manager", async () => {
+test("Init", async () => {
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const ruleset = await Ruleset.fromAccountAddress(
     provider.connection,
@@ -99,87 +92,50 @@ test("Init mint manager", async () => {
   );
 });
 
-test("Attempt to close but account is non-empty", async () => {
+test("Transfer", async () => {
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
-  const tokenAtaId = getAssociatedTokenAddressSync(
+  const recipient = Keypair.generate();
+  const fromAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
     provider.wallet.publicKey
   );
-  const tokenAta = await getAccount(provider.connection, tokenAtaId);
-  expect(tokenAta.isFrozen).toBe(true);
-  expect(tokenAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
-  expect(tokenAta.amount.toString()).toBe("1");
-
-  tx.add(
-    createCloseInstruction({
-      mintManager: mintManagerId,
-      mint: mintKeypair.publicKey,
-      tokenAccount: tokenAtaId,
-      owner: provider.wallet.publicKey,
-    })
-  );
-
-  await expect(
-    executeTransaction(provider.connection, tx, provider.wallet)
-  ).rejects.toThrow();
-});
-
-test("Create empty mint token account for a user", async () => {
-  const tx = new Transaction();
-
-  const userAtaId = getAssociatedTokenAddressSync(
+  const toAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    user.publicKey
+    recipient.publicKey
   );
-
+  const fromAta = await getAccount(provider.connection, fromAtaId);
+  expect(fromAta.isFrozen).toBe(true);
+  expect(fromAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
+  expect(fromAta.amount.toString()).toBe("1");
   tx.add(
     createAssociatedTokenAccountInstruction(
       provider.wallet.publicKey,
-      userAtaId,
-      user.publicKey,
+      toAtaId,
+      recipient.publicKey,
       mintKeypair.publicKey
-    )
+    ),
+    createTransferInstruction({
+      mintManager: mintManagerId,
+      ruleset: RULESET_ID,
+      mint: mintKeypair.publicKey,
+      from: fromAtaId,
+      to: toAtaId,
+      authority: provider.wallet.publicKey,
+      instructions: SYSVAR_INSTRUCTIONS_PUBKEY,
+    })
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
-  const createdTokenAccount = await tryGetAccount(() =>
-    getAccount(provider.connection, userAtaId)
+  const fromAtaCheck = await tryGetAccount(() =>
+    getAccount(provider.connection, fromAtaId)
   );
-  expect(createdTokenAccount?.isInitialized).toBeTruthy();
-  expect(createdTokenAccount?.mint.toString()).toBe(
-    mintKeypair.publicKey.toString()
-  );
-  expect(createdTokenAccount?.isFrozen).toBeFalsy();
-  expect(createdTokenAccount?.owner.toString()).toBe(user.publicKey.toString());
-});
+  expect(fromAtaCheck).toBeNull();
 
-test("Close token account", async () => {
-  const tx = new Transaction();
-  const mintManagerId = findMintManagerId(mintKeypair.publicKey);
-
-  const userAtaId = getAssociatedTokenAddressSync(
-    mintKeypair.publicKey,
-    user.publicKey
-  );
-  const holderAta = await getAccount(provider.connection, userAtaId);
-  expect(holderAta.isFrozen).toBe(false);
-  expect(holderAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
-  expect(holderAta.amount.toString()).toBe("0");
-
-  // close empty account
-  tx.add(
-    createCloseInstruction({
-      mintManager: mintManagerId,
-      mint: mintKeypair.publicKey,
-      tokenAccount: userAtaId,
-      owner: user.publicKey,
-    })
-  );
-  await executeTransaction(provider.connection, tx, new Wallet(user));
-
-  const closedTokenAccount = await tryGetAccount(() =>
-    getAccount(provider.connection, userAtaId)
-  );
-  expect(closedTokenAccount).toBeNull();
+  const toAtaCheck = await getAccount(provider.connection, toAtaId);
+  expect(toAtaCheck.owner.toString()).toBe(recipient.publicKey.toString());
+  expect(toAtaCheck.isFrozen).toBe(true);
+  expect(toAtaCheck.mint.toString()).toBe(mintKeypair.publicKey.toString());
+  expect(toAtaCheck.amount.toString()).toBe("1");
+  expect(toAtaCheck.delegate).toBeNull();
 });

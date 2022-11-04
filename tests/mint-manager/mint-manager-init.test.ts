@@ -8,9 +8,9 @@ import {
   findRulesetId,
   MintManager,
   Ruleset,
-} from "../sdk";
-import type { CardinalProvider } from "../utils";
-import { createMintTx, executeTransaction, getProvider } from "../utils";
+} from "../../sdk";
+import type { CardinalProvider } from "../../utils";
+import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
@@ -24,16 +24,14 @@ let provider: CardinalProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
-  await executeTransaction(
+  const splMintIx = await createMintTx(
     provider.connection,
-    await createMintTx(
-      provider.connection,
-      mintKeypair.publicKey,
-      provider.wallet.publicKey
-    ),
-    provider.wallet,
-    [mintKeypair]
+    mintKeypair.publicKey,
+    provider.wallet.publicKey
   );
+  await executeTransaction(provider.connection, splMintIx, provider.wallet, [
+    mintKeypair,
+  ]);
 });
 
 test("Init", async () => {
@@ -62,6 +60,7 @@ test("Init", async () => {
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
+  // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
     mintManagerId

@@ -2,6 +2,7 @@ import { expect, test } from "@jest/globals";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAssociatedTokenAddressSync,
+  getMint,
 } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
@@ -13,7 +14,7 @@ import {
   Ruleset,
 } from "../../sdk";
 import type { CardinalProvider } from "../../utils";
-import { executeTransaction, getProvider } from "../../utils";
+import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 
 const RULESET_NAME = "cardinal-no-check";
 const RULESET_ID = findRulesetId(RULESET_NAME);
@@ -26,8 +27,7 @@ beforeAll(async () => {
 
 test("Init", async () => {
   const mintKeypair = Keypair.generate();
-  const mint = mintKeypair.publicKey;
-  const mintManagerId = findMintManagerId(mint);
+  const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const ruleset = await Ruleset.fromAccountAddress(
     provider.connection,
     RULESET_ID
@@ -38,7 +38,7 @@ test("Init", async () => {
   tx.add(
     createInitializeMintInstruction({
       mintManager: mintManagerId,
-      mint: mint,
+      mint: mintKeypair.publicKey,
       ruleset: RULESET_ID,
       targetTokenAccount: getAssociatedTokenAddressSync(
         mintKeypair.publicKey,
@@ -56,11 +56,23 @@ test("Init", async () => {
     mintKeypair,
   ]);
 
+  // check mint
+  const mintInfo = await tryGetAccount(() =>
+    getMint(provider.connection, mintKeypair.publicKey)
+  );
+  expect(mintInfo).not.toBeNull();
+  expect(mintInfo?.isInitialized).toBeTruthy();
+  expect(mintInfo?.supply.toString()).toBe("1");
+  expect(mintInfo?.decimals.toString()).toBe("0");
+  expect(mintInfo?.freezeAuthority?.toString()).toBe(mintManagerId.toString());
+  expect(mintInfo?.mintAuthority?.toString()).toBe(mintManagerId.toString());
+
+  // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
     mintManagerId
   );
-  expect(mintManager.mint.toString()).toBe(mint.toString());
+  expect(mintManager.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(mintManager.authority.toString()).toBe(
     provider.wallet.publicKey.toString()
   );

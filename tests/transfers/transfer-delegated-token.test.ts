@@ -5,6 +5,7 @@ import {
   createAssociatedTokenAccountInstruction,
   getAccount,
   getAssociatedTokenAddressSync,
+  getMint,
 } from "@solana/spl-token";
 import {
   Keypair,
@@ -27,10 +28,10 @@ import {
   executeTransaction,
   getProvider,
   newAccountWithLamports,
+  tryGetAccount,
 } from "../../utils";
 
 const mintKeypair = Keypair.generate();
-const mint = mintKeypair.publicKey;
 
 const RULESET_NAME = "cardinal-no-check";
 const RULESET_ID = findRulesetId(RULESET_NAME);
@@ -46,8 +47,8 @@ beforeAll(async () => {
   delegate = await newAccountWithLamports(provider.connection);
 });
 
-test("Init mint manager", async () => {
-  const mintManagerId = findMintManagerId(mint);
+test("Initialize mint", async () => {
+  const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const ruleset = await Ruleset.fromAccountAddress(
     provider.connection,
     RULESET_ID
@@ -57,7 +58,7 @@ test("Init mint manager", async () => {
   tx.add(
     createInitializeMintInstruction({
       mintManager: mintManagerId,
-      mint: mint,
+      mint: mintKeypair.publicKey,
       ruleset: RULESET_ID,
       targetTokenAccount: getAssociatedTokenAddressSync(
         mintKeypair.publicKey,
@@ -75,11 +76,23 @@ test("Init mint manager", async () => {
     mintKeypair,
   ]);
 
+  // check mint
+  const mintInfo = await tryGetAccount(() =>
+    getMint(provider.connection, mintKeypair.publicKey)
+  );
+  expect(mintInfo).not.toBeNull();
+  expect(mintInfo?.isInitialized).toBeTruthy();
+  expect(mintInfo?.supply.toString()).toBe("1");
+  expect(mintInfo?.decimals.toString()).toBe("0");
+  expect(mintInfo?.freezeAuthority?.toString()).toBe(mintManagerId.toString());
+  expect(mintInfo?.mintAuthority?.toString()).toBe(mintManagerId.toString());
+
+  // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
     mintManagerId
   );
-  expect(mintManager.mint.toString()).toBe(mint.toString());
+  expect(mintManager.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(mintManager.authority.toString()).toBe(
     provider.wallet.publicKey.toString()
   );
@@ -89,21 +102,21 @@ test("Init mint manager", async () => {
 });
 
 test("Delegate", async () => {
-  const mintManagerId = findMintManagerId(mint);
+  const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const fromAtaId = getAssociatedTokenAddressSync(
-    mint,
+    mintKeypair.publicKey,
     provider.wallet.publicKey
   );
   const fromAta = await getAccount(provider.connection, fromAtaId);
   expect(fromAta.isFrozen).toBe(true);
-  expect(fromAta.mint.toString()).toBe(mint.toString());
+  expect(fromAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(fromAta.amount.toString()).toBe("1");
 
   tx.add(
     createApproveInstruction({
       mintManager: mintManagerId,
-      mint: mint,
+      mint: mintKeypair.publicKey,
       holderTokenAccount: fromAtaId,
       holder: provider.wallet.publicKey,
       delegate: delegate.publicKey,
@@ -113,25 +126,28 @@ test("Delegate", async () => {
 
   const fromAtaCheck = await getAccount(provider.connection, fromAtaId);
   expect(fromAtaCheck.isFrozen).toBe(true);
-  expect(fromAtaCheck.mint.toString()).toBe(mint.toString());
+  expect(fromAtaCheck.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(fromAtaCheck.amount.toString()).toBe("1");
   expect(fromAtaCheck.delegate?.toString()).toBe(delegate.publicKey.toString());
   expect(fromAtaCheck.delegatedAmount.toString()).toBe("1");
 });
 
 test("Transfer", async () => {
-  const mintManagerId = findMintManagerId(mint);
+  const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const recipient = Keypair.generate();
   const fromAtaId = getAssociatedTokenAddressSync(
-    mint,
+    mintKeypair.publicKey,
     provider.wallet.publicKey
   );
-  const toAtaId = getAssociatedTokenAddressSync(mint, recipient.publicKey);
+  const toAtaId = getAssociatedTokenAddressSync(
+    mintKeypair.publicKey,
+    recipient.publicKey
+  );
   const fromAta = await getAccount(provider.connection, fromAtaId);
 
   expect(fromAta.isFrozen).toBe(true);
-  expect(fromAta.mint.toString()).toBe(mint.toString());
+  expect(fromAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(fromAta.amount.toString()).toBe("1");
 
   tx.add(
@@ -139,12 +155,12 @@ test("Transfer", async () => {
       delegate.publicKey,
       toAtaId,
       recipient.publicKey,
-      mint
+      mintKeypair.publicKey
     ),
     createTransferInstruction({
       mintManager: mintManagerId,
       ruleset: RULESET_ID,
-      mint: mint,
+      mint: mintKeypair.publicKey,
       from: fromAtaId,
       to: toAtaId,
       authority: delegate.publicKey,
@@ -155,11 +171,13 @@ test("Transfer", async () => {
 
   const fromAtaCheck = await getAccount(provider.connection, fromAtaId);
   expect(fromAtaCheck.isFrozen).toBe(false);
-  expect(fromAtaCheck.mint.toString()).toBe(mint.toString());
+  expect(fromAtaCheck.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(fromAtaCheck.amount.toString()).toBe("0");
 
   const toAtaCheck = await getAccount(provider.connection, toAtaId);
+  expect(toAtaCheck.owner.toString()).toBe(recipient.publicKey.toString());
   expect(toAtaCheck.isFrozen).toBe(true);
-  expect(toAtaCheck.mint.toString()).toBe(mint.toString());
+  expect(toAtaCheck.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(toAtaCheck.amount.toString()).toBe("1");
+  expect(toAtaCheck.delegate).toBeNull();
 });
