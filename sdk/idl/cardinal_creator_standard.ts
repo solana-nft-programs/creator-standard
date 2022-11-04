@@ -1,5 +1,5 @@
 export type CardinalCreatorStandard = {
-  version: "0.1.5";
+  version: "0.1.7";
   name: "cardinal_creator_standard";
   instructions: [
     {
@@ -871,7 +871,7 @@ export type CardinalCreatorStandard = {
 };
 
 export const IDL: CardinalCreatorStandard = {
-  version: "0.1.5",
+  version: "0.1.7",
   name: "cardinal_creator_standard",
   instructions: [
     {
