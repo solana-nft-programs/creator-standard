@@ -10,7 +10,7 @@ import {
   Ruleset,
   createUpdateMintManagerInstruction,
 } from "../sdk";
-import { createMintTx } from "./mint";
+import { createMintTx } from "../utils";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 
 const mintKeypair = Keypair.generate();

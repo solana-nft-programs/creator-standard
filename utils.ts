@@ -4,10 +4,20 @@ import {
   sendAndConfirmRawTransaction,
   SendTransactionError,
   Signer,
+  SystemProgram,
 } from "@solana/web3.js";
 import { PublicKey, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { PROGRAM_ADDRESS } from "./sdk/generated";
 import { utils, Wallet } from "@project-serum/anchor";
+import {
+  createAssociatedTokenAccountInstruction,
+  createInitializeMint2Instruction,
+  createMintToInstruction,
+  getAssociatedTokenAddressSync,
+  getMinimumBalanceForRentExemptMint,
+  MINT_SIZE,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
 
 export async function newAccountWithLamports(
   connection: Connection,
@@ -156,5 +166,25 @@ export const secondaryConnectionFor = (
       networkURLs[cluster || defaultCluster]?.secondary ||
       networkURLs[cluster || defaultCluster]!.primary,
     "recent"
+  );
+};
+
+export const createMintTx = async (
+  connection: Connection,
+  mint: PublicKey,
+  authority: PublicKey
+) => {
+  const ata = getAssociatedTokenAddressSync(mint, authority);
+  return new Transaction().add(
+    SystemProgram.createAccount({
+      fromPubkey: authority,
+      newAccountPubkey: mint,
+      space: MINT_SIZE,
+      lamports: await getMinimumBalanceForRentExemptMint(connection),
+      programId: TOKEN_PROGRAM_ID,
+    }),
+    createInitializeMint2Instruction(mint, 0, authority, authority),
+    createAssociatedTokenAccountInstruction(authority, ata, authority, mint),
+    createMintToInstruction(mint, ata, authority, 1)
   );
 };
