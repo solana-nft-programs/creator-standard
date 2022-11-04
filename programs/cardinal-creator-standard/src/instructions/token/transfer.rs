@@ -102,7 +102,10 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         let ix = load_instruction_at_checked(i.into(), &instructions_account_info)
             .expect("Failed to get instruction");
 
-        if allowed_programs.len() > 0 && !allowed_programs.contains(&ix.program_id) {
+        if allowed_programs.len() > 0
+            && ix.program_id != *ctx.program_id
+            && !allowed_programs.contains(&ix.program_id)
+        {
             return Err(error!(ErrorCode::ProgramNotAllowed));
         }
 
