@@ -1,10 +1,11 @@
-import { test, expect } from "@jest/globals";
+import { expect, test } from "@jest/globals";
+import { Wallet } from "@project-serum/anchor";
 import {
-  CardinalProvider,
-  executeTransaction,
-  getProvider,
-  newAccountWithLamports,
-} from "../../utils";
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  createAssociatedTokenAccountInstruction,
+  getAccount,
+  getAssociatedTokenAddressSync,
+} from "@solana/spl-token";
 import {
   Keypair,
   PublicKey,
@@ -13,21 +14,20 @@ import {
 } from "@solana/web3.js";
 
 import {
-  findMintManagerId,
-  MintManager,
-  findRulesetId,
-  Ruleset,
   createApproveInstruction,
   createInitializeMintInstruction,
   createTransferInstruction,
+  findMintManagerId,
+  findRulesetId,
+  MintManager,
+  Ruleset,
 } from "../../sdk";
+import type { CardinalProvider } from "../../utils";
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  getAccount,
-  getAssociatedTokenAddressSync,
-  createAssociatedTokenAccountInstruction,
-} from "@solana/spl-token";
-import { Wallet } from "@project-serum/anchor";
+  executeTransaction,
+  getProvider,
+  newAccountWithLamports,
+} from "../../utils";
 
 const mintKeypair = Keypair.generate();
 const mint = mintKeypair.publicKey;

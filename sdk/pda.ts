@@ -1,6 +1,7 @@
 import { utils } from "@project-serum/anchor";
-import { PublicKey } from "@solana/web3.js";
 import { findProgramAddressSync } from "@project-serum/anchor/dist/cjs/utils/pubkey";
+import type { PublicKey } from "@solana/web3.js";
+
 import { PROGRAM_ID } from "./generated";
 
 export const findMintManagerId = (mintId: PublicKey) => {

@@ -1,23 +1,27 @@
-import { test, expect } from "@jest/globals";
-import { CardinalProvider, executeTransaction, getProvider } from "../../utils";
-import { PublicKey, SYSVAR_INSTRUCTIONS_PUBKEY } from "@solana/web3.js";
-import { Keypair, Transaction } from "@solana/web3.js";
-
-import {
-  findMintManagerId,
-  MintManager,
-  createInitRulesetInstruction,
-  findRulesetId,
-  Ruleset,
-  createTransferInstruction,
-  createInitializeMintInstruction,
-} from "../../sdk";
+import { expect, test } from "@jest/globals";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
   getAccount,
   getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
+import {
+  Keypair,
+  PublicKey,
+  SYSVAR_INSTRUCTIONS_PUBKEY,
+  Transaction,
+} from "@solana/web3.js";
+
+import {
+  createInitializeMintInstruction,
+  createTransferInstruction,
+  findMintManagerId,
+  findRulesetId,
+  MintManager,
+  Ruleset,
+} from "../../sdk";
+import type { CardinalProvider } from "../../utils";
+import { executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 const mint = mintKeypair.publicKey;
@@ -29,7 +33,6 @@ const RULESET_COLLECTOR = new PublicKey(
 );
 
 let provider: CardinalProvider;
-let delegate: Keypair;
 
 beforeAll(async () => {
   provider = await getProvider();

@@ -1,11 +1,10 @@
 import * as anchor from "@project-serum/anchor";
-import { connectionFor } from "../utils";
 import { Keypair, Transaction } from "@solana/web3.js";
-import { executeTransaction } from "../utils";
-import { createInitRulesetInstruction, Ruleset } from "../sdk/generated";
-import { findRulesetId } from "../sdk";
+import dotenv from "dotenv";
 
-const dotenv = require("dotenv");
+import { findRulesetId } from "../sdk";
+import { createInitRulesetInstruction, Ruleset } from "../sdk/generated";
+import { connectionFor, executeTransaction } from "../utils";
 
 dotenv.config();
 
@@ -49,6 +48,7 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
       new anchor.Wallet(wallet)
     );
   } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     console.log(`Transactionn failed: ${e}`);
   }
 

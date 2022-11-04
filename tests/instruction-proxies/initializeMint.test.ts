@@ -1,24 +1,22 @@
-import { test, expect } from "@jest/globals";
-import { CardinalProvider, executeTransaction, getProvider } from "../../utils";
-import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
-
-import {
-  findMintManagerId,
-  MintManager,
-  findRulesetId,
-  Ruleset,
-  createInitializeMintInstruction,
-} from "../../sdk";
+import { expect, test } from "@jest/globals";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   getAssociatedTokenAddressSync,
 } from "@solana/spl-token";
+import { Keypair, Transaction } from "@solana/web3.js";
+
+import {
+  createInitializeMintInstruction,
+  findMintManagerId,
+  findRulesetId,
+  MintManager,
+  Ruleset,
+} from "../../sdk";
+import type { CardinalProvider } from "../../utils";
+import { executeTransaction, getProvider } from "../../utils";
 
 const RULESET_NAME = "cardinal-no-check";
 const RULESET_ID = findRulesetId(RULESET_NAME);
-const RULESET_COLLECTOR = new PublicKey(
-  "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
-);
 
 let provider: CardinalProvider;
 

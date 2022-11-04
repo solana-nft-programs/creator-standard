@@ -1,17 +1,16 @@
-import { test, beforeAll, expect } from "@jest/globals";
-import { CardinalProvider, executeTransaction, getProvider } from "../utils";
-import { PublicKey } from "@solana/web3.js";
-import { Keypair, Transaction } from "@solana/web3.js";
+import { beforeAll, expect, test } from "@jest/globals";
+import { getAssociatedTokenAddressSync } from "@solana/spl-token";
+import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
 
 import {
-  findMintManagerId,
   createInitMintManagerInstruction,
-  MintManager,
+  findMintManagerId,
   findRulesetId,
+  MintManager,
   Ruleset,
 } from "../sdk";
-import { createMintTx } from "../utils";
-import { getAssociatedTokenAddressSync } from "@solana/spl-token";
+import type { CardinalProvider } from "../utils";
+import { createMintTx, executeTransaction, getProvider } from "../utils";
 
 const mintKeypair = Keypair.generate();
 
