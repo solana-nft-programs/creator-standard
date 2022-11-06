@@ -14,6 +14,8 @@ pub enum ErrorCode {
     DataTypeMismatch,
     #[error("Invalid mint")]
     InvalidMint,
+    #[error("Invalid amount")]
+    InvalidAmount,
     #[error("Invalid token account")]
     InvalidTokenAccount,
     #[error("Invalid collector address")]

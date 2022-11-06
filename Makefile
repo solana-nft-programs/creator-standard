@@ -5,7 +5,7 @@ TEST_KEY := $(shell solana-keygen pubkey ./tests/test-keypairs/test-key.json)
 all: build start test stop
 
 build:
-	anchor build
+	cargo build-bpf
 	yarn idl:generate && yarn solita && yarn lint
 
 start:

@@ -5,6 +5,8 @@ use solana_program::{account_info::AccountInfo, program_error::ProgramError, pub
 
 use crate::{errors::ErrorCode, id, utils::assert_owner};
 
+pub const CREATION_LAMPORTS: u64 = 10_000_000;
+pub const COLLECTOR_SHARE: u64 = 50;
 pub const COLLECTOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const DEFAULT_PROGRAMS: [&str; 1] = ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"];
 pub fn is_default_program(program_id: Pubkey) -> bool {
@@ -16,7 +18,9 @@ pub fn is_default_program(program_id: Pubkey) -> bool {
 pub enum AccountType {
     Ruleset = 0,
     MintManager = 1,
-    Unrecognized = 2,
+    AccountBalance = 2,
+    AccountBalances = 3,
+    Unrecognized = 4,
 }
 
 impl From<u8> for AccountType {
@@ -24,6 +28,8 @@ impl From<u8> for AccountType {
         match orig {
             0 => return AccountType::Ruleset,
             1 => return AccountType::MintManager,
+            2 => return AccountType::AccountBalance,
+            3 => return AccountType::AccountBalances,
             _ => return AccountType::Unrecognized,
         };
     }
@@ -34,6 +40,7 @@ impl From<u8> for AccountType {
 //     pub info: AccountInfo<'info>,
 // }
 
+// CreatorStandardAccount
 pub trait CreatorStandardAccount {
     fn account_type() -> AccountType;
     fn set_account_type(&mut self) -> ();

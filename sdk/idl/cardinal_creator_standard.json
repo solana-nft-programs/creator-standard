@@ -1,28 +1,48 @@
 {
-  "version": "0.1.0",
+  "version": "0.4.0",
   "name": "cardinal_creator_standard",
   "instructions": [
     {
-      "name": "InitMint",
+      "name": "InitMintManager",
       "accounts": [
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": false
-        },
         {
           "name": "mintManager",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "authority",
+          "name": "mint",
           "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "ruleset",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "holderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rulesetCollector",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "collector",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
           "isSigner": true
         },
         {
           "name": "payer",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -43,58 +63,11 @@
         "type": "u8",
         "value": 0
       }
-    },
-    {
-      "name": "InitMintManager",
-      "accounts": [
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mintManager",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "ruleset",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false,
-          "desc": "Token program"
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false,
-          "desc": "System program"
-        }
-      ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 1
-      }
     }
   ],
   "accounts": [
     {
-      "name": "MintManager",
+      "name": "AccountBalance",
       "type": {
         "kind": "struct",
         "fields": [
@@ -103,26 +76,46 @@
             "type": "u8"
           },
           {
-            "name": "version",
-            "type": "u8"
+            "name": "address",
+            "type": "publicKey"
           },
           {
             "name": "mint",
             "type": "publicKey"
           },
           {
-            "name": "authority",
-            "type": "publicKey"
+            "name": "size",
+            "type": "u64"
           },
           {
-            "name": "ruleset",
-            "type": "publicKey"
+            "name": "balance",
+            "type": "u64"
           }
         ]
       }
     },
     {
-      "name": "MintManagerV2",
+      "name": "AccountBalances",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": "u8"
+          },
+          {
+            "name": "balances",
+            "type": {
+              "vec": {
+                "defined": "AccountBalance"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Ruleset",
       "type": {
         "kind": "struct",
         "fields": [
@@ -135,24 +128,187 @@
             "type": "u8"
           },
           {
-            "name": "mint",
-            "type": "publicKey"
-          },
-          {
             "name": "authority",
             "type": "publicKey"
           },
           {
-            "name": "ruleset",
+            "name": "collector",
             "type": "publicKey"
+          },
+          {
+            "name": "checkSellerFeeBasisPoints",
+            "type": "bool"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "allowedPrograms",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "disallowedAddresses",
+            "type": {
+              "vec": "publicKey"
+            }
           }
         ]
       }
     }
   ],
+  "types": [
+    {
+      "name": "AccountType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Ruleset"
+          },
+          {
+            "name": "MintManager"
+          },
+          {
+            "name": "AccountBalance"
+          },
+          {
+            "name": "AccountBalances"
+          },
+          {
+            "name": "Unrecognized"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 0,
+      "name": "InvalidAccountType",
+      "msg": "Invalid account type"
+    },
+    {
+      "code": 1,
+      "name": "DataTypeMismatch",
+      "msg": "Data type mismatch"
+    },
+    {
+      "code": 2,
+      "name": "InvalidMint",
+      "msg": "Invalid mint"
+    },
+    {
+      "code": 3,
+      "name": "InvalidAmount",
+      "msg": "Invalid amount"
+    },
+    {
+      "code": 4,
+      "name": "InvalidTokenAccount",
+      "msg": "Invalid token account"
+    },
+    {
+      "code": 5,
+      "name": "InvalidCollector",
+      "msg": "Invalid collector address"
+    },
+    {
+      "code": 6,
+      "name": "InvalidRulesetCollector",
+      "msg": "Invalid ruleset collector address"
+    },
+    {
+      "code": 7,
+      "name": "InvalidAuthority",
+      "msg": "Invalid authority address"
+    },
+    {
+      "code": 8,
+      "name": "InvalidMintManager",
+      "msg": "Invalid mint manager"
+    },
+    {
+      "code": 9,
+      "name": "InvlaidHolderTokenAccount",
+      "msg": "Invalid holder token account"
+    },
+    {
+      "code": 10,
+      "name": "InvalidTargetTokenAccount",
+      "msg": "Invalid target token account"
+    },
+    {
+      "code": 11,
+      "name": "InvalidCloseTokenAccount",
+      "msg": "Invalid token account to close"
+    },
+    {
+      "code": 12,
+      "name": "InvalidHolderTokenAccount",
+      "msg": "Invalid holder token account"
+    },
+    {
+      "code": 13,
+      "name": "InvalidRuleset",
+      "msg": "Invalid ruleset"
+    },
+    {
+      "code": 14,
+      "name": "InvalidPreTransferInstruction",
+      "msg": "Invalid pre transfer instruction"
+    },
+    {
+      "code": 15,
+      "name": "InvalidPostTransferInstruction",
+      "msg": "Invalid post transfer instruction"
+    },
+    {
+      "code": 16,
+      "name": "ProgramDisallowed",
+      "msg": "Disallowed program included in transfer"
+    },
+    {
+      "code": 17,
+      "name": "ProgramNotAllowed",
+      "msg": "Program not allowed in allowed programs to transfer"
+    },
+    {
+      "code": 18,
+      "name": "UnknownAccount",
+      "msg": "Unknown account found in instruction"
+    },
+    {
+      "code": 19,
+      "name": "AccountNotFound",
+      "msg": "Account not found in instruction"
+    },
+    {
+      "code": 20,
+      "name": "TokenAlreadyInUse",
+      "msg": "Token already in use"
+    },
+    {
+      "code": 21,
+      "name": "InvalidTokenUser",
+      "msg": "Invalid token user"
+    },
+    {
+      "code": 22,
+      "name": "TokenCurentlyInUse",
+      "msg": "Token currently in use"
+    },
+    {
+      "code": 23,
+      "name": "InvalidRulesetAuthority",
+      "msg": "Invalid ruleset authority"
+    }
+  ],
   "metadata": {
     "origin": "shank",
-    "address": "mTok58Lg4YfcmwqyrDHpf7ogp599WRhzb6PxjaBqAxS",
+    "address": "creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez",
     "binaryVersion": "0.0.5",
     "libVersion": "^0.0.5"
   }

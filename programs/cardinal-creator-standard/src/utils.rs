@@ -48,6 +48,15 @@ pub fn assert_owner(account: &AccountInfo, owner: &Pubkey, name: &str) -> Progra
 }
 
 #[inline(always)]
+pub fn assert_amount(amount_one: &str, amount_two: &str, name: &str) -> ProgramResult {
+    assert_with_msg(
+        amount_one == amount_two,
+        ProgramError::from(ErrorCode::InvalidAmount),
+        format!("Invalid amount for {}", name).as_str(),
+    )
+}
+
+#[inline(always)]
 pub fn assert_empty(account: &AccountInfo, name: &str) -> ProgramResult {
     assert_with_msg(
         account.data_is_empty(),
@@ -66,7 +75,7 @@ pub fn assert_address(address_one: &Pubkey, address_two: &Pubkey, name: &str) ->
 }
 
 #[inline(always)]
-pub fn assert_valid_mint_account(
+pub fn unpack_checked_mint_account(
     account: &AccountInfo,
     name: Option<&str>,
 ) -> Result<Mint, ProgramError> {
@@ -85,7 +94,7 @@ pub fn assert_valid_mint_account(
 }
 
 #[inline(always)]
-pub fn assert_valid_token_account(
+pub fn unpack_checked_token_account(
     account: &AccountInfo,
     name: Option<&str>,
 ) -> Result<TokenAccount, ProgramError> {
