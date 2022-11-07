@@ -7,16 +7,13 @@ import {
 } from "@solana/spl-token";
 import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
 
-import {
-  createApproveInstruction,
-  createInitializeMintInstruction,
-  createRevokeInstruction,
-  createSetInUseByInstruction,
-  findMintManagerId,
-  findRulesetId,
-  MintManager,
-  Ruleset,
-} from "../../sdk";
+import { Ruleset } from "../../sdk";
+import { MintManager } from "../../sdk/generated/accounts/MintManager";
+import { createApproveInstruction } from "../../sdk/generated/instructions/Approve";
+import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
+import { createRevokeInstruction } from "../../sdk/generated/instructions/Revoke";
+import { createSetInUseByInstruction } from "../../sdk/generated/instructions/SetInUseBy";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 
@@ -140,7 +137,9 @@ test("Set in use by", async () => {
         holderTokenAccount: holderAtaId,
       },
       {
-        ix: { inUseBy: IN_USE_BY_AUTHORITY.publicKey },
+        setInUseByIx: {
+          inUseByAddress: IN_USE_BY_AUTHORITY.publicKey,
+        },
       }
     )
   );

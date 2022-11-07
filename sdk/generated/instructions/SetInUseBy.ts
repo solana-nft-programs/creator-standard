@@ -49,7 +49,7 @@ export type SetInUseByInstructionAccounts = {
   holderTokenAccount: web3.PublicKey
 }
 
-export const setInUseByInstructionDiscriminator = 2
+export const setInUseByInstructionDiscriminator = 4
 
 /**
  * Creates a _SetInUseBy_ instruction.

@@ -23,6 +23,19 @@ solana_program::entrypoint!(process_instruction);
 #[derive(Debug, Clone, ShankInstruction, BorshSerialize, BorshDeserialize)]
 #[rustfmt::skip]
 pub enum CreatorStandardInstruction {
+    // ruleset
+    #[account(0, writable, name = "ruleset")]
+    #[account(1, signer, name = "authority")]
+    #[account(2, writable, signer, name = "payer")]
+    #[account(3, name = "system_program")]
+    InitRuleset(InitRulesetIx),
+
+    #[account(0, writable, name = "ruleset")]
+    #[account(1, signer, name = "authority")]
+    #[account(2, signer, name = "payer")]
+    #[account(3, name = "system_program")]
+    UpdateRuleset(UpdateRulesetIx),
+
     // mint_manager
     #[account(0, writable, name = "mint_manager")]
     #[account(1, writable, name = "mint")]
@@ -42,7 +55,7 @@ pub enum CreatorStandardInstruction {
     #[account(3, signer, name = "authority")]
     #[account(4, signer, signer, name = "payer")]
     #[account(5, name = "system_program", desc = "System program")]
-    UpdateMintManager,
+    UpdateMintManager(UpdateMintManagerIx),
 
     #[account(0, writable, name = "mint_manager")]
     #[account(1, signer, name = "holder")]
@@ -52,19 +65,6 @@ pub enum CreatorStandardInstruction {
     #[account(0, name = "mint_manager")]
     #[account(1, name = "user")]
     RemoveInUseBy,
-
-    // ruleset
-    #[account(0, writable, name = "ruleset")]
-    #[account(1, signer, name = "authority")]
-    #[account(2, signer, name = "payer")]
-    #[account(3, name = "system_program")]
-    InitRuleset(InitRulesetIx),
-
-    #[account(0, writable, name = "ruleset")]
-    #[account(1, signer, name = "authority")]
-    #[account(2, signer, name = "payer")]
-    #[account(3, name = "system_program")]
-    UpdateRuleset(UpdateRulesetIx),
 
     // token
     #[account(0, name = "mint_manager")]
@@ -146,10 +146,10 @@ pub fn process_instruction(
             let ctx = InitMintManagerCtx::load(accounts)?;
             instructions::mint_manager::init_mint_manager::handler(ctx)
         }
-        CreatorStandardInstruction::UpdateMintManager => {
+        CreatorStandardInstruction::UpdateMintManager(ix) => {
             msg!("CreatorStandardInstruction::UpdateMintManager");
             let ctx = UpdateMintManagerCtx::load(accounts)?;
-            instructions::mint_manager::update_mint_manager::handler(ctx)
+            instructions::mint_manager::update_mint_manager::handler(ctx, ix)
         }
         CreatorStandardInstruction::SetInUseBy(ix) => {
             msg!("CreatorStandardInstruction::SetInUseBy");

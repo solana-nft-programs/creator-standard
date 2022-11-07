@@ -2,8 +2,9 @@ import * as anchor from "@project-serum/anchor";
 import { Keypair, Transaction } from "@solana/web3.js";
 import dotenv from "dotenv";
 
-import { findRulesetId } from "../sdk";
-import { createInitRulesetInstruction, Ruleset } from "../sdk/generated";
+import { Ruleset } from "../sdk";
+import { createInitRulesetInstruction } from "../sdk/generated/instructions/InitRuleset";
+import { findRulesetId } from "../sdk/pda";
 import { connectionFor, executeTransaction } from "../utils";
 
 dotenv.config();
@@ -29,7 +30,7 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
         payer: wallet.publicKey,
       },
       {
-        ix: {
+        initRulesetIx: {
           name: params.name,
           collector: wallet.publicKey,
           checkSellerFeeBasisPoints: false,
@@ -63,6 +64,6 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
 };
 
 const params: RulesetParams = {
-  name: "cardinal-no-check-2",
+  name: "cardinal-no-checks",
 };
 main(params).catch((e) => console.log(e));

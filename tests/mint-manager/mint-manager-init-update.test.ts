@@ -2,14 +2,11 @@ import { beforeAll, expect, test } from "@jest/globals";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import {
-  createInitMintManagerInstruction,
-  createUpdateMintManagerInstruction,
-  findMintManagerId,
-  findRulesetId,
-  MintManager,
-  Ruleset,
-} from "../../sdk";
+import { createInitMintManagerInstruction } from "../../sdk";
+import { MintManager } from "../../sdk/generated/accounts/MintManager";
+import { Ruleset } from "../../sdk/generated/accounts/Ruleset";
+import { createUpdateMintManagerInstruction } from "../../sdk/generated/instructions/UpdateMintManager";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
@@ -90,7 +87,11 @@ test("Update mint manager", async () => {
         collector: ruleset.collector,
         ruleset: findRulesetId(RULESET_NAME_2),
       },
-      { ix: { authority: newAuthority.publicKey } }
+      {
+        updateMintManagerIx: {
+          authority: newAuthority.publicKey,
+        },
+      }
     )
   );
   await executeTransaction(provider.connection, tx, provider.wallet);

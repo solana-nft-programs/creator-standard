@@ -50,7 +50,7 @@ export type UpdateRulesetInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const updateRulesetInstructionDiscriminator = 5
+export const updateRulesetInstructionDiscriminator = 1
 
 /**
  * Creates a _UpdateRuleset_ instruction.

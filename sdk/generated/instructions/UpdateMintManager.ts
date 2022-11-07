@@ -7,15 +7,35 @@
 
 import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
+import {
+  UpdateMintManagerIx,
+  updateMintManagerIxBeet,
+} from '../types/UpdateMintManagerIx'
 
 /**
  * @category Instructions
  * @category UpdateMintManager
  * @category generated
  */
-export const UpdateMintManagerStruct = new beet.BeetArgsStruct<{
-  instructionDiscriminator: number
-}>([['instructionDiscriminator', beet.u8]], 'UpdateMintManagerInstructionArgs')
+export type UpdateMintManagerInstructionArgs = {
+  updateMintManagerIx: UpdateMintManagerIx
+}
+/**
+ * @category Instructions
+ * @category UpdateMintManager
+ * @category generated
+ */
+export const UpdateMintManagerStruct = new beet.BeetArgsStruct<
+  UpdateMintManagerInstructionArgs & {
+    instructionDiscriminator: number
+  }
+>(
+  [
+    ['instructionDiscriminator', beet.u8],
+    ['updateMintManagerIx', updateMintManagerIxBeet],
+  ],
+  'UpdateMintManagerInstructionArgs'
+)
 /**
  * Accounts required by the _UpdateMintManager_ instruction
  *
@@ -37,22 +57,26 @@ export type UpdateMintManagerInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const updateMintManagerInstructionDiscriminator = 1
+export const updateMintManagerInstructionDiscriminator = 3
 
 /**
  * Creates a _UpdateMintManager_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
+ * @param args to provide as instruction data to the program
+ *
  * @category Instructions
  * @category UpdateMintManager
  * @category generated
  */
 export function createUpdateMintManagerInstruction(
   accounts: UpdateMintManagerInstructionAccounts,
+  args: UpdateMintManagerInstructionArgs,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
   const [data] = UpdateMintManagerStruct.serialize({
     instructionDiscriminator: updateMintManagerInstructionDiscriminator,
+    ...args,
   })
   const keys: web3.AccountMeta[] = [
     {

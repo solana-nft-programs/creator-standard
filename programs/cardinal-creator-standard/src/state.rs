@@ -36,9 +36,9 @@ pub fn is_default_program(program_id: Pubkey) -> bool {
 #[repr(C)]
 #[derive(Clone, Copy, BorshSerialize, BorshDeserialize, PartialEq)]
 pub enum AccountType {
-    Ruleset = 1,
-    MintManager = 2,
-    Unrecognized = 3,
+    Ruleset = 0,
+    MintManager = 1,
+    Unrecognized = 2,
 }
 
 impl From<u8> for AccountType {

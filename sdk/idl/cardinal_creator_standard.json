@@ -3,6 +3,80 @@
   "name": "cardinal_creator_standard",
   "instructions": [
     {
+      "name": "InitRuleset",
+      "accounts": [
+        {
+          "name": "ruleset",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "initRulesetIx",
+          "type": {
+            "defined": "InitRulesetIx"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 0
+      }
+    },
+    {
+      "name": "UpdateRuleset",
+      "accounts": [
+        {
+          "name": "ruleset",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "updateRulesetIx",
+          "type": {
+            "defined": "UpdateRulesetIx"
+          }
+        }
+      ],
+      "discriminant": {
+        "type": "u8",
+        "value": 1
+      }
+    },
+    {
       "name": "InitMintManager",
       "accounts": [
         {
@@ -61,7 +135,7 @@
       "args": [],
       "discriminant": {
         "type": "u8",
-        "value": 0
+        "value": 2
       }
     },
     {
@@ -99,10 +173,17 @@
           "desc": "System program"
         }
       ],
-      "args": [],
+      "args": [
+        {
+          "name": "updateMintManagerIx",
+          "type": {
+            "defined": "UpdateMintManagerIx"
+          }
+        }
+      ],
       "discriminant": {
         "type": "u8",
-        "value": 1
+        "value": 3
       }
     },
     {
@@ -134,7 +215,7 @@
       ],
       "discriminant": {
         "type": "u8",
-        "value": 2
+        "value": 4
       }
     },
     {
@@ -152,80 +233,6 @@
         }
       ],
       "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 3
-      }
-    },
-    {
-      "name": "InitRuleset",
-      "accounts": [
-        {
-          "name": "ruleset",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "payer",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "initRulesetIx",
-          "type": {
-            "defined": "InitRulesetIx"
-          }
-        }
-      ],
-      "discriminant": {
-        "type": "u8",
-        "value": 4
-      }
-    },
-    {
-      "name": "UpdateRuleset",
-      "accounts": [
-        {
-          "name": "ruleset",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "payer",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "updateRulesetIx",
-          "type": {
-            "defined": "UpdateRulesetIx"
-          }
-        }
-      ],
       "discriminant": {
         "type": "u8",
         "value": 5
@@ -682,6 +689,18 @@
         "fields": [
           {
             "name": "inUseByAddress",
+            "type": "publicKey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateMintManagerIx",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
             "type": "publicKey"
           }
         ]

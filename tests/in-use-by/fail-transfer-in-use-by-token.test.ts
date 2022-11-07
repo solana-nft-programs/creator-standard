@@ -13,15 +13,12 @@ import {
   Transaction,
 } from "@solana/web3.js";
 
-import {
-  createInitializeMintInstruction,
-  createSetInUseByInstruction,
-  createTransferInstruction,
-  findMintManagerId,
-  findRulesetId,
-  MintManager,
-  Ruleset,
-} from "../../sdk";
+import { Ruleset } from "../../sdk";
+import { MintManager } from "../../sdk/generated/accounts/MintManager";
+import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
+import { createSetInUseByInstruction } from "../../sdk/generated/instructions/SetInUseBy";
+import { createTransferInstruction } from "../../sdk/generated/instructions/Transfer";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 
@@ -110,7 +107,9 @@ test("Set in use by", async () => {
         holderTokenAccount: holderAtaId,
       },
       {
-        ix: { inUseBy: IN_USE_BY_AUTHORITY.publicKey },
+        setInUseByIx: {
+          inUseByAddress: IN_USE_BY_AUTHORITY.publicKey,
+        },
       }
     )
   );

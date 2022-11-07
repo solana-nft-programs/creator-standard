@@ -6,13 +6,10 @@ import {
 } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import {
-  createInitializeMintInstruction,
-  findMintManagerId,
-  findRulesetId,
-  MintManager,
-  Ruleset,
-} from "../../sdk";
+import { Ruleset } from "../../sdk";
+import { MintManager } from "../../sdk/generated/accounts/MintManager";
+import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 

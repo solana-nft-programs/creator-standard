@@ -45,7 +45,7 @@ export type InitMintManagerInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const initMintManagerInstructionDiscriminator = 0
+export const initMintManagerInstructionDiscriminator = 2
 
 /**
  * Creates a _InitMintManager_ instruction.

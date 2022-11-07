@@ -30,7 +30,7 @@ export type RemoveInUseByInstructionAccounts = {
   user: web3.PublicKey
 }
 
-export const removeInUseByInstructionDiscriminator = 3
+export const removeInUseByInstructionDiscriminator = 5
 
 /**
  * Creates a _RemoveInUseBy_ instruction.

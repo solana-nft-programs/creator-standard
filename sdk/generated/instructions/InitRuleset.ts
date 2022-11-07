@@ -38,7 +38,7 @@ export const InitRulesetStruct = new beet.FixableBeetArgsStruct<
  *
  * @property [_writable_] ruleset
  * @property [**signer**] authority
- * @property [**signer**] payer
+ * @property [_writable_, **signer**] payer
  * @category Instructions
  * @category InitRuleset
  * @category generated
@@ -50,7 +50,7 @@ export type InitRulesetInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const initRulesetInstructionDiscriminator = 4
+export const initRulesetInstructionDiscriminator = 0
 
 /**
  * Creates a _InitRuleset_ instruction.
@@ -84,7 +84,7 @@ export function createInitRulesetInstruction(
     },
     {
       pubkey: accounts.payer,
-      isWritable: false,
+      isWritable: true,
       isSigner: true,
     },
     {
