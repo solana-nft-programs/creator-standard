@@ -1,12 +1,12 @@
 use std::collections::HashSet;
 
 use crate::errors::ErrorCode;
-use crate::state::assert_mint_manager_seeds;
-use crate::state::is_default_program;
-use crate::state::shared::CreatorStandardAccount;
 use crate::state::AccountType;
+use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
+use crate::state::assert_mint_manager_seeds;
+use crate::state::is_default_program;
 use crate::utils::assert_address;
 use crate::utils::assert_mut;
 use crate::utils::assert_program_account;

@@ -564,7 +564,7 @@
   ],
   "accounts": [
     {
-      "name": "AccountBalances",
+      "name": "MintManager",
       "type": {
         "kind": "struct",
         "fields": [
@@ -573,11 +573,69 @@
             "type": "u8"
           },
           {
-            "name": "balances",
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "mint",
+            "type": "publicKey"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "ruleset",
+            "type": "publicKey"
+          },
+          {
+            "name": "inUseBy",
             "type": {
-              "vec": {
-                "defined": "AccountBalance"
-              }
+              "option": "publicKey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Ruleset",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "accountType",
+            "type": "u8"
+          },
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "collector",
+            "type": "publicKey"
+          },
+          {
+            "name": "checkSellerFeeBasisPoints",
+            "type": "bool"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "allowedPrograms",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "disallowedAddresses",
+            "type": {
+              "vec": "publicKey"
             }
           }
         ]
@@ -585,30 +643,6 @@
     }
   ],
   "types": [
-    {
-      "name": "AccountBalance",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "address",
-            "type": "publicKey"
-          },
-          {
-            "name": "mint",
-            "type": "publicKey"
-          },
-          {
-            "name": "size",
-            "type": "u64"
-          },
-          {
-            "name": "balance",
-            "type": "u64"
-          }
-        ]
-      }
-    },
     {
       "name": "InitRulesetIx",
       "type": {
@@ -699,9 +733,6 @@
           },
           {
             "name": "MintManager"
-          },
-          {
-            "name": "AccountBalances"
           },
           {
             "name": "Unrecognized"

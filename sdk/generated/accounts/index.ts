@@ -1,5 +1,7 @@
-export * from './AccountBalances'
+export * from './MintManager'
+export * from './Ruleset'
 
-import { AccountBalances } from './AccountBalances'
+import { MintManager } from './MintManager'
+import { Ruleset } from './Ruleset'
 
-export const accountProviders = { AccountBalances }
+export const accountProviders = { MintManager, Ruleset }

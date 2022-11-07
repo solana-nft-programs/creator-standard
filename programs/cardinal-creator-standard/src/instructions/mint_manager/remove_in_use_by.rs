@@ -1,9 +1,8 @@
-use crate::state::mint_manager;
-use crate::state::shared::CreatorStandardAccount;
+use crate::state::CreatorStandardAccount;
+use crate::state::MintManager;
 use crate::utils::assert_address;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
-use mint_manager::MintManager;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;

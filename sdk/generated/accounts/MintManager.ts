@@ -5,66 +5,80 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
-import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
+import * as beet from '@metaplex-foundation/beet'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
-import { AccountBalance, accountBalanceBeet } from '../types/AccountBalance'
 
 /**
- * Arguments used to create {@link AccountBalances}
+ * Arguments used to create {@link MintManager}
  * @category Accounts
  * @category generated
  */
-export type AccountBalancesArgs = {
+export type MintManagerArgs = {
   accountType: number
-  balances: AccountBalance[]
+  version: number
+  mint: web3.PublicKey
+  authority: web3.PublicKey
+  ruleset: web3.PublicKey
+  inUseBy: beet.COption<web3.PublicKey>
 }
 /**
- * Holds the data for the {@link AccountBalances} Account and provides de/serialization
+ * Holds the data for the {@link MintManager} Account and provides de/serialization
  * functionality for that data
  *
  * @category Accounts
  * @category generated
  */
-export class AccountBalances implements AccountBalancesArgs {
+export class MintManager implements MintManagerArgs {
   private constructor(
     readonly accountType: number,
-    readonly balances: AccountBalance[]
+    readonly version: number,
+    readonly mint: web3.PublicKey,
+    readonly authority: web3.PublicKey,
+    readonly ruleset: web3.PublicKey,
+    readonly inUseBy: beet.COption<web3.PublicKey>
   ) {}
 
   /**
-   * Creates a {@link AccountBalances} instance from the provided args.
+   * Creates a {@link MintManager} instance from the provided args.
    */
-  static fromArgs(args: AccountBalancesArgs) {
-    return new AccountBalances(args.accountType, args.balances)
+  static fromArgs(args: MintManagerArgs) {
+    return new MintManager(
+      args.accountType,
+      args.version,
+      args.mint,
+      args.authority,
+      args.ruleset,
+      args.inUseBy
+    )
   }
 
   /**
-   * Deserializes the {@link AccountBalances} from the data of the provided {@link web3.AccountInfo}.
+   * Deserializes the {@link MintManager} from the data of the provided {@link web3.AccountInfo}.
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
   static fromAccountInfo(
     accountInfo: web3.AccountInfo<Buffer>,
     offset = 0
-  ): [AccountBalances, number] {
-    return AccountBalances.deserialize(accountInfo.data, offset)
+  ): [MintManager, number] {
+    return MintManager.deserialize(accountInfo.data, offset)
   }
 
   /**
    * Retrieves the account info from the provided address and deserializes
-   * the {@link AccountBalances} from its data.
+   * the {@link MintManager} from its data.
    *
    * @throws Error if no account info is found at the address or if deserialization fails
    */
   static async fromAccountAddress(
     connection: web3.Connection,
     address: web3.PublicKey
-  ): Promise<AccountBalances> {
+  ): Promise<MintManager> {
     const accountInfo = await connection.getAccountInfo(address)
     if (accountInfo == null) {
-      throw new Error(`Unable to find AccountBalances account at ${address}`)
+      throw new Error(`Unable to find MintManager account at ${address}`)
     }
-    return AccountBalances.fromAccountInfo(accountInfo, 0)[0]
+    return MintManager.fromAccountInfo(accountInfo, 0)[0]
   }
 
   /**
@@ -78,64 +92,68 @@ export class AccountBalances implements AccountBalancesArgs {
       'creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez'
     )
   ) {
-    return beetSolana.GpaBuilder.fromStruct(programId, accountBalancesBeet)
+    return beetSolana.GpaBuilder.fromStruct(programId, mintManagerBeet)
   }
 
   /**
-   * Deserializes the {@link AccountBalances} from the provided data Buffer.
+   * Deserializes the {@link MintManager} from the provided data Buffer.
    * @returns a tuple of the account data and the offset up to which the buffer was read to obtain it.
    */
-  static deserialize(buf: Buffer, offset = 0): [AccountBalances, number] {
-    return accountBalancesBeet.deserialize(buf, offset)
+  static deserialize(buf: Buffer, offset = 0): [MintManager, number] {
+    return mintManagerBeet.deserialize(buf, offset)
   }
 
   /**
-   * Serializes the {@link AccountBalances} into a Buffer.
+   * Serializes the {@link MintManager} into a Buffer.
    * @returns a tuple of the created Buffer and the offset up to which the buffer was written to store it.
    */
   serialize(): [Buffer, number] {
-    return accountBalancesBeet.serialize(this)
+    return mintManagerBeet.serialize(this)
   }
 
   /**
    * Returns the byteSize of a {@link Buffer} holding the serialized data of
-   * {@link AccountBalances} for the provided args.
+   * {@link MintManager} for the provided args.
    *
    * @param args need to be provided since the byte size for this account
    * depends on them
    */
-  static byteSize(args: AccountBalancesArgs) {
-    const instance = AccountBalances.fromArgs(args)
-    return accountBalancesBeet.toFixedFromValue(instance).byteSize
+  static byteSize(args: MintManagerArgs) {
+    const instance = MintManager.fromArgs(args)
+    return mintManagerBeet.toFixedFromValue(instance).byteSize
   }
 
   /**
    * Fetches the minimum balance needed to exempt an account holding
-   * {@link AccountBalances} data from rent
+   * {@link MintManager} data from rent
    *
    * @param args need to be provided since the byte size for this account
    * depends on them
    * @param connection used to retrieve the rent exemption information
    */
   static async getMinimumBalanceForRentExemption(
-    args: AccountBalancesArgs,
+    args: MintManagerArgs,
     connection: web3.Connection,
     commitment?: web3.Commitment
   ): Promise<number> {
     return connection.getMinimumBalanceForRentExemption(
-      AccountBalances.byteSize(args),
+      MintManager.byteSize(args),
       commitment
     )
   }
 
   /**
-   * Returns a readable version of {@link AccountBalances} properties
+   * Returns a readable version of {@link MintManager} properties
    * and can be used to convert to JSON and/or logging
    */
   pretty() {
     return {
       accountType: this.accountType,
-      balances: this.balances,
+      version: this.version,
+      mint: this.mint.toBase58(),
+      authority: this.authority.toBase58(),
+      ruleset: this.ruleset.toBase58(),
+      inUseBy: this.inUseBy,
     }
   }
 }
@@ -144,14 +162,18 @@ export class AccountBalances implements AccountBalancesArgs {
  * @category Accounts
  * @category generated
  */
-export const accountBalancesBeet = new beet.FixableBeetStruct<
-  AccountBalances,
-  AccountBalancesArgs
+export const mintManagerBeet = new beet.FixableBeetStruct<
+  MintManager,
+  MintManagerArgs
 >(
   [
     ['accountType', beet.u8],
-    ['balances', beet.array(accountBalanceBeet)],
+    ['version', beet.u8],
+    ['mint', beetSolana.publicKey],
+    ['authority', beetSolana.publicKey],
+    ['ruleset', beetSolana.publicKey],
+    ['inUseBy', beet.coption(beetSolana.publicKey)],
   ],
-  AccountBalances.fromArgs,
-  'AccountBalances'
+  MintManager.fromArgs,
+  'MintManager'
 )

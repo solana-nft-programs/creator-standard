@@ -1,7 +1,7 @@
 use crate::errors::ErrorCode;
 use crate::id;
 use crate::state::assert_mint_manager_seeds;
-use crate::state::shared::CreatorStandardAccount;
+use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
 use crate::state::COLLECTOR;

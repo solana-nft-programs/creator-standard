@@ -1,6 +1,6 @@
 use crate::errors::ErrorCode;
 use crate::state::assert_mint_manager_seeds;
-use crate::state::shared::CreatorStandardAccount;
+use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::utils::assert_address;
 use crate::utils::assert_amount;

@@ -13,7 +13,6 @@ import * as beet from '@metaplex-foundation/beet'
 export enum AccountType {
   Ruleset,
   MintManager,
-  AccountBalances,
   Unrecognized,
 }
 

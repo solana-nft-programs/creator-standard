@@ -1,8 +1,9 @@
 use std::str::FromStr;
 
 use crate::id;
-use crate::state::ruleset;
-use crate::state::shared::CreatorStandardAccount;
+use crate::state::calculate_ruleset_size;
+use crate::state::CreatorStandardAccount;
+use crate::state::Ruleset;
 use crate::state::RULESET_AUTHORITY;
 use crate::utils::assert_address;
 use crate::utils::assert_empty;
@@ -10,8 +11,6 @@ use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use ruleset::calculate_ruleset_size;
-use ruleset::Ruleset;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
