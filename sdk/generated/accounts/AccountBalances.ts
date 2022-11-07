@@ -8,7 +8,7 @@
 import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
-import { AccountBalance, accountBalanceBeet } from './AccountBalance'
+import { AccountBalance, accountBalanceBeet } from '../types/AccountBalance'
 
 /**
  * Arguments used to create {@link AccountBalances}

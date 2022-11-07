@@ -8,6 +8,8 @@ use spl_token::state::Account as TokenAccount;
 use spl_token::state::Mint;
 
 use crate::errors::ErrorCode;
+use crate::id;
+use crate::state::AccountType;
 
 #[inline(always)]
 pub fn assert_with_msg(v: bool, err: impl Into<ProgramError>, msg: &str) -> ProgramResult {
@@ -75,13 +77,28 @@ pub fn assert_address(address_one: &Pubkey, address_two: &Pubkey, name: &str) ->
 }
 
 #[inline(always)]
+pub fn assert_program_account(account: &AccountInfo, account_type: &AccountType) -> ProgramResult {
+    let data = &account.data.borrow_mut();
+    assert_with_msg(
+        data[0] == *account_type as u8 && *account.owner == id(),
+        ProgramError::InvalidInstructionData,
+        format!(
+            "{} must be account type {}",
+            account.key,
+            account_type.to_string()
+        )
+        .as_str(),
+    )
+}
+
+#[inline(always)]
 pub fn unpack_checked_mint_account(
     account: &AccountInfo,
     name: Option<&str>,
 ) -> Result<Mint, ProgramError> {
     let check_mint = Mint::unpack(&account.data.try_borrow().expect("Could not borrow data"));
     assert_with_msg(
-        check_mint.is_ok(),
+        check_mint.is_ok() || *account.owner != spl_token::id(),
         ProgramError::from(ErrorCode::InvalidMint),
         format!(
             "Invalid {} mint account {}",
@@ -101,7 +118,7 @@ pub fn unpack_checked_token_account(
     let check_token_account =
         TokenAccount::unpack(&account.data.try_borrow().expect("Could not borrow data"));
     assert_with_msg(
-        check_token_account.is_ok(),
+        check_token_account.is_ok() || *account.owner != spl_token::id(),
         ProgramError::from(ErrorCode::InvalidTokenAccount),
         format!(
             "Invalid {} token account {}",

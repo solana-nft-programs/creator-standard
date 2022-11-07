@@ -5,22 +5,18 @@
  * See: https://github.com/metaplex-foundation/solita
  */
 
+import * as web3 from '@solana/web3.js'
+import * as beetSolana from '@metaplex-foundation/beet-solana'
 import * as beet from '@metaplex-foundation/beet'
-/**
- * @category enums
- * @category generated
- */
-export enum AccountType {
-  Ruleset,
-  MintManager,
-  AccountBalances,
-  Unrecognized,
+export type SetInUseByIx = {
+  inUseByAddress: web3.PublicKey
 }
 
 /**
  * @category userTypes
  * @category generated
  */
-export const accountTypeBeet = beet.fixedScalarEnum(
-  AccountType
-) as beet.FixedSizeBeet<AccountType, AccountType>
+export const setInUseByIxBeet = new beet.BeetArgsStruct<SetInUseByIx>(
+  [['inUseByAddress', beetSolana.publicKey]],
+  'SetInUseByIx'
+)

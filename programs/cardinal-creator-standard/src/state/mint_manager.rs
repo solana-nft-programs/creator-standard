@@ -1,12 +1,12 @@
 use crate::state::shared::AccountType;
-use borsh::{BorshDeserialize, BorshSerialize};
+use crate::state::shared::CreatorStandardAccount;
+use borsh::BorshDeserialize;
+use borsh::BorshSerialize;
 use shank::ShankAccount;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 
 use crate::utils::assert_with_msg;
-
-use super::CreatorStandardAccount;
 
 pub const MINT_MANAGER_SEED: &str = "mint-manager";
 pub const MINT_MANAGER_SIZE: usize = std::mem::size_of::<MintManager>() + 64;
@@ -41,7 +41,7 @@ pub fn assert_mint_manager_seeds(
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
-#[derive(Clone, BorshSerialize, BorshDeserialize, Debug, PartialEq, ShankAccount)]
+#[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone, ShankAccount)]
 pub struct MintManager {
     pub account_type: u8,
     pub version: u8,
