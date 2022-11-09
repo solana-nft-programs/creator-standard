@@ -24,8 +24,8 @@ use solana_program::system_instruction::create_account;
 use solana_program::system_program;
 use solana_program::sysvar;
 use solana_program::sysvar::Sysvar;
+use spl_associated_token_account::create_associated_token_account;
 use spl_associated_token_account::get_associated_token_address;
-use spl_associated_token_account::instruction::create_associated_token_account;
 use std::str::FromStr;
 
 pub struct InitializeMintCtx<'a, 'info> {
@@ -189,19 +189,13 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
     }
     if ctx.target_token_account.data_is_empty() {
         invoke_signed(
-            &create_associated_token_account(
-                ctx.payer.key,
-                ctx.target.key,
-                ctx.mint.key,
-                ctx.token_program.key,
-            ),
+            &create_associated_token_account(ctx.payer.key, ctx.target.key, ctx.mint.key),
             &[
                 ctx.payer.clone(),
                 ctx.target_token_account.clone(),
                 ctx.target.clone(),
                 ctx.mint.clone(),
                 ctx.system_program.clone(),
-                ctx.token_program.clone(),
                 ctx.rent.clone(),
             ],
             &[],
