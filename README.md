@@ -1,7 +1,7 @@
 # Cardinal Creator Standard
 
 <div style="text-align: center; width: 100%;">
-  <img style="height: 450px" src="./doc-assets/banner.png" />
+  <img style="width: full" src="./doc-assets/banner.png" />
 </div>
 
 ## Spec outlining [details](https://cardinal-labs.notion.site/The-Creator-Standard-v1-5fce56a1d8bb440f849205e9fb5befc2)
@@ -17,31 +17,31 @@ We bounced a lot back and forth on the phrasing of the proposed solution between
 # Basic NFT
 
 <div style="text-align: center; width: 100%;">
-  <img style="height: 450px" src="./doc-assets/nft.png" />
+  <img style="width: full" src="./doc-assets/nft.png" />
 </div>
 
 # NFT with Attached Ruleset
 
 <div style="text-align: center; width: 100%;">
-  <img style="height: 450px" src="./doc-assets/nft-ruleset.png" />
+  <img style="width: full" src="./doc-assets/nft-ruleset.png" />
 </div>
 
 # NFT Ruleset Program Interaction
 
 <div style="text-align: center; width: 100%;">
-  <img style="height: 450px" src="./doc-assets/nft-ruleset-programs.png" />
+  <img style="width: full" src="./doc-assets/nft-ruleset-programs.png" />
 </div>
 
 # Rulesets Can Be 1:Many with NFTs
 
 <div style="text-align: center; width: 100%;">
-  <img style="height: 450px" src="./doc-assets/ruleset-1-to-many.png" />
+  <img style="width: full" src="./doc-assets/ruleset-1-to-many.png" />
 </div>
 
 # Rulesets Can Extend Other Rulesets
 
 <div style="text-align: center; width: 100%;">
-  <img style="height: 450px" src="./doc-assets/rulesets-extends.png" />
+  <img style="width: full" src="./doc-assets/rulesets-extends.png" />
 </div>
 
 # Program State
