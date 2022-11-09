@@ -21,7 +21,6 @@ use solana_program::sysvar::Sysvar;
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone)]
 pub struct UpdateRulesetIx {
-    pub name: String,
     pub authority: Pubkey,
     pub collector: Pubkey,
     pub disallowed_addresses: Vec<Pubkey>,

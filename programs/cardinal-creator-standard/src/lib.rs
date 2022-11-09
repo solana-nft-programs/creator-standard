@@ -20,7 +20,8 @@ solana_program::declare_id!("creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez");
 #[cfg(not(feature = "no-entrypoint"))]
 solana_program::entrypoint!(process_instruction);
 
-#[derive(Debug, Clone, ShankInstruction, BorshSerialize, BorshDeserialize)]
+#[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
+#[derive(BorshSerialize, BorshDeserialize, Clone, ShankInstruction)]
 #[rustfmt::skip]
 pub enum CreatorStandardInstruction {
     // ruleset
@@ -32,7 +33,7 @@ pub enum CreatorStandardInstruction {
 
     #[account(0, writable, name = "ruleset")]
     #[account(1, signer, name = "authority")]
-    #[account(2, signer, name = "payer")]
+    #[account(2, writable, signer, name = "payer")]
     #[account(3, name = "system_program")]
     UpdateRuleset(UpdateRulesetIx),
 
@@ -44,7 +45,7 @@ pub enum CreatorStandardInstruction {
     #[account(4, writable, name = "ruleset_collector")]
     #[account(5, writable, name = "collector")]
     #[account(6, signer, name = "authority")]
-    #[account(7, signer, signer, name = "payer")]
+    #[account(7, signer, name = "payer")]
     #[account(8, name = "token_program", desc = "Token program")]
     #[account(9, name = "system_program", desc = "System program")]
     InitMintManager,
@@ -53,7 +54,7 @@ pub enum CreatorStandardInstruction {
     #[account(1, name = "ruleset")]
     #[account(2, writable, name = "collector")]
     #[account(3, signer, name = "authority")]
-    #[account(4, signer, signer, name = "payer")]
+    #[account(4, signer, name = "payer")]
     #[account(5, name = "system_program", desc = "System program")]
     UpdateMintManager(UpdateMintManagerIx),
 
@@ -63,7 +64,7 @@ pub enum CreatorStandardInstruction {
     SetInUseBy(SetInUseByIx),
 
     #[account(0, writable, name = "mint_manager")]
-    #[account(1, name = "user")]
+    #[account(1, signer, name = "user")]
     RemoveInUseBy,
 
     // token
@@ -93,7 +94,7 @@ pub enum CreatorStandardInstruction {
     #[account(0, name = "mint")]
     #[account(1, writable, name = "token_account")]
     #[account(2, name = "owner")]
-    #[account(3, signer, name = "payer")]
+    #[account(3, writable, signer, name = "payer")]
     #[account(4, name = "rent")]
     #[account(5, name = "token_program")]
     #[account(6, name = "associated_token_program")]

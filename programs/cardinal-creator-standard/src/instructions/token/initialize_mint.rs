@@ -24,8 +24,8 @@ use solana_program::system_instruction::create_account;
 use solana_program::system_program;
 use solana_program::sysvar;
 use solana_program::sysvar::Sysvar;
-use spl_associated_token_account::create_associated_token_account;
 use spl_associated_token_account::get_associated_token_address;
+use spl_associated_token_account::instruction::create_associated_token_account;
 use std::str::FromStr;
 
 pub struct InitializeMintCtx<'a, 'info> {
@@ -182,7 +182,7 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
             .collect::<Vec<&[u8]>>()],
     )?;
 
-    // Check/Create ATA
+// Check/Create ATA
     let associated_token_account = get_associated_token_address(ctx.target.key, ctx.mint.key);
     if associated_token_account != *ctx.target_token_account.key {
         return Err(ProgramError::from(ErrorCode::InvalidTargetTokenAccount));

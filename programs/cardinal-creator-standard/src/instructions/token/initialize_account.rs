@@ -8,7 +8,7 @@ use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
 use solana_program::system_program;
 use solana_program::sysvar;
-use spl_associated_token_account::create_associated_token_account;
+use spl_associated_token_account::instruction::create_associated_token_account;
 
 pub struct InitializeAccountCtx<'a, 'info> {
     pub mint: &'a AccountInfo<'info>,
