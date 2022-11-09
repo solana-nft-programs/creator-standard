@@ -34,6 +34,46 @@
 <p>The goal of this standard is not to replace the Token program or the Metadata program (base layer). The standard aims to introduce a layer on top of a token’s base layer that permissions transfers according to a predefined set of rules specified by the token’s creator.</p>
 <p>We bounced a lot back and forth on the phrasing of the proposed solution between “standard” vs “solution”. We concluded to the “standard” phrasing because this approach will not be supporting already minted Master Edition tokens. A “solution” would allow this on-top layer to be introduced to all already existing existing tokens, however the current proposed approach implements permissioned transfers for all but Master Edition tokens. Our standard utilizes a token’s freeze authority which for a Master Edition is owned by Metaplex and cannot be proxied.</p>
 
+<a href="#basic-nft" id="basic-nft" style="color: inherit; text-decoration: none;">
+  <h1>Basic NFT</h1>
+</a>
+<div style="text-align: center; width: 100%;">
+  <img style="height: 450px" src="./doc-assets/nft.png" />
+</div>
+
+
+<a href="#nft-with-attached-ruleset" id="nft-with-attached-ruleset" style="color: inherit; text-decoration: none;">
+  <h1>NFT with Attached Ruleset</h1>
+</a>
+<div style="text-align: center; width: 100%;">
+  <img style="height: 450px" src="./doc-assets/nft-ruleset.png" />
+</div>
+
+
+<a href="#nft-ruleset-program-interaction" id="nft-ruleset-program-interaction" style="color: inherit; text-decoration: none;">
+  <h1>NFT Ruleset Program Interaction</h1>
+</a>
+<div style="text-align: center; width: 100%;">
+  <img style="height: 450px" src="./doc-assets/nft-ruleset-programs.png" />
+</div>
+
+
+<a href="#rulesets-can-be-1many-with-nfts" id="rulesets-can-be-1many-with-nfts" style="color: inherit; text-decoration: none;">
+  <h1>Rulesets Can Be 1:Many with NFTs</h1>
+</a>
+<div style="text-align: center; width: 100%;">
+  <img style="height: 450px" src="./doc-assets/ruleset-1-to-many.png" />
+</div>
+
+
+<a href="#rulesets-can-extend-other-rulesets" id="rulesets-can-extend-other-rulesets" style="color: inherit; text-decoration: none;">
+  <h1>Rulesets Can Extend Other Rulesets</h1>
+</a>
+<div style="text-align: center; width: 100%;">
+  <img style="height: 450px" src="./doc-assets/rulesets-extends.png" />
+</div>
+
+
 <a href="#program-state" id="program-state" style="color: inherit; text-decoration: none;">
   <h1>Program State</h1>
 </a>
@@ -47,7 +87,7 @@
 
 </aside>
 
-<pre><code class="language-rust"><span class="hl-0">let</span><span class="hl-1"> </span><span class="hl-0">mut</span><span class="hl-1"> </span><span class="hl-2">seeds</span><span class="hl-1"> = [</span><span class="hl-3">&#39;ruleset&#39;</span><span class="hl-1">.</span><span class="hl-4">as_bytes</span><span class="hl-1">(), </span><span class="hl-2">name</span><span class="hl-1">.</span><span class="hl-4">as_bytes</span><span class="hl-1">()];</span><br/><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-0">struct</span><span class="hl-1"> </span><span class="hl-5">Ruleset</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">account_type</span><span class="hl-1">: </span><span class="hl-5">u8</span><span class="hl-1">,</span><span class="hl-6"> // account discriminator</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">version</span><span class="hl-1">: </span><span class="hl-5">u8</span><span class="hl-1">,</span><span class="hl-6">      // for potential future verisioning</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">authority</span><span class="hl-1">: </span><span class="hl-5">Pubkey</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">collector</span><span class="hl-1">: </span><span class="hl-5">Pubkey</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">check_seller_fee_basis_points</span><span class="hl-1">: </span><span class="hl-5">bool</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">name</span><span class="hl-1">: </span><span class="hl-5">String</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">allowed_programs</span><span class="hl-1">: </span><span class="hl-5">Vec</span><span class="hl-1">&lt;</span><span class="hl-5">Pubkey</span><span class="hl-1">&gt;,</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">disallowed_addresses</span><span class="hl-1">: </span><span class="hl-5">Vec</span><span class="hl-1">&lt;</span><span class="hl-5">Pubkey</span><span class="hl-1">&gt;,</span><br/><span class="hl-1">}</span>
+<pre><code class="language-rust"><span class="hl-0">let</span><span class="hl-1"> </span><span class="hl-0">mut</span><span class="hl-1"> </span><span class="hl-2">seeds</span><span class="hl-1"> = [</span><span class="hl-3">&#39;ruleset&#39;</span><span class="hl-1">.</span><span class="hl-4">as_bytes</span><span class="hl-1">(), </span><span class="hl-2">name</span><span class="hl-1">.</span><span class="hl-4">as_bytes</span><span class="hl-1">()];</span><br/><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-0">struct</span><span class="hl-1"> </span><span class="hl-5">Ruleset</span><span class="hl-1"> {</span><br/><span class="hl-6">    // account discriminator</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">account_type</span><span class="hl-1">: </span><span class="hl-5">u8</span><span class="hl-1">,</span><br/><span class="hl-6">    // version for potential future versioning</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">version</span><span class="hl-1">: </span><span class="hl-5">u8</span><span class="hl-1">,</span><br/><span class="hl-6">    // authority who can update this ruleset</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">authority</span><span class="hl-1">: </span><span class="hl-5">Pubkey</span><span class="hl-1">,</span><br/><span class="hl-6">    // collector who collects anything from this ruleset</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">collector</span><span class="hl-1">: </span><span class="hl-5">Pubkey</span><span class="hl-1">,</span><br/><span class="hl-6">    // whether to check the seller_fee_basis_points using post-transfer</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">check_seller_fee_basis_points</span><span class="hl-1">: </span><span class="hl-5">bool</span><span class="hl-1">,</span><br/><span class="hl-6">    // name for this ruleset (also used to derive ruleset address)</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">name</span><span class="hl-1">: </span><span class="hl-5">String</span><span class="hl-1">,</span><br/><span class="hl-6">    // vector of allowed programs that can interact with this nft</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">allowed_programs</span><span class="hl-1">: </span><span class="hl-5">Vec</span><span class="hl-1">&lt;</span><span class="hl-5">Pubkey</span><span class="hl-1">&gt;,</span><br/><span class="hl-6">    // vector of disallowed addresses that cannot interact with this nft</span><br/><span class="hl-1">    </span><span class="hl-0">pub</span><span class="hl-1"> </span><span class="hl-2">disallowed_addresses</span><span class="hl-1">: </span><span class="hl-5">Vec</span><span class="hl-1">&lt;</span><span class="hl-5">Pubkey</span><span class="hl-1">&gt;,</span><br/><span class="hl-1">}</span>
 </code></pre>
 
 <a href="#mint-manager" id="mint-manager" style="color: inherit; text-decoration: none;">
@@ -58,7 +98,7 @@
 
 </aside>
 
-<pre><code class="language-rust"><span class="hl-0">let</span><span class="hl-1"> </span><span class="hl-0">mut</span><span class="hl-1"> </span><span class="hl-2">seeds</span><span class="hl-1"> = [&#39;</span><span class="hl-5">mint</span><span class="hl-1">-</span><span class="hl-2">manager</span><span class="hl-3">&#39;.as_bytes(), mint.as_ref()];</span><br/><span class="hl-3">pub struct MintManager {</span><br/><span class="hl-3">    pub account_type: u8, // account discriminator</span><br/><span class="hl-3">  pub version: u8,      // for potential future verisioning</span><br/><span class="hl-3">  pub mint: Pubkey,</span><br/><span class="hl-3">  pub authority: Pubkey,</span><br/><span class="hl-3">  pub ruleset: Pubkey,</span><br/><span class="hl-3">  pub in_use_by: Option&lt;Pubkey&gt;,</span><br/><span class="hl-3">}</span>
+<pre><code class="language-rust"><span class="hl-0">let</span><span class="hl-1"> </span><span class="hl-0">mut</span><span class="hl-1"> </span><span class="hl-2">seeds</span><span class="hl-1"> = [&#39;</span><span class="hl-5">mint</span><span class="hl-1">-</span><span class="hl-2">manager</span><span class="hl-3">&#39;.as_bytes(), mint.as_ref()];</span><br/><span class="hl-3">pub struct MintManager {</span><br/><span class="hl-3">  // account discriminator</span><br/><span class="hl-3">  pub account_type: u8,</span><br/><span class="hl-3">  // version for potential future versioning</span><br/><span class="hl-3">  pub version: u8,</span><br/><span class="hl-3">  // mint address of this NFT that this mint-manager corresponds to</span><br/><span class="hl-3">  pub mint: Pubkey,</span><br/><span class="hl-3">  // authority who can update the ruleset of this mint-manager</span><br/><span class="hl-3">  pub authority: Pubkey,</span><br/><span class="hl-3">  // ruleset to be checked when transferring</span><br/><span class="hl-3">  pub ruleset: Pubkey,</span><br/><span class="hl-3">  // optional address currently using this NFT meaning it cannot be transferred while in-use</span><br/><span class="hl-3">  pub in_use_by: Option&lt;Pubkey&gt;,</span><br/><span class="hl-3">}</span>
 </code></pre>
 <p>When a mint manager gets created for a mint, the mint manager freezes the mint perpetually. Each mint manager is associated with a ruleset, with it specifying specific a set of rules</p>
 <p>Most fields are self-explanatory with the exception of <code>in_use_by</code> field which needs some underlying context and will be discussed below.</p>
