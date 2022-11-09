@@ -21,6 +21,7 @@ pub struct BurnCtx<'info> {
         && holder_token_account.mint == mint.key()
         && holder_token_account.amount == 1 @ ErrorCode::InvlaidHolderTokenAccount)]
     holder_token_account: Account<'info, TokenAccount>,
+    #[account(mut)]
     holder: Signer<'info>,
 
     token_program: Program<'info, Token>,

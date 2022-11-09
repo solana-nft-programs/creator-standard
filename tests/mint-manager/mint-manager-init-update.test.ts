@@ -2,20 +2,17 @@ import { beforeAll, expect, test } from "@jest/globals";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import {
-  createInitMintManagerInstruction,
-  createUpdateMintManagerInstruction,
-  findMintManagerId,
-  findRulesetId,
-  MintManager,
-  Ruleset,
-} from "../../sdk";
+import { createInitMintManagerInstruction } from "../../sdk";
+import { MintManager } from "../../sdk/generated/accounts/MintManager";
+import { Ruleset } from "../../sdk/generated/accounts/Ruleset";
+import { createUpdateMintManagerInstruction } from "../../sdk/generated/instructions/UpdateMintManager";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
-const RULESET_NAME_1 = "cardinal-no-check";
-const RULESET_NAME_2 = "cardinal-no-check-2";
+const RULESET_NAME_1 = "ruleset-no-checks";
+const RULESET_NAME_2 = "ruleset-no-checks-2";
 const RULESET_ID_1 = findRulesetId(RULESET_NAME_1);
 const RULESET_ID_2 = findRulesetId(RULESET_NAME_2);
 let provider: CardinalProvider;
@@ -90,7 +87,11 @@ test("Update mint manager", async () => {
         collector: ruleset.collector,
         ruleset: findRulesetId(RULESET_NAME_2),
       },
-      { ix: { authority: newAuthority.publicKey } }
+      {
+        updateMintManagerIx: {
+          authority: newAuthority.publicKey,
+        },
+      }
     )
   );
   await executeTransaction(provider.connection, tx, provider.wallet);

@@ -2,6 +2,7 @@ import { expect, test } from "@jest/globals";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
+  createTransferInstruction,
   getAccount,
   getAssociatedTokenAddressSync,
   getMint,
@@ -13,21 +14,17 @@ import {
   Transaction,
 } from "@solana/web3.js";
 
-import {
-  createInitializeMintInstruction,
-  createSetInUseByInstruction,
-  createTransferInstruction,
-  findMintManagerId,
-  findRulesetId,
-  MintManager,
-  Ruleset,
-} from "../../sdk";
+import { Ruleset } from "../../sdk";
+import { MintManager } from "../../sdk/generated/accounts/MintManager";
+import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
+import { createSetInUseByInstruction } from "../../sdk/generated/instructions/SetInUseBy";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
-const RULESET_NAME = "cardinal-no-check";
+const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
 const RULESET_COLLECTOR = new PublicKey(
   "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
@@ -46,6 +43,10 @@ test("Init", async () => {
     provider.connection,
     RULESET_ID
   );
+  const targetTokenAccount = getAssociatedTokenAddressSync(
+    mintKeypair.publicKey,
+    provider.wallet.publicKey
+  );
 
   const tx = new Transaction();
   tx.add(
@@ -53,10 +54,7 @@ test("Init", async () => {
       mintManager: mintManagerId,
       mint: mintKeypair.publicKey,
       ruleset: RULESET_ID,
-      targetTokenAccount: getAssociatedTokenAddressSync(
-        mintKeypair.publicKey,
-        provider.wallet.publicKey
-      ),
+      targetTokenAccount: targetTokenAccount,
       target: provider.wallet.publicKey,
       rulesetCollector: RULESET_COLLECTOR,
       authority: provider.wallet.publicKey,
@@ -110,7 +108,9 @@ test("Set in use by", async () => {
         holderTokenAccount: holderAtaId,
       },
       {
-        ix: { inUseBy: IN_USE_BY_AUTHORITY.publicKey },
+        setInUseByIx: {
+          inUseByAddress: IN_USE_BY_AUTHORITY.publicKey,
+        },
       }
     )
   );

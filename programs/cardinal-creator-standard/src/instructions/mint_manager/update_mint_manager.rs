@@ -15,7 +15,7 @@ pub struct UpdateMintManagerCtx<'info> {
     mint_manager: Account<'info, MintManager>,
     ruleset: Account<'info, Ruleset>,
     /// CHECK: Account is not read from
-    #[account(mut, constraint = collector.key() == ruleset.collector @ ErrorCode::InvalidCollector)]
+    #[account(mut, constraint = collector.key().to_string() == COLLECTOR @ ErrorCode::InvalidCollector)]
     collector: UncheckedAccount<'info>,
     #[account(constraint = authority.key() == mint_manager.authority @ ErrorCode::InvalidAuthority)]
     authority: Signer<'info>,

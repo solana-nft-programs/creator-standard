@@ -2,19 +2,15 @@ import { beforeAll, expect, test } from "@jest/globals";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
 
-import {
-  createInitMintManagerInstruction,
-  findMintManagerId,
-  findRulesetId,
-  MintManager,
-  Ruleset,
-} from "../../sdk";
+import { createInitMintManagerInstruction, Ruleset } from "../../sdk";
+import { MintManager } from "../../sdk/generated/accounts/MintManager";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
-const RULESET_NAME = "cardinal-no-check";
+const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
 const RULESET_COLLECTOR = new PublicKey(
   "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"

@@ -45,7 +45,6 @@ export const updateRulesetStruct = new beet.FixableBeetArgsStruct<
 export type UpdateRulesetInstructionAccounts = {
   ruleset: web3.PublicKey
   authority: web3.PublicKey
-  systemProgram?: web3.PublicKey
 }
 
 export const updateRulesetInstructionDiscriminator = [
@@ -81,11 +80,6 @@ export function createUpdateRulesetInstruction(
       pubkey: accounts.authority,
       isWritable: false,
       isSigner: true,
-    },
-    {
-      pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
-      isWritable: false,
-      isSigner: false,
     },
   ]
 

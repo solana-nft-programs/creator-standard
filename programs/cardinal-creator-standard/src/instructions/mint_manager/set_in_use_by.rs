@@ -14,7 +14,7 @@ pub struct SetInUseByCtx<'info> {
     mint_manager: Box<Account<'info, MintManager>>,
     holder: Signer<'info>,
 
-    #[account(constraint = holder_token_account.owner == holder.key() && holder_token_account.mint == mint_manager.mint @ ErrorCode::InvalidHolderTokenAccount)]
+    #[account(constraint = holder_token_account.amount == 1 && holder_token_account.owner == holder.key() && holder_token_account.mint == mint_manager.mint @ ErrorCode::InvalidHolderTokenAccount)]
     holder_token_account: Box<Account<'info, TokenAccount>>,
 }
 

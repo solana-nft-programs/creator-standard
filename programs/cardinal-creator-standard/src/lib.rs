@@ -70,12 +70,4 @@ pub mod cardinal_creator_standard {
     pub fn transfer(ctx: Context<TransferCtx>) -> Result<()> {
         token::transfer::handler(ctx)
     }
-
-    pub fn pre_transfer(ctx: Context<PreTransferCtx>) -> Result<()> {
-        token::pre_transfer::handler(ctx)
-    }
-
-    pub fn post_transfer(ctx: Context<PostTransferCtx>) -> Result<()> {
-        token::post_transfer::handler(ctx)
-    }
 }

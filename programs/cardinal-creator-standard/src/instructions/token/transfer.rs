@@ -9,14 +9,10 @@ use anchor_spl::token::Token;
 use anchor_spl::token::TokenAccount;
 use anchor_spl::token::Transfer;
 use anchor_spl::token::{self};
-use arrayref::array_ref;
 use solana_program::serialize_utils::read_u16;
 use solana_program::sysvar::instructions::load_instruction_at_checked;
 use solana_program::sysvar::{self};
 use std::collections::HashSet;
-
-use super::POST_TRANSFER_DISCRIMINATOR;
-use super::PRE_TRANSFER_DISCRIMINATOR;
 
 #[derive(Accounts)]
 pub struct TransferCtx<'info> {
@@ -80,50 +76,6 @@ pub fn handler(ctx: Context<TransferCtx>) -> Result<()> {
         }
     }
     ////////////////////////////////////////////////////////////
-
-    /////////////// check pre/post ///////////////
-    if ctx.accounts.ruleset.check_seller_fee_basis_points {
-        // check pre_transfer
-        let first_ix = load_instruction_at_checked(0, &instructions_account_info)
-            .expect("Failed to get first instruction");
-        let data: &[u8] = &first_ix.data;
-        if data.is_empty() {
-            return Err(error!(ErrorCode::InvalidPreTransferInstruction));
-        }
-        let disc_bytes = array_ref![data, 0, 8];
-        // check first account is account balances for this mint
-        let mint = ctx.accounts.mint_manager.mint;
-        let path = &[ACCOUNT_BALANCES_SEED.as_bytes(), mint.as_ref()];
-        let (account_balances_address, _bump) = Pubkey::find_program_address(path, ctx.program_id);
-        if account_balances_address != first_ix.accounts[0].pubkey {
-            return Err(error!(ErrorCode::InvalidPreTransferInstruction));
-        }
-        // check instruction
-        if first_ix.program_id != *ctx.program_id || disc_bytes != &PRE_TRANSFER_DISCRIMINATOR {
-            return Err(error!(ErrorCode::InvalidPreTransferInstruction));
-        }
-
-        // check post_transfer
-        let last_ix =
-            load_instruction_at_checked(num_instructions.into(), &instructions_account_info)
-                .expect("Failed to get last instruction");
-        // check first account is account balances for this mint
-        if account_balances_address != last_ix.accounts[0].pubkey {
-            return Err(error!(ErrorCode::InvalidPreTransferInstruction));
-        }
-        // check instruction
-        let data: &[u8] = &last_ix.data;
-        if data.is_empty() {
-            return Err(error!(ErrorCode::InvalidPostTransferInstruction));
-        }
-        let disc_bytes = array_ref![data, 0, 8];
-        if last_ix.program_id != *ctx.program_id || disc_bytes != &POST_TRANSFER_DISCRIMINATOR {
-            return Err(error!(ErrorCode::InvalidPostTransferInstruction));
-        }
-
-        // TODO balance checks
-    }
-    //////////////////////////////////////////////
 
     ///////////////// handle transfer /////////////////
     let mint = ctx.accounts.mint.key();

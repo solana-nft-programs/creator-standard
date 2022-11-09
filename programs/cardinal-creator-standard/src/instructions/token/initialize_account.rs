@@ -11,7 +11,7 @@ pub struct InitializeAccountCtx<'info> {
     #[account(mut)]
     token_account: UncheckedAccount<'info>,
     /// CHECK: Account created or checked in handler
-    token_account_owner: UncheckedAccount<'info>,
+    owner: UncheckedAccount<'info>,
 
     #[account(mut)]
     payer: Signer<'info>,
@@ -25,7 +25,7 @@ pub fn handler(ctx: Context<InitializeAccountCtx>) -> Result<()> {
     let cpi_accounts = associated_token::Create {
         payer: ctx.accounts.payer.to_account_info(),
         associated_token: ctx.accounts.token_account.to_account_info(),
-        authority: ctx.accounts.token_account_owner.to_account_info(),
+        authority: ctx.accounts.owner.to_account_info(),
         mint: ctx.accounts.mint.to_account_info(),
         system_program: ctx.accounts.system_program.to_account_info(),
         token_program: ctx.accounts.token_program.to_account_info(),

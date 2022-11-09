@@ -25,8 +25,7 @@ pub struct InitMintManagerCtx<'info> {
     mint: Box<Account<'info, Mint>>,
     ruleset: Box<Account<'info, Ruleset>>,
 
-    /// CHECK: Account is not read from
-    #[account(mut, constraint = holder_token_account.mint == mint.key() @ ErrorCode::InvalidHolderTokenAccount)]
+    #[account(mut, constraint = holder_token_account.amount == 1 && holder_token_account.owner == authority.key() && holder_token_account.mint == mint.key() @ ErrorCode::InvalidHolderTokenAccount)]
     holder_token_account: Box<Account<'info, TokenAccount>>,
 
     /// CHECK: Account is not read from

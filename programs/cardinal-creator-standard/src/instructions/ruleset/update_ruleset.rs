@@ -17,7 +17,6 @@ pub struct UpdateRulesetCtx<'info> {
     ruleset: Account<'info, Ruleset>,
     #[account(constraint = authority.key() == ruleset.authority @ ErrorCode::InvalidAuthority)]
     authority: Signer<'info>,
-    system_program: Program<'info, System>,
 }
 
 pub fn handler(ctx: Context<UpdateRulesetCtx>, ix: UpdateRulesetIx) -> Result<()> {
@@ -27,5 +26,6 @@ pub fn handler(ctx: Context<UpdateRulesetCtx>, ix: UpdateRulesetIx) -> Result<()
     ruleset.check_seller_fee_basis_points = ix.check_seller_fee_basis_points;
     ruleset.allowed_programs = ix.allowed_programs;
     ruleset.disallowed_addresses = ix.disallowed_addresses;
+
     Ok(())
 }

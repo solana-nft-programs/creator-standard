@@ -1,5 +1,5 @@
 {
-  "version": "0.1.7",
+  "version": "0.3.0",
   "name": "cardinal_creator_standard",
   "instructions": [
     {
@@ -190,11 +190,6 @@
           "name": "authority",
           "isMut": false,
           "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
         }
       ],
       "args": [
@@ -291,7 +286,7 @@
           "isSigner": false
         },
         {
-          "name": "tokenAccountOwner",
+          "name": "owner",
           "isMut": false,
           "isSigner": false
         },
@@ -410,7 +405,7 @@
         },
         {
           "name": "holder",
-          "isMut": false,
+          "isMut": true,
           "isSigner": true
         },
         {
@@ -451,11 +446,6 @@
         },
         {
           "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
           "isMut": false,
           "isSigner": false
         }
@@ -503,48 +493,6 @@
         {
           "name": "systemProgram",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "instructions",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "preTransfer",
-      "accounts": [
-        {
-          "name": "accountBalances",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "instructions",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "postTransfer",
-      "accounts": [
-        {
-          "name": "accountBalances",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "collector",
-          "isMut": true,
           "isSigner": false
         },
         {

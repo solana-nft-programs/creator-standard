@@ -7,14 +7,11 @@ import {
 } from "@solana/spl-token";
 import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
 
-import {
-  createApproveInstruction,
-  createInitializeMintInstruction,
-  findMintManagerId,
-  findRulesetId,
-  MintManager,
-  Ruleset,
-} from "../../sdk";
+import { Ruleset } from "../../sdk";
+import { MintManager } from "../../sdk/generated/accounts/MintManager";
+import { createApproveInstruction } from "../../sdk/generated/instructions/Approve";
+import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import {
   executeTransaction,
@@ -25,7 +22,7 @@ import {
 
 const mintKeypair = Keypair.generate();
 
-const RULESET_NAME = "cardinal-no-check";
+const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
 const RULESET_COLLECTOR = new PublicKey(
   "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
@@ -45,6 +42,10 @@ test("Initialize mint", async () => {
     provider.connection,
     RULESET_ID
   );
+  const targetTokenAccount = getAssociatedTokenAddressSync(
+    mintKeypair.publicKey,
+    provider.wallet.publicKey
+  );
 
   const tx = new Transaction();
   tx.add(
@@ -52,10 +53,7 @@ test("Initialize mint", async () => {
       mintManager: mintManagerId,
       mint: mintKeypair.publicKey,
       ruleset: RULESET_ID,
-      targetTokenAccount: getAssociatedTokenAddressSync(
-        mintKeypair.publicKey,
-        provider.wallet.publicKey
-      ),
+      targetTokenAccount: targetTokenAccount,
       target: provider.wallet.publicKey,
       rulesetCollector: RULESET_COLLECTOR,
       authority: provider.wallet.publicKey,

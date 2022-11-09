@@ -25,7 +25,7 @@ export const initializeAccountStruct = new beet.BeetArgsStruct<{
  *
  * @property [] mint
  * @property [_writable_] tokenAccount
- * @property [] tokenAccountOwner
+ * @property [] owner
  * @property [_writable_, **signer**] payer
  * @property [] associatedTokenProgram
  * @category Instructions
@@ -35,7 +35,7 @@ export const initializeAccountStruct = new beet.BeetArgsStruct<{
 export type InitializeAccountInstructionAccounts = {
   mint: web3.PublicKey
   tokenAccount: web3.PublicKey
-  tokenAccountOwner: web3.PublicKey
+  owner: web3.PublicKey
   payer: web3.PublicKey
   rent?: web3.PublicKey
   tokenProgram?: web3.PublicKey
@@ -74,7 +74,7 @@ export function createInitializeAccountInstruction(
       isSigner: false,
     },
     {
-      pubkey: accounts.tokenAccountOwner,
+      pubkey: accounts.owner,
       isWritable: false,
       isSigner: false,
     },

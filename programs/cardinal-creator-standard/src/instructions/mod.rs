@@ -14,7 +14,5 @@ pub use token::burn::*;
 pub use token::close::*;
 pub use token::initialize_account::*;
 pub use token::initialize_mint::*;
-pub use token::post_transfer::*;
-pub use token::pre_transfer::*;
 pub use token::revoke::*;
 pub use token::transfer::*;

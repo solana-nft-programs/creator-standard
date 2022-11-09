@@ -20,7 +20,6 @@ pub struct CloseCtx<'info> {
     owner: Signer<'info>,
 
     token_program: Program<'info, Token>,
-    system_program: Program<'info, System>,
 }
 
 pub fn handler(ctx: Context<CloseCtx>) -> Result<()> {

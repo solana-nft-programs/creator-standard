@@ -37,7 +37,6 @@ export type CloseInstructionAccounts = {
   tokenAccount: web3.PublicKey
   owner: web3.PublicKey
   tokenProgram?: web3.PublicKey
-  systemProgram?: web3.PublicKey
 }
 
 export const closeInstructionDiscriminator = [
@@ -82,11 +81,6 @@ export function createCloseInstruction(
     },
     {
       pubkey: accounts.tokenProgram ?? splToken.TOKEN_PROGRAM_ID,
-      isWritable: false,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.systemProgram ?? web3.SystemProgram.programId,
       isWritable: false,
       isSigner: false,
     },

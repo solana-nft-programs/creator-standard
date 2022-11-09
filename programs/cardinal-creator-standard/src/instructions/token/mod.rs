@@ -3,8 +3,6 @@ pub mod burn;
 pub mod close;
 pub mod initialize_account;
 pub mod initialize_mint;
-pub mod post_transfer;
-pub mod pre_transfer;
 pub mod revoke;
 pub mod transfer;
 
@@ -13,7 +11,5 @@ pub use burn::*;
 pub use close::*;
 pub use initialize_account::*;
 pub use initialize_mint::*;
-pub use post_transfer::*;
-pub use pre_transfer::*;
 pub use revoke::*;
 pub use transfer::*;

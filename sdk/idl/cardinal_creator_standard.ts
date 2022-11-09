@@ -1,5 +1,5 @@
 export type CardinalCreatorStandard = {
-  version: "0.1.7";
+  version: "0.3.0";
   name: "cardinal_creator_standard";
   instructions: [
     {
@@ -190,11 +190,6 @@ export type CardinalCreatorStandard = {
           name: "authority";
           isMut: false;
           isSigner: true;
-        },
-        {
-          name: "systemProgram";
-          isMut: false;
-          isSigner: false;
         }
       ];
       args: [
@@ -291,7 +286,7 @@ export type CardinalCreatorStandard = {
           isSigner: false;
         },
         {
-          name: "tokenAccountOwner";
+          name: "owner";
           isMut: false;
           isSigner: false;
         },
@@ -410,7 +405,7 @@ export type CardinalCreatorStandard = {
         },
         {
           name: "holder";
-          isMut: false;
+          isMut: true;
           isSigner: true;
         },
         {
@@ -451,11 +446,6 @@ export type CardinalCreatorStandard = {
         },
         {
           name: "tokenProgram";
-          isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "systemProgram";
           isMut: false;
           isSigner: false;
         }
@@ -503,48 +493,6 @@ export type CardinalCreatorStandard = {
         {
           name: "systemProgram";
           isMut: false;
-          isSigner: false;
-        },
-        {
-          name: "instructions";
-          isMut: false;
-          isSigner: false;
-        }
-      ];
-      args: [];
-    },
-    {
-      name: "preTransfer";
-      accounts: [
-        {
-          name: "accountBalances";
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "payer";
-          isMut: true;
-          isSigner: true;
-        },
-        {
-          name: "instructions";
-          isMut: false;
-          isSigner: false;
-        }
-      ];
-      args: [];
-    },
-    {
-      name: "postTransfer";
-      accounts: [
-        {
-          name: "accountBalances";
-          isMut: true;
-          isSigner: false;
-        },
-        {
-          name: "collector";
-          isMut: true;
           isSigner: false;
         },
         {
@@ -871,7 +819,7 @@ export type CardinalCreatorStandard = {
 };
 
 export const IDL: CardinalCreatorStandard = {
-  version: "0.1.7",
+  version: "0.3.0",
   name: "cardinal_creator_standard",
   instructions: [
     {
@@ -1063,11 +1011,6 @@ export const IDL: CardinalCreatorStandard = {
           isMut: false,
           isSigner: true,
         },
-        {
-          name: "systemProgram",
-          isMut: false,
-          isSigner: false,
-        },
       ],
       args: [
         {
@@ -1163,7 +1106,7 @@ export const IDL: CardinalCreatorStandard = {
           isSigner: false,
         },
         {
-          name: "tokenAccountOwner",
+          name: "owner",
           isMut: false,
           isSigner: false,
         },
@@ -1282,7 +1225,7 @@ export const IDL: CardinalCreatorStandard = {
         },
         {
           name: "holder",
-          isMut: false,
+          isMut: true,
           isSigner: true,
         },
         {
@@ -1323,11 +1266,6 @@ export const IDL: CardinalCreatorStandard = {
         },
         {
           name: "tokenProgram",
-          isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "systemProgram",
           isMut: false,
           isSigner: false,
         },
@@ -1375,48 +1313,6 @@ export const IDL: CardinalCreatorStandard = {
         {
           name: "systemProgram",
           isMut: false,
-          isSigner: false,
-        },
-        {
-          name: "instructions",
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-    },
-    {
-      name: "preTransfer",
-      accounts: [
-        {
-          name: "accountBalances",
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "payer",
-          isMut: true,
-          isSigner: true,
-        },
-        {
-          name: "instructions",
-          isMut: false,
-          isSigner: false,
-        },
-      ],
-      args: [],
-    },
-    {
-      name: "postTransfer",
-      accounts: [
-        {
-          name: "accountBalances",
-          isMut: true,
-          isSigner: false,
-        },
-        {
-          name: "collector",
-          isMut: true,
           isSigner: false,
         },
         {
