@@ -11,8 +11,8 @@ import type { CardinalProvider } from "../../utils";
 import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
-const RULESET_NAME_1 = "cardinal-no-check";
-const RULESET_NAME_2 = "cardinal-no-check-2";
+const RULESET_NAME_1 = "ruleset-no-checks";
+const RULESET_NAME_2 = "ruleset-no-checks-2";
 const RULESET_ID_1 = findRulesetId(RULESET_NAME_1);
 const RULESET_ID_2 = findRulesetId(RULESET_NAME_2);
 let provider: CardinalProvider;

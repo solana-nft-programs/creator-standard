@@ -17,7 +17,7 @@ pub fn assert_with_msg(v: bool, err: impl Into<ProgramError>, msg: &str) -> Prog
         Ok(())
     } else {
         let caller = std::panic::Location::caller();
-        msg!("{}. \n{}", msg, caller);
+        msg!("{} {}", msg, caller);
         Err(err.into())
     }
 }

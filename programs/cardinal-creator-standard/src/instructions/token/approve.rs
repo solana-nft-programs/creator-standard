@@ -1,7 +1,7 @@
 use crate::errors::ErrorCode;
+use crate::state::assert_mint_manager_seeds;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
-use crate::state::assert_mint_manager_seeds;
 use crate::utils::assert_address;
 use crate::utils::assert_amount;
 use crate::utils::assert_mut;
@@ -122,6 +122,8 @@ pub fn handler(ctx: ApproveCtx) -> ProgramResult {
         )?,
         &[
             ctx.holder_token_account.clone(),
+            ctx.mint.clone(),
+            ctx.holder.clone(),
             ctx.delegate.clone(),
             ctx.mint_manager.clone(),
         ],

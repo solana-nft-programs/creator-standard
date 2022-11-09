@@ -18,7 +18,7 @@ import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
-const RULESET_NAME = "cardinal-no-check";
+const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
 const IN_USE_BY_AUTHORITY = Keypair.generate();
 

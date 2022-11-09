@@ -1,6 +1,6 @@
+use crate::state::calculate_ruleset_size;
 use crate::state::CreatorStandardAccount;
 use crate::state::Ruleset;
-use crate::state::calculate_ruleset_size;
 use crate::utils::assert_address;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
@@ -105,6 +105,7 @@ pub fn handler(ctx: UpdateRulesetCtx, ix: UpdateRulesetIx) -> ProgramResult {
     }
 
     ctx.ruleset.realloc(new_ruleset_space, false)?;
+    ruleset.save(ctx.ruleset)?;
 
     Ok(())
 }

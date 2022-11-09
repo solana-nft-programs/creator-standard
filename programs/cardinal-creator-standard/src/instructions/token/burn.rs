@@ -131,6 +131,7 @@ pub fn handler(ctx: BurnCtx) -> ProgramResult {
         &[
             ctx.holder_token_account.clone(),
             ctx.mint.clone(),
+            ctx.holder.clone(),
             ctx.mint_manager.clone(),
         ],
         &[&mint_manager_seeds

@@ -1,6 +1,7 @@
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use shank::ShankAccount;
+use solana_program::entrypoint::ProgramResult;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 
@@ -20,9 +21,6 @@ use crate::id;
 use crate::utils::assert_owner;
 
 ///////////// CONSTANTS /////////////
-pub const CREATION_LAMPORTS: u64 = 10_000_000;
-pub const UPDATE_LAMPORTS: u64 = 5_000_000;
-pub const COLLECTOR_SHARE: u64 = 50;
 pub const COLLECTOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const DEFAULT_PROGRAMS: [&str; 1] = ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"];
@@ -66,6 +64,8 @@ impl Display for AccountType {
 pub trait CreatorStandardAccount {
     fn account_type() -> AccountType;
     fn set_account_type(&mut self) -> ();
+    fn save(&self, account: &AccountInfo) -> ProgramResult;
+    fn new() -> Self;
 
     fn safe_deserialize<T: BorshDeserialize>(mut data: &[u8]) -> Result<T, BorshError> {
         if !is_correct_account_type(data, Self::account_type()) {
@@ -132,8 +132,8 @@ pub const MINT_MANAGER_SIZE: usize = std::mem::size_of::<MintManager>() + 64;
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
 #[derive(Clone, BorshSerialize, BorshDeserialize, Debug, PartialEq, ShankAccount)]
 pub struct MintManager {
-    pub account_type: u8,
-    pub version: u8,
+    pub account_type: u8, // account discriminator
+    pub version: u8,      // for potential future verisioning
     pub mint: Pubkey,
     pub authority: Pubkey,
     pub ruleset: Pubkey,
@@ -141,12 +141,28 @@ pub struct MintManager {
 }
 
 impl CreatorStandardAccount for MintManager {
+    fn new() -> Self {
+        MintManager {
+            account_type: AccountType::MintManager as u8,
+            version: 0,
+            mint: Pubkey::default(),
+            authority: Pubkey::default(),
+            ruleset: Pubkey::default(),
+            in_use_by: None,
+        }
+    }
+
     fn account_type() -> AccountType {
         AccountType::MintManager
     }
 
     fn set_account_type(&mut self) -> () {
         self.account_type = AccountType::MintManager as u8
+    }
+
+    fn save(&self, account: &AccountInfo) -> ProgramResult {
+        BorshSerialize::serialize(self, &mut *account.data.borrow_mut())?;
+        Ok(())
     }
 }
 ///////////// MINT MANAGER /////////////
@@ -190,8 +206,8 @@ pub fn calculate_ruleset_size(
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone, ShankAccount)]
 pub struct Ruleset {
-    pub account_type: u8,
-    pub version: u8,
+    pub account_type: u8, // account discriminator
+    pub version: u8,      // for potential future verisioning
     pub authority: Pubkey,
     pub collector: Pubkey,
     pub check_seller_fee_basis_points: bool,
@@ -201,11 +217,30 @@ pub struct Ruleset {
 }
 
 impl CreatorStandardAccount for Ruleset {
+    fn new() -> Self {
+        Ruleset {
+            account_type: AccountType::Ruleset as u8,
+            version: 0,
+            authority: Pubkey::default(),
+            collector: Pubkey::default(),
+            check_seller_fee_basis_points: true,
+            name: String::from(""),
+            allowed_programs: Vec::new(),
+            disallowed_addresses: Vec::new(),
+        }
+    }
+
     fn account_type() -> AccountType {
         AccountType::Ruleset
     }
+
     fn set_account_type(&mut self) -> () {
         self.account_type = AccountType::Ruleset as u8
+    }
+
+    fn save(&self, account: &AccountInfo) -> ProgramResult {
+        BorshSerialize::serialize(self, &mut *account.data.borrow_mut())?;
+        Ok(())
     }
 }
 

@@ -21,7 +21,7 @@ export const InitializeMintStruct = new beet.BeetArgsStruct<{
  * Accounts required by the _InitializeMint_ instruction
  *
  * @property [_writable_] mintManager
- * @property [**signer**] mint
+ * @property [_writable_, **signer**] mint
  * @property [] ruleset
  * @property [_writable_] targetTokenAccount
  * @property [**signer**] target
@@ -75,7 +75,7 @@ export function createInitializeMintInstruction(
     },
     {
       pubkey: accounts.mint,
-      isWritable: false,
+      isWritable: true,
       isSigner: true,
     },
     {

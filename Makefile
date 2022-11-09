@@ -11,8 +11,7 @@ build:
 start:
 	solana-test-validator --url https://api.devnet.solana.com \
 		--clone metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s --clone PwDiXFxQsGra4sFFTT8r1QWRMd4vfumiWC1jfWNfdYT \
-		--clone 9NZLBAUfyvAgNQeb7MJdLdYydcjPEE7A9rAjxMYs5Jaa \
-		--clone 784sC7D4cr3KsfSMiYESCYxwVNHngNK7csoTmQ2wwSza \
+		--clone BWfcxedmWSowGRyxVGDyZoeDcMwudtNfvccZLY7iUm6Y \
 		--bpf-program creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez ./target/deploy/cardinal_creator_standard.so \
 		--reset --quiet & echo $$! > validator.PID
 	sleep 8

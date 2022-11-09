@@ -62,7 +62,7 @@ pub enum CreatorStandardInstruction {
     #[account(2, name = "holder_token_account")]
     SetInUseBy(SetInUseByIx),
 
-    #[account(0, name = "mint_manager")]
+    #[account(0, writable, name = "mint_manager")]
     #[account(1, name = "user")]
     RemoveInUseBy,
 
@@ -101,7 +101,7 @@ pub enum CreatorStandardInstruction {
     InitializeAccount,
 
     #[account(0, writable, name = "mint_manager")]
-    #[account(1, signer, name = "mint")]
+    #[account(1, writable, signer, name = "mint")]
     #[account(2, name = "ruleset")]
     #[account(3, writable, name = "target_token_account")]
     #[account(4, signer, name = "target")]

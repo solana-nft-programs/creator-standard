@@ -1,7 +1,9 @@
 use std::str::FromStr;
 
 use crate::id;
+use crate::state::assert_ruleset_seeds;
 use crate::state::calculate_ruleset_size;
+
 use crate::state::CreatorStandardAccount;
 use crate::state::Ruleset;
 use crate::state::RULESET_AUTHORITY;
@@ -14,7 +16,7 @@ use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
-use solana_program::program::invoke;
+use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use solana_program::rent::Rent;
@@ -77,8 +79,9 @@ impl<'a, 'info> InitRulesetCtx<'a, 'info> {
 }
 
 pub fn handler(ctx: InitRulesetCtx, ix: InitRulesetIx) -> ProgramResult {
+    let ruleset_seeds = assert_ruleset_seeds(&ix.name, ctx.ruleset.key)?;
     let ruleset_space = calculate_ruleset_size(&ix.allowed_programs, &ix.disallowed_addresses);
-    invoke(
+    invoke_signed(
         &create_account(
             ctx.payer.key,
             ctx.ruleset.key,
@@ -87,10 +90,13 @@ pub fn handler(ctx: InitRulesetCtx, ix: InitRulesetIx) -> ProgramResult {
             &&id(),
         ),
         &[ctx.payer.clone(), ctx.ruleset.clone()],
+        &[&ruleset_seeds
+            .iter()
+            .map(|s| s.as_slice())
+            .collect::<Vec<&[u8]>>()],
     )?;
 
-    let mut ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
-    ruleset.set_account_type();
+    let mut ruleset: Ruleset = Ruleset::new();
     ruleset.version = 0;
     ruleset.authority = *ctx.authority.key;
     ruleset.collector = ix.collector;
@@ -98,6 +104,7 @@ pub fn handler(ctx: InitRulesetCtx, ix: InitRulesetIx) -> ProgramResult {
     ruleset.name = ix.name;
     ruleset.allowed_programs = ix.allowed_programs;
     ruleset.disallowed_addresses = ix.disallowed_addresses;
+    ruleset.save(ctx.ruleset)?;
 
     Ok(())
 }

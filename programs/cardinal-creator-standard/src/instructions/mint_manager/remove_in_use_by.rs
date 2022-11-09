@@ -41,6 +41,7 @@ impl<'a, 'info> RemoveInUseByCtx<'a, 'info> {
 pub fn handler(ctx: RemoveInUseByCtx) -> ProgramResult {
     let mut mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
     mint_manager.in_use_by = None;
+    mint_manager.save(ctx.mint_manager)?;
 
     Ok(())
 }

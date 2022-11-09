@@ -1,7 +1,6 @@
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
-use crate::state::UPDATE_LAMPORTS;
 use crate::utils::assert_address;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
@@ -10,10 +9,8 @@ use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
-use solana_program::program::invoke;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
-use solana_program::system_instruction::transfer;
 use solana_program::system_program;
 
 #[repr(C)]
@@ -78,15 +75,7 @@ pub fn handler(ctx: UpdateMintManagerCtx, ix: UpdateMintManagerIx) -> ProgramRes
     let mut mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
     mint_manager.authority = ix.authority;
     mint_manager.ruleset = *ctx.ruleset.key;
-
-    invoke(
-        &transfer(&ctx.payer.key, &ctx.collector.key, UPDATE_LAMPORTS),
-        &[
-            ctx.payer.clone(),
-            ctx.collector.clone(),
-            ctx.system_program.clone(),
-        ],
-    )?;
+    mint_manager.save(ctx.mint_manager)?;
 
     Ok(())
 }

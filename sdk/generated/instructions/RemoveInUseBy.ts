@@ -19,7 +19,7 @@ export const RemoveInUseByStruct = new beet.BeetArgsStruct<{
 /**
  * Accounts required by the _RemoveInUseBy_ instruction
  *
- * @property [] mintManager
+ * @property [_writable_] mintManager
  * @property [] user
  * @category Instructions
  * @category RemoveInUseBy
@@ -50,7 +50,7 @@ export function createRemoveInUseByInstruction(
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.mintManager,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {

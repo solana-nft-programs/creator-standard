@@ -1,7 +1,7 @@
 module.exports = {
   clearMocks: true,
   moduleFileExtensions: ["js", "ts"],
-  testMatch: ["**/mint-manager-init.test.ts"],
+  testMatch: ["**/*.test.ts"],
   transform: {
     "^.+\\.ts$": "ts-jest",
   },

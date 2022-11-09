@@ -74,13 +74,13 @@ pub fn handler(ctx: InitializeAccountCtx) -> ProgramResult {
     invoke_signed(
         &create_associated_token_account(
             &ctx.payer.key,
-            &ctx.owner.key,
+            &ctx.token_account.key,
             &ctx.mint.key,
             &ctx.token_program.key,
         ),
         &[
             ctx.payer.clone(),
-            ctx.associated_token_program.clone(),
+            ctx.token_account.clone(),
             ctx.owner.clone(),
             ctx.mint.clone(),
             ctx.system_program.clone(),

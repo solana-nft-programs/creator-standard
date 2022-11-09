@@ -10,7 +10,7 @@ import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
-const RULESET_NAME = "cardinal-no-checks";
+const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
 const RULESET_COLLECTOR = new PublicKey(
   "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"

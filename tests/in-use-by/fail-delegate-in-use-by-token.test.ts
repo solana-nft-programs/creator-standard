@@ -18,7 +18,7 @@ import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
-const RULESET_NAME = "cardinal-no-check";
+const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
 const RULESET_COLLECTOR = new PublicKey(
   "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
@@ -37,6 +37,10 @@ test("Init", async () => {
     provider.connection,
     RULESET_ID
   );
+  const targetTokenAccount = getAssociatedTokenAddressSync(
+    mintKeypair.publicKey,
+    provider.wallet.publicKey
+  );
 
   const tx = new Transaction();
   tx.add(
@@ -44,10 +48,7 @@ test("Init", async () => {
       mintManager: mintManagerId,
       mint: mintKeypair.publicKey,
       ruleset: RULESET_ID,
-      targetTokenAccount: getAssociatedTokenAddressSync(
-        mintKeypair.publicKey,
-        provider.wallet.publicKey
-      ),
+      targetTokenAccount: targetTokenAccount,
       target: provider.wallet.publicKey,
       rulesetCollector: RULESET_COLLECTOR,
       authority: provider.wallet.publicKey,

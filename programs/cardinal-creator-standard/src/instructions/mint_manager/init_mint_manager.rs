@@ -2,13 +2,11 @@ use std::str::FromStr;
 
 use crate::errors::ErrorCode;
 use crate::id;
+use crate::state::assert_mint_manager_seeds;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
-use crate::state::assert_mint_manager_seeds;
 use crate::state::COLLECTOR;
-use crate::state::COLLECTOR_SHARE;
-use crate::state::CREATION_LAMPORTS;
 use crate::state::MINT_MANAGER_SIZE;
 use crate::utils::assert_address;
 use crate::utils::assert_amount;
@@ -26,7 +24,6 @@ use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use solana_program::rent::Rent;
 use solana_program::system_instruction::create_account;
-use solana_program::system_instruction::transfer;
 use solana_program::system_program;
 use solana_program::sysvar::Sysvar;
 
@@ -68,6 +65,7 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         assert_empty(ctx.mint_manager, "mint_manager")?;
 
         // check valid mint
+        assert_mut(ctx.mint, "mint")?;
         unpack_checked_mint_account(ctx.mint, Some("token mint"))?;
 
         ///// no checks for ruleset /////
@@ -130,7 +128,7 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
     let mint_manager_space = MINT_MANAGER_SIZE;
     let mint_manager_seeds = assert_mint_manager_seeds(ctx.mint.key, ctx.mint_manager.key)?;
     // create mint manager account
-    invoke(
+    invoke_signed(
         &create_account(
             ctx.payer.key,
             ctx.mint_manager.key,
@@ -139,10 +137,13 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
             &id(),
         ),
         &[ctx.payer.clone(), ctx.mint_manager.clone()],
+        &[&mint_manager_seeds
+            .iter()
+            .map(|s| s.as_slice())
+            .collect::<Vec<&[u8]>>()],
     )?;
 
-    let mut mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
-    mint_manager.set_account_type();
+    let mut mint_manager: MintManager = MintManager::new();
     mint_manager.version = 0;
     mint_manager.mint = *ctx.mint.key;
     mint_manager.authority = *ctx.authority.key;
@@ -156,7 +157,7 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
     }
 
     // set mint authority
-    invoke_signed(
+    invoke(
         &spl_token::instruction::set_authority(
             ctx.token_program.key,
             ctx.mint.key,
@@ -166,27 +167,19 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
             &[],
         )?,
         &[ctx.mint.clone(), ctx.authority.clone()],
-        &[&mint_manager_seeds
-            .iter()
-            .map(|s| s.as_slice())
-            .collect::<Vec<&[u8]>>()],
     )?;
 
     // set freeze authoriy
-    invoke_signed(
+    invoke(
         &spl_token::instruction::set_authority(
             ctx.token_program.key,
             ctx.mint.key,
             Some(ctx.mint_manager.key),
-            spl_token::instruction::AuthorityType::MintTokens,
+            spl_token::instruction::AuthorityType::FreezeAccount,
             ctx.authority.key,
             &[],
         )?,
         &[ctx.mint.clone(), ctx.authority.clone()],
-        &[&mint_manager_seeds
-            .iter()
-            .map(|s| s.as_slice())
-            .collect::<Vec<&[u8]>>()],
     )?;
 
     // freeze holder token account
@@ -195,13 +188,13 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
             ctx.token_program.key,
             ctx.holder_token_account.key,
             ctx.mint.key,
-            ctx.authority.key,
+            ctx.mint_manager.key,
             &[],
         )?,
         &[
             ctx.holder_token_account.clone(),
             ctx.mint.clone(),
-            ctx.authority.clone(),
+            ctx.mint_manager.clone(),
         ],
         &[&mint_manager_seeds
             .iter()
@@ -209,38 +202,6 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
             .collect::<Vec<&[u8]>>()],
     )?;
 
-    // creation lamports
-    let ruleset_collector_amount = CREATION_LAMPORTS
-        .checked_mul(COLLECTOR_SHARE)
-        .expect("Invalid multiplication")
-        .checked_div(100)
-        .expect("Invalid div");
-    invoke(
-        &transfer(
-            &ctx.payer.key,
-            &ctx.ruleset_collector.key,
-            ruleset_collector_amount,
-        ),
-        &[
-            ctx.payer.clone(),
-            ctx.ruleset_collector.clone(),
-            ctx.system_program.clone(),
-        ],
-    )?;
-    invoke(
-        &transfer(
-            &ctx.payer.key,
-            &ctx.collector.key,
-            CREATION_LAMPORTS
-                .checked_sub(ruleset_collector_amount)
-                .expect("Invalid sub"),
-        ),
-        &[
-            ctx.payer.clone(),
-            ctx.collector.clone(),
-            ctx.system_program.clone(),
-        ],
-    )?;
-
+    mint_manager.save(ctx.mint_manager)?;
     Ok(())
 }

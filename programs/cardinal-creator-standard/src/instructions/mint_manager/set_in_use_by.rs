@@ -53,7 +53,7 @@ impl<'a, 'info> SetInUseByCtx<'a, 'info> {
             "holder_token_account amount",
         )?;
         assert_address(
-            &ctx.holder_token_account.owner,
+            &holder_token_account.owner,
             &ctx.holder.key,
             "holder_token_account owner",
         )?;
@@ -73,6 +73,7 @@ pub fn handler(ctx: SetInUseByCtx, ix: SetInUseByIx) -> ProgramResult {
         return Err(ProgramError::from(ErrorCode::TokenAlreadyInUse));
     }
     mint_manager.in_use_by = Some(ix.in_use_by_address);
+    mint_manager.save(ctx.mint_manager)?;
 
     Ok(())
 }

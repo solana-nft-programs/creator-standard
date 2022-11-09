@@ -5,8 +5,6 @@ use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
 use crate::state::COLLECTOR;
-use crate::state::COLLECTOR_SHARE;
-use crate::state::CREATION_LAMPORTS;
 use crate::state::MINT_MANAGER_SIZE;
 use crate::utils::assert_address;
 use crate::utils::assert_empty;
@@ -23,7 +21,6 @@ use solana_program::program_pack::Pack;
 use solana_program::pubkey::Pubkey;
 use solana_program::rent::Rent;
 use solana_program::system_instruction::create_account;
-use solana_program::system_instruction::transfer;
 use solana_program::system_program;
 use solana_program::sysvar;
 use solana_program::sysvar::Sysvar;
@@ -116,7 +113,7 @@ impl<'a, 'info> InitializeMintCtx<'a, 'info> {
 
         // associated_token_program
         assert_address(
-            ctx.token_program.key,
+            ctx.associated_token_program.key,
             &spl_associated_token_account::id(),
             "associated_token_program",
         )?;
@@ -135,7 +132,7 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
     let mint_manager_space = MINT_MANAGER_SIZE;
     let mint_manager_seeds = assert_mint_manager_seeds(ctx.mint.key, ctx.mint_manager.key)?;
     // create mint manager account
-    invoke(
+    invoke_signed(
         &create_account(
             ctx.payer.key,
             ctx.mint_manager.key,
@@ -144,10 +141,13 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
             &&id(),
         ),
         &[ctx.payer.clone(), ctx.mint_manager.clone()],
+        &[&mint_manager_seeds
+            .iter()
+            .map(|s| s.as_slice())
+            .collect::<Vec<&[u8]>>()],
     )?;
 
-    let mut mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
-    mint_manager.set_account_type();
+    let mut mint_manager: MintManager = MintManager::new();
     mint_manager.version = 0;
     mint_manager.mint = *ctx.mint.key;
     mint_manager.authority = *ctx.authority.key;
@@ -197,7 +197,7 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
             ),
             &[
                 ctx.payer.clone(),
-                ctx.associated_token_program.clone(),
+                ctx.target_token_account.clone(),
                 ctx.target.clone(),
                 ctx.mint.clone(),
                 ctx.system_program.clone(),
@@ -208,7 +208,7 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
         )?;
     } else {
         // check valid target token account
-        unpack_checked_token_account(ctx.target_token_account, Some("from"))?;
+        unpack_checked_token_account(ctx.target_token_account, Some("target_token_account"))?;
     }
 
     // mint to
@@ -221,7 +221,11 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
             &[],
             1,
         )?,
-        &[ctx.mint.clone(), ctx.rent.clone()],
+        &[
+            ctx.target_token_account.clone(),
+            ctx.mint.clone(),
+            ctx.mint_manager.clone(),
+        ],
         &[&mint_manager_seeds
             .iter()
             .map(|s| s.as_slice())
@@ -247,39 +251,7 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
             .map(|s| s.as_slice())
             .collect::<Vec<&[u8]>>()],
     )?;
-
-    // creation lamports
-    let ruleset_collector_amount = CREATION_LAMPORTS
-        .checked_mul(COLLECTOR_SHARE)
-        .expect("Invalid multiplication")
-        .checked_div(100)
-        .expect("Invalid div");
-    invoke(
-        &transfer(
-            &ctx.payer.key,
-            &ctx.ruleset_collector.key,
-            ruleset_collector_amount,
-        ),
-        &[
-            ctx.payer.clone(),
-            ctx.ruleset_collector.clone(),
-            ctx.system_program.clone(),
-        ],
-    )?;
-    invoke(
-        &transfer(
-            &ctx.payer.key,
-            &ctx.collector.key,
-            CREATION_LAMPORTS
-                .checked_sub(ruleset_collector_amount)
-                .expect("Invalid sub"),
-        ),
-        &[
-            ctx.payer.clone(),
-            ctx.collector.clone(),
-            ctx.system_program.clone(),
-        ],
-    )?;
+    mint_manager.save(ctx.mint_manager)?;
 
     Ok(())
 }
