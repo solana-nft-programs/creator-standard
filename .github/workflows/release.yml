@@ -76,19 +76,18 @@ jobs:
       - uses: ./.github/actions/install-solana
         with:
           solana_version: ${{ env.SOLANA_VERSION }}
-      - uses: ./.github/actions/install-anchor
-        with:
-          anchor_git: ${{ env.ANCHOR_GIT }}
-          anchor_version: ${{ env.ANCHOR_VERSION }}
-      - name: Build programs
-        run: anchor build --verifiable
+      # - uses: ./.github/actions/install-anchor
+      #   with:
+      #     anchor_git: ${{ env.ANCHOR_GIT }}
+      #     anchor_version: ${{ env.ANCHOR_VERSION }}
+      # - name: Build programs
+      #   run: anchor build --verifiable
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             target/deploy/*
             target/idl/*
-            target/verifiable/*
 
   site:
     runs-on: ubuntu-latest
