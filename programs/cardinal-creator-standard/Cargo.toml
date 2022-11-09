@@ -1,6 +1,6 @@
 [package]
 name = "cardinal-creator-standard"
-version = "0.4.0"
+version = "1.0.0"
 edition = "2021"
 homepage = "https://cardinal.so"
 repository = "https://github.com/cardinal-labs/cardinal-creator-standard"
