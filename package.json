@@ -1,6 +1,6 @@
 {
   "name": "cardinal-creator-standard",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "SDK for cardinal-creator-standard",
   "main": "index.ts",
   "license": "MIT",
