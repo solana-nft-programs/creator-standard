@@ -2,10 +2,12 @@ import { beforeAll, expect, test } from "@jest/globals";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import { createInitMintManagerInstruction } from "../../sdk";
+import {
+  createInitMintManagerInstruction,
+  createUpdateMintManagerInstruction,
+} from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { Ruleset } from "../../sdk/generated/accounts/Ruleset";
-import { createUpdateMintManagerInstruction } from "../../sdk/generated/instructions/UpdateMintManager";
 import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { createMintTx, executeTransaction, getProvider } from "../../utils";
@@ -88,7 +90,7 @@ test("Update mint manager", async () => {
         ruleset: findRulesetId(RULESET_NAME_2),
       },
       {
-        updateMintManagerIx: {
+        ix: {
           authority: newAuthority.publicKey,
         },
       }

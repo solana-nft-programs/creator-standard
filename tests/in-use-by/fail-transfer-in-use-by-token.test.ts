@@ -2,7 +2,6 @@ import { expect, test } from "@jest/globals";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   createAssociatedTokenAccountInstruction,
-  createTransferInstruction,
   getAccount,
   getAssociatedTokenAddressSync,
   getMint,
@@ -14,10 +13,13 @@ import {
   Transaction,
 } from "@solana/web3.js";
 
-import { Ruleset } from "../../sdk";
+import {
+  createInitializeMintInstruction,
+  createSetInUseByInstruction,
+  createTransferInstruction,
+  Ruleset,
+} from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
-import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
-import { createSetInUseByInstruction } from "../../sdk/generated/instructions/SetInUseBy";
 import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
@@ -108,8 +110,8 @@ test("Set in use by", async () => {
         holderTokenAccount: holderAtaId,
       },
       {
-        setInUseByIx: {
-          inUseByAddress: IN_USE_BY_AUTHORITY.publicKey,
+        ix: {
+          inUseBy: IN_USE_BY_AUTHORITY.publicKey,
         },
       }
     )

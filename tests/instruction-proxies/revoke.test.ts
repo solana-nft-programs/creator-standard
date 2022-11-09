@@ -7,11 +7,13 @@ import {
 } from "@solana/spl-token";
 import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
 
-import { Ruleset } from "../../sdk";
+import {
+  createApproveInstruction,
+  createInitializeMintInstruction,
+  createRevokeInstruction,
+  Ruleset,
+} from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
-import { createApproveInstruction } from "../../sdk/generated/instructions/Approve";
-import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
-import { createRevokeInstruction } from "../../sdk/generated/instructions/Revoke";
 import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
