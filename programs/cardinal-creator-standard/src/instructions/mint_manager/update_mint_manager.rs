@@ -15,7 +15,7 @@ use solana_program::system_program;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
-#[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
+#[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone)]
 pub struct UpdateMintManagerIx {
     pub authority: Pubkey,
 }
@@ -51,11 +51,11 @@ impl<'a, 'info> UpdateMintManagerCtx<'a, 'info> {
 
         // rulese_collector
         assert_mut(ctx.collector, "collector")?;
-        assert_address(&ctx.collector.key, &ruleset.collector, "collector")?;
+        assert_address(ctx.collector.key, &ruleset.collector, "collector")?;
 
         // authority
         assert_signer(ctx.authority, "authority")?;
-        assert_address(&ctx.authority.key, &mint_manager.authority, "authority")?;
+        assert_address(ctx.authority.key, &mint_manager.authority, "authority")?;
 
         // payer
         assert_signer(ctx.payer, "payer")?;

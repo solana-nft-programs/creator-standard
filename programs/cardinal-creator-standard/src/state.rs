@@ -32,7 +32,7 @@ pub fn is_default_program(program_id: Pubkey) -> bool {
 
 ///////////// ACCOUNT TYPE /////////////
 #[repr(C)]
-#[derive(Clone, Copy, BorshSerialize, BorshDeserialize, PartialEq)]
+#[derive(Clone, Copy, PartialEq, Eq, BorshSerialize, BorshDeserialize)]
 pub enum AccountType {
     Ruleset = 0,
     MintManager = 1,
@@ -42,10 +42,10 @@ pub enum AccountType {
 impl From<u8> for AccountType {
     fn from(orig: u8) -> Self {
         match orig {
-            0 => return AccountType::Ruleset,
-            1 => return AccountType::MintManager,
-            _ => return AccountType::Unrecognized,
-        };
+            0 => AccountType::Ruleset,
+            1 => AccountType::MintManager,
+            _ => AccountType::Unrecognized,
+        }
     }
 }
 
@@ -63,7 +63,7 @@ impl Display for AccountType {
 ///////////// CREATOR STANDARD ACCOUNT /////////////
 pub trait CreatorStandardAccount {
     fn account_type() -> AccountType;
-    fn set_account_type(&mut self) -> ();
+    fn set_account_type(&mut self);
     fn save(&self, account: &AccountInfo) -> ProgramResult;
     fn new() -> Self;
 
@@ -130,7 +130,7 @@ pub const MINT_MANAGER_SIZE: usize = std::mem::size_of::<MintManager>() + 64;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
-#[derive(Clone, BorshSerialize, BorshDeserialize, Debug, PartialEq, ShankAccount)]
+#[derive(Clone, BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, ShankAccount)]
 pub struct MintManager {
     pub account_type: u8, // account discriminator
     pub version: u8,      // for potential future verisioning
@@ -156,7 +156,7 @@ impl CreatorStandardAccount for MintManager {
         AccountType::MintManager
     }
 
-    fn set_account_type(&mut self) -> () {
+    fn set_account_type(&mut self) {
         self.account_type = AccountType::MintManager as u8
     }
 
@@ -204,7 +204,7 @@ pub fn calculate_ruleset_size(
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
-#[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone, ShankAccount)]
+#[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone, ShankAccount)]
 pub struct Ruleset {
     pub account_type: u8, // account discriminator
     pub version: u8,      // for potential future verisioning
@@ -234,7 +234,7 @@ impl CreatorStandardAccount for Ruleset {
         AccountType::Ruleset
     }
 
-    fn set_account_type(&mut self) -> () {
+    fn set_account_type(&mut self) {
         self.account_type = AccountType::Ruleset as u8
     }
 

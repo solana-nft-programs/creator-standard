@@ -26,7 +26,7 @@ use solana_program::sysvar::Sysvar;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
-#[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
+#[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone)]
 pub struct InitRulesetIx {
     pub name: String,
     pub collector: Pubkey,
@@ -87,7 +87,7 @@ pub fn handler(ctx: InitRulesetCtx, ix: InitRulesetIx) -> ProgramResult {
             ctx.ruleset.key,
             Rent::get()?.minimum_balance(ruleset_space),
             u64::try_from(ruleset_space).expect("Could not cast to u64"),
-            &&id(),
+            &id(),
         ),
         &[ctx.payer.clone(), ctx.ruleset.clone()],
         &[&ruleset_seeds

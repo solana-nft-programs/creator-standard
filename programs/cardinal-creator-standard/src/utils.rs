@@ -82,12 +82,7 @@ pub fn assert_program_account(account: &AccountInfo, account_type: &AccountType)
     assert_with_msg(
         data[0] == *account_type as u8 && *account.owner == id(),
         ProgramError::InvalidInstructionData,
-        format!(
-            "{} must be account type {}",
-            account.key,
-            account_type.to_string()
-        )
-        .as_str(),
+        format!("{} must be account type {}", account.key, account_type).as_str(),
     )
 }
 

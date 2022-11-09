@@ -52,12 +52,12 @@ impl<'a, 'info> TransferCtx<'a, 'info> {
         let mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
 
         // mint_manager
-        assert_address(&mint_manager.mint, &ctx.mint.key, "mint_manager mint")?;
+        assert_address(&mint_manager.mint, ctx.mint.key, "mint_manager mint")?;
 
         // ruleset
         assert_address(
             &mint_manager.ruleset,
-            &ctx.ruleset.key,
+            ctx.ruleset.key,
             "mint_manager ruleset",
         )?;
         assert_program_account(ctx.ruleset, &AccountType::Ruleset)?;
@@ -126,10 +126,10 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
     }
 
     for i in 0..num_instructions {
-        let ix = load_instruction_at_checked(i.into(), &ctx.instructions)
+        let ix = load_instruction_at_checked(i.into(), ctx.instructions)
             .expect("Failed to get instruction");
 
-        if allowed_programs.len() > 0
+        if !allowed_programs.is_empty()
             && !is_default_program(ix.program_id)
             && !allowed_programs.contains(&ix.program_id)
         {
@@ -137,7 +137,7 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
         }
 
         for account in ix.accounts {
-            if disallowed_addresses.len() > 0 && disallowed_addresses.contains(&account.pubkey) {
+            if !disallowed_addresses.is_empty() && disallowed_addresses.contains(&account.pubkey) {
                 return Err(ProgramError::from(ErrorCode::ProgramDisallowed));
             }
         }

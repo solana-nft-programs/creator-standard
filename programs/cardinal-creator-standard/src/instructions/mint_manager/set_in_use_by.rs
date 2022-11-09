@@ -16,7 +16,7 @@ use solana_program::pubkey::Pubkey;
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
-#[derive(BorshSerialize, BorshDeserialize, PartialEq, Debug, Clone)]
+#[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone)]
 pub struct SetInUseByIx {
     pub in_use_by_address: Pubkey,
 }
@@ -54,7 +54,7 @@ impl<'a, 'info> SetInUseByCtx<'a, 'info> {
         )?;
         assert_address(
             &holder_token_account.owner,
-            &ctx.holder.key,
+            ctx.holder.key,
             "holder_token_account owner",
         )?;
         assert_address(

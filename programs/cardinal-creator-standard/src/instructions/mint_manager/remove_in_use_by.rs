@@ -29,7 +29,7 @@ impl<'a, 'info> RemoveInUseByCtx<'a, 'info> {
         // user
         assert_address(
             &mint_manager.in_use_by.expect("Token not in use"),
-            &ctx.user.key,
+            ctx.user.key,
             "user",
         )?;
         assert_signer(ctx.user, "user")?;

@@ -84,14 +84,14 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         )?;
         assert_address(
             &holder_token_account.owner,
-            &ctx.authority.key,
+            ctx.authority.key,
             "holder_token_account owner",
         )?;
 
         // ruleset_collector
         assert_mut(ctx.ruleset_collector, "ruleset_collector")?;
         assert_address(
-            &ctx.ruleset_collector.key,
+            ctx.ruleset_collector.key,
             &ruleset.collector,
             "ruleset_collector",
         )?;
@@ -99,7 +99,7 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         // collector
         assert_mut(ctx.collector, "collector")?;
         assert_address(
-            &ctx.collector.key,
+            ctx.collector.key,
             &Pubkey::from_str(COLLECTOR).expect("Invalid collector pubkey"),
             "collector",
         )?;

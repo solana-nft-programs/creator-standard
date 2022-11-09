@@ -40,7 +40,7 @@ impl<'a, 'info> ApproveCtx<'a, 'info> {
             unpack_checked_token_account(ctx.holder_token_account, Some("holder_token_account"))?;
 
         // mint_manager
-        assert_address(&mint_manager.mint, &ctx.mint.key, "mint_manager mint")?;
+        assert_address(&mint_manager.mint, ctx.mint.key, "mint_manager mint")?;
 
         ///// no checks for mint /////
 
@@ -58,7 +58,7 @@ impl<'a, 'info> ApproveCtx<'a, 'info> {
         )?;
         assert_address(
             &holder_token_account.owner,
-            &ctx.holder.key,
+            ctx.holder.key,
             "holder_token_account owner",
         )?;
         assert_with_msg(

@@ -85,7 +85,7 @@ impl<'a, 'info> InitializeMintCtx<'a, 'info> {
         // ruleset_collector
         assert_mut(ctx.ruleset_collector, "ruleset_collector")?;
         assert_address(
-            &ctx.ruleset_collector.key,
+            ctx.ruleset_collector.key,
             &ruleset.collector,
             "ruleset_collector",
         )?;
@@ -93,7 +93,7 @@ impl<'a, 'info> InitializeMintCtx<'a, 'info> {
         // collector
         assert_mut(ctx.collector, "collector")?;
         assert_address(
-            &ctx.collector.key,
+            ctx.collector.key,
             &Pubkey::from_str(COLLECTOR).expect("Invalid collector pubkey"),
             "collector",
         )?;
@@ -138,7 +138,7 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
             ctx.mint_manager.key,
             Rent::get()?.minimum_balance(mint_manager_space),
             u64::try_from(mint_manager_space).expect("Could not cast to u64"),
-            &&id(),
+            &id(),
         ),
         &[ctx.payer.clone(), ctx.mint_manager.clone()],
         &[&mint_manager_seeds
@@ -183,17 +183,17 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
     )?;
 
     // Check/Create ATA
-    let associated_token_account = get_associated_token_address(&ctx.target.key, &ctx.mint.key);
+    let associated_token_account = get_associated_token_address(ctx.target.key, ctx.mint.key);
     if associated_token_account != *ctx.target_token_account.key {
         return Err(ProgramError::from(ErrorCode::InvalidTargetTokenAccount));
     }
     if ctx.target_token_account.data_is_empty() {
         invoke_signed(
             &create_associated_token_account(
-                &ctx.payer.key,
-                &ctx.target.key,
-                &ctx.mint.key,
-                &ctx.token_program.key,
+                ctx.payer.key,
+                ctx.target.key,
+                ctx.mint.key,
+                ctx.token_program.key,
             ),
             &[
                 ctx.payer.clone(),

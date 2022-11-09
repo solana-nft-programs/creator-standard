@@ -42,7 +42,7 @@ impl<'a, 'info> BurnCtx<'a, 'info> {
 
         // mint_manager
         assert_mut(ctx.mint_manager, "mint_manager")?;
-        assert_address(&mint_manager.mint, &ctx.mint.key, "mint_manager mint")?;
+        assert_address(&mint_manager.mint, ctx.mint.key, "mint_manager mint")?;
 
         // mint
         assert_mut(ctx.mint, "mint")?;
@@ -61,7 +61,7 @@ impl<'a, 'info> BurnCtx<'a, 'info> {
         )?;
         assert_address(
             &holder_token_account.owner,
-            &ctx.holder.key,
+            ctx.holder.key,
             "holder_token_account owner",
         )?;
 
