@@ -189,13 +189,19 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
     }
     if ctx.target_token_account.data_is_empty() {
         invoke_signed(
-            &create_associated_token_account(ctx.payer.key, ctx.target.key, ctx.mint.key),
+            &create_associated_token_account(
+                ctx.payer.key,
+                ctx.target.key,
+                ctx.mint.key,
+                ctx.token_program.key,
+            ),
             &[
                 ctx.payer.clone(),
                 ctx.target_token_account.clone(),
                 ctx.target.clone(),
                 ctx.mint.clone(),
                 ctx.system_program.clone(),
+                ctx.token_program.clone(),
                 ctx.rent.clone(),
             ],
             &[],
