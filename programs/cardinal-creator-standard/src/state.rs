@@ -24,7 +24,10 @@ use crate::utils::assert_owner;
 ///////////// CONSTANTS /////////////
 pub const COLLECTOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
-pub const DEFAULT_PROGRAMS: [&str; 1] = ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"];
+pub const DEFAULT_PROGRAMS: [&str; 2] = [
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+    "mccsLbWK9m7pbFotPmPGBhN37WnsfHG6SRsmeRTJSiP",
+];
 
 pub fn is_default_program(program_id: &Pubkey) -> bool {
     DEFAULT_PROGRAMS.contains(&&program_id.to_string()[..])
