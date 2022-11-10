@@ -6,10 +6,9 @@
  */
 
 import * as web3 from '@solana/web3.js'
-import * as beet from '@metaplex-foundation/beet'
 import * as beetSolana from '@metaplex-foundation/beet-solana'
+import * as beet from '@metaplex-foundation/beet'
 export type UpdateRulesetIx = {
-  name: string
   authority: web3.PublicKey
   collector: web3.PublicKey
   disallowedAddresses: web3.PublicKey[]
@@ -24,7 +23,6 @@ export type UpdateRulesetIx = {
 export const updateRulesetIxBeet =
   new beet.FixableBeetArgsStruct<UpdateRulesetIx>(
     [
-      ['name', beet.utf8String],
       ['authority', beetSolana.publicKey],
       ['collector', beetSolana.publicKey],
       ['disallowedAddresses', beet.array(beetSolana.publicKey)],

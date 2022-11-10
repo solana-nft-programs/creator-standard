@@ -38,7 +38,7 @@ export const UpdateRulesetStruct = new beet.FixableBeetArgsStruct<
  *
  * @property [_writable_] ruleset
  * @property [**signer**] authority
- * @property [**signer**] payer
+ * @property [_writable_, **signer**] payer
  * @category Instructions
  * @category UpdateRuleset
  * @category generated
@@ -84,7 +84,7 @@ export function createUpdateRulesetInstruction(
     },
     {
       pubkey: accounts.payer,
-      isWritable: false,
+      isWritable: true,
       isSigner: true,
     },
     {

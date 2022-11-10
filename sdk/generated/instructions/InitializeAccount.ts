@@ -23,7 +23,7 @@ export const InitializeAccountStruct = new beet.BeetArgsStruct<{
  * @property [] mint
  * @property [_writable_] tokenAccount
  * @property [] owner
- * @property [**signer**] payer
+ * @property [_writable_, **signer**] payer
  * @property [] associatedTokenProgram
  * @category Instructions
  * @category InitializeAccount
@@ -75,7 +75,7 @@ export function createInitializeAccountInstruction(
     },
     {
       pubkey: accounts.payer,
-      isWritable: false,
+      isWritable: true,
       isSigner: true,
     },
     {

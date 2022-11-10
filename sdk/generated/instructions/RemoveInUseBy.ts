@@ -20,7 +20,7 @@ export const RemoveInUseByStruct = new beet.BeetArgsStruct<{
  * Accounts required by the _RemoveInUseBy_ instruction
  *
  * @property [_writable_] mintManager
- * @property [] user
+ * @property [**signer**] user
  * @category Instructions
  * @category RemoveInUseBy
  * @category generated
@@ -56,7 +56,7 @@ export function createRemoveInUseByInstruction(
     {
       pubkey: accounts.user,
       isWritable: false,
-      isSigner: false,
+      isSigner: true,
     },
   ]
 

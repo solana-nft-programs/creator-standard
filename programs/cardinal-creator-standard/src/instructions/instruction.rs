@@ -192,7 +192,7 @@ pub fn approve(
             AccountMeta::new_readonly(mint, false),
             AccountMeta::new(holder_token_account, false),
             AccountMeta::new_readonly(holder, true),
-            AccountMeta::new(delegate, false),
+            AccountMeta::new_readonly(delegate, false),
             AccountMeta::new_readonly(spl_token::id(), false),
         ],
         data: CreatorStandardInstruction::Approve.try_to_vec().unwrap(),

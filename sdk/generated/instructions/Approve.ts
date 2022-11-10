@@ -24,7 +24,7 @@ export const ApproveStruct = new beet.BeetArgsStruct<{
  * @property [] mint
  * @property [_writable_] holderTokenAccount
  * @property [**signer**] holder
- * @property [_writable_] delegate
+ * @property [] delegate
  * @category Instructions
  * @category Approve
  * @category generated
@@ -78,7 +78,7 @@ export function createApproveInstruction(
     },
     {
       pubkey: accounts.delegate,
-      isWritable: true,
+      isWritable: false,
       isSigner: false,
     },
     {
