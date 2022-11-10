@@ -71,8 +71,7 @@ impl<'a, 'info> ApproveCtx<'a, 'info> {
         assert_mut(ctx.holder, "holder")?;
         assert_signer(ctx.holder, "holder")?;
 
-        // delegate
-        assert_mut(ctx.delegate, "delegate")?;
+        ///// no checks for delegate /////
 
         // token_program
         assert_address(ctx.token_program.key, &spl_token::id(), "token_program")?;

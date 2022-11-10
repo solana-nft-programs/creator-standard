@@ -72,7 +72,7 @@ pub enum CreatorStandardInstruction {
     #[account(1, name = "mint")]
     #[account(2, writable, name = "holder_token_account")]
     #[account(3, signer, name = "holder")]
-    #[account(4, writable, name = "delegate")]
+    #[account(4, name = "delegate")]
     #[account(5, name = "token_program")]
     Approve,
 
