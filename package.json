@@ -1,9 +1,12 @@
 {
-  "name": "cardinal-creator-standard",
-  "version": "1.0.8",
+  "name": "@cardinal/creator-standard",
+  "version": "1.0.9",
   "description": "SDK for cardinal-creator-standard",
   "main": "index.ts",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "jest --setupFiles dotenv/config",
     "build": "rm -fr dist/ && tsc -P tsconfig.cjs.json && tsc -P tsconfig.esm.json",
