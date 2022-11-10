@@ -55,6 +55,7 @@ impl<'a, 'info> UpdateRulesetCtx<'a, 'info> {
         assert_address(ctx.authority.key, &ruleset.authority, "authority")?;
 
         // payer
+        assert_mut(ctx.payer, "payer")?;
         assert_signer(ctx.authority, "payer")?;
 
         // system_program
