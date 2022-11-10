@@ -14,8 +14,18 @@ pub mod state;
 pub mod utils;
 
 use instructions::*;
+use solana_security_txt::security_txt;
 
 solana_program::declare_id!("creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez");
+
+security_txt! {
+    name: "Cardinal Creator Standard",
+    project_url: "cardinal.so",
+    contacts: "email:team@cardinal.so,twitter:@cardinal_labs",
+    policy: "https://github.com/cardinal-labs/cardinal-creator-standard/blob/main/LICENSE",
+    preferred_languages: "en",
+    source_code: "https://github.com/cardinal-labs/cardinal-creator-standard"
+}
 
 #[cfg(not(feature = "no-entrypoint"))]
 solana_program::entrypoint!(process_instruction);
