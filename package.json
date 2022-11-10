@@ -2,8 +2,16 @@
   "name": "@cardinal/creator-standard",
   "version": "1.0.9",
   "description": "SDK for cardinal-creator-standard",
-  "main": "index.ts",
-  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "repository": "git@github.com:cardinal-labs/cardinal-payemnt-manager.git",
+  "author": "The Cardinal Team <team@cardinal.so>",
+  "bugs": {
+    "url": "https://github.com/cardinal-labs/cardinal-payment-manager/issues",
+    "email": "info@cardinal.so"
+  },
+  "homepage": "https://cardinal.so",
+  "license": "AGPL-3.0",
   "publishConfig": {
     "access": "public"
   },
