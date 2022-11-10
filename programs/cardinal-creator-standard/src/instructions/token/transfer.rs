@@ -130,7 +130,7 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
             .expect("Failed to get instruction");
 
         if !allowed_programs.is_empty()
-            && !is_default_program(ix.program_id)
+            && !is_default_program(&ix.program_id)
             && !allowed_programs.contains(&ix.program_id)
         {
             return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));

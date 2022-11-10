@@ -7,6 +7,7 @@ use solana_program::pubkey::Pubkey;
 
 use crate::utils::assert_with_msg;
 
+use std::collections::HashSet;
 use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
@@ -25,7 +26,7 @@ pub const COLLECTOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const DEFAULT_PROGRAMS: [&str; 1] = ["TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"];
 
-pub fn is_default_program(program_id: Pubkey) -> bool {
+pub fn is_default_program(program_id: &Pubkey) -> bool {
     DEFAULT_PROGRAMS.contains(&&program_id.to_string()[..])
 }
 ///////////// CONSTANTS /////////////
@@ -245,3 +246,30 @@ impl CreatorStandardAccount for Ruleset {
 }
 
 ///////////// RULESET /////////////
+
+///////////// UTILS /////////////
+pub fn check_program(program_id: Pubkey, ruleset: &Ruleset) -> bool {
+    let mut allowed_programs = HashSet::new();
+    for program_id in &ruleset.allowed_programs {
+        allowed_programs.insert(program_id);
+    }
+
+    let mut disallowed_addresses = HashSet::new();
+    for program_id in &ruleset.disallowed_addresses {
+        disallowed_addresses.insert(program_id);
+    }
+
+    if !allowed_programs.is_empty()
+        && !is_default_program(&program_id)
+        && !allowed_programs.contains(&program_id)
+    {
+        return false;
+    }
+
+    if !disallowed_addresses.is_empty() && disallowed_addresses.contains(&program_id) {
+        return false;
+    }
+
+    return true;
+}
+///////////// UTILS /////////////
