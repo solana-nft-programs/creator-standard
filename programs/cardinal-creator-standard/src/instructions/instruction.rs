@@ -218,8 +218,8 @@ pub fn approve_and_set_in_use_by(
     Instruction {
         program_id,
         accounts: vec![
-            AccountMeta::new_readonly(mint_manager, false),
-            AccountMeta::new(mint, false),
+            AccountMeta::new(mint_manager, false),
+            AccountMeta::new_readonly(mint, false),
             AccountMeta::new(holder_token_account, false),
             AccountMeta::new_readonly(holder, true),
             AccountMeta::new_readonly(delegate, false),
