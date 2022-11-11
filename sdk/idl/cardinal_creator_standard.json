@@ -100,6 +100,11 @@
           "isSigner": false
         },
         {
+          "name": "holder",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
           "name": "rulesetCollector",
           "isMut": true,
           "isSigner": false
@@ -112,7 +117,7 @@
         {
           "name": "authority",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "payer",
@@ -958,6 +963,16 @@
       "code": 23,
       "name": "InvalidRulesetAuthority",
       "msg": "Invalid ruleset authority"
+    },
+    {
+      "code": 24,
+      "name": "InvalidFreezeAuthority",
+      "msg": "Invalid freeze authority"
+    },
+    {
+      "code": 25,
+      "name": "InvalidMintAuthority",
+      "msg": "Invalid mint authority"
     }
   ],
   "metadata": {

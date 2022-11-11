@@ -98,8 +98,8 @@ impl<'a, 'info> InitializeMintCtx<'a, 'info> {
             "collector",
         )?;
 
-        // authority
-        assert_signer(ctx.authority, "authority")?;
+        ///// no checks for authority, potentially they are also signer that is why leaving here and not passing as ix /////
+        // assert_signer(ctx.authority, "authority")?;
 
         // payer
         assert_signer(ctx.payer, "payer")?;
@@ -182,7 +182,7 @@ pub fn handler(ctx: InitializeMintCtx) -> ProgramResult {
             .collect::<Vec<&[u8]>>()],
     )?;
 
-// Check/Create ATA
+    // Check/Create ATA
     let associated_token_account = get_associated_token_address(ctx.target.key, ctx.mint.key);
     if associated_token_account != *ctx.target_token_account.key {
         return Err(ProgramError::from(ErrorCode::InvalidTargetTokenAccount));

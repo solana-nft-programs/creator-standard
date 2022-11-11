@@ -558,6 +558,52 @@ createErrorFromNameLookup.set(
 )
 
 /**
+ * InvalidFreezeAuthority: 'Invalid freeze authority'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidFreezeAuthorityError extends Error {
+  readonly code: number = 0x18
+  readonly name: string = 'InvalidFreezeAuthority'
+  constructor() {
+    super('Invalid freeze authority')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidFreezeAuthorityError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x18, () => new InvalidFreezeAuthorityError())
+createErrorFromNameLookup.set(
+  'InvalidFreezeAuthority',
+  () => new InvalidFreezeAuthorityError()
+)
+
+/**
+ * InvalidMintAuthority: 'Invalid mint authority'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidMintAuthorityError extends Error {
+  readonly code: number = 0x19
+  readonly name: string = 'InvalidMintAuthority'
+  constructor() {
+    super('Invalid mint authority')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidMintAuthorityError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x19, () => new InvalidMintAuthorityError())
+createErrorFromNameLookup.set(
+  'InvalidMintAuthority',
+  () => new InvalidMintAuthorityError()
+)
+
+/**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors
  * @category generated

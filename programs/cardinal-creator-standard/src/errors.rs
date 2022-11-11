@@ -56,6 +56,10 @@ pub enum ErrorCode {
     TokenCurentlyInUse,
     #[error("Invalid ruleset authority")]
     InvalidRulesetAuthority,
+    #[error("Invalid freeze authority")]
+    InvalidFreezeAuthority,
+    #[error("Invalid mint authority")]
+    InvalidMintAuthority,
 }
 
 impl PrintProgramError for ErrorCode {

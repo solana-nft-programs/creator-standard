@@ -47,6 +47,7 @@ test("Init mint manager", async () => {
       mint: mintKeypair.publicKey,
       ruleset: RULESET_ID_1,
       holderTokenAccount: ata,
+      holder: provider.wallet.publicKey,
       rulesetCollector: ruleset.collector,
       collector: ruleset.collector,
       authority: provider.wallet.publicKey,

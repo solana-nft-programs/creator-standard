@@ -32,6 +32,7 @@ pub struct InitMintManagerCtx<'a, 'info> {
     pub mint: &'a AccountInfo<'info>,
     pub ruleset: &'a AccountInfo<'info>,
     pub holder_token_account: &'a AccountInfo<'info>,
+    pub holder: &'a AccountInfo<'info>,
     pub ruleset_collector: &'a AccountInfo<'info>,
     pub collector: &'a AccountInfo<'info>,
     pub authority: &'a AccountInfo<'info>,
@@ -48,6 +49,7 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
             mint: next_account_info(account_iter)?,
             ruleset: next_account_info(account_iter)?,
             holder_token_account: next_account_info(account_iter)?,
+            holder: next_account_info(account_iter)?,
             ruleset_collector: next_account_info(account_iter)?,
             collector: next_account_info(account_iter)?,
             authority: next_account_info(account_iter)?,
@@ -84,9 +86,12 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         )?;
         assert_address(
             &holder_token_account.owner,
-            ctx.authority.key,
+            ctx.holder.key,
             "holder_token_account owner",
         )?;
+
+        // holder
+        assert_signer(ctx.holder, "holder")?;
 
         // ruleset_collector
         assert_mut(ctx.ruleset_collector, "ruleset_collector")?;
@@ -104,8 +109,7 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
             "collector",
         )?;
 
-        // authority
-        assert_signer(ctx.authority, "authority")?;
+        ///// no checks for authority, potentially they are also signer that is why leaving here and not passing as ix /////
 
         // payer
         assert_signer(ctx.payer, "payer")?;
@@ -156,6 +160,14 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
         return Err(ProgramError::from(ErrorCode::InvalidMint));
     }
 
+    if mint.freeze_authority.is_some() && &mint.freeze_authority.unwrap() != ctx.holder.key {
+        return Err(ProgramError::from(ErrorCode::InvalidFreezeAuthority));
+    }
+
+    if &mint.mint_authority.unwrap() != ctx.holder.key {
+        return Err(ProgramError::from(ErrorCode::InvalidMintAuthority));
+    }
+
     // set mint authority
     invoke(
         &spl_token::instruction::set_authority(
@@ -163,10 +175,10 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
             ctx.mint.key,
             Some(ctx.mint_manager.key),
             spl_token::instruction::AuthorityType::MintTokens,
-            ctx.authority.key,
+            ctx.holder.key,
             &[],
         )?,
-        &[ctx.mint.clone(), ctx.authority.clone()],
+        &[ctx.mint.clone(), ctx.holder.clone()],
     )?;
 
     // set freeze authoriy
@@ -176,10 +188,10 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
             ctx.mint.key,
             Some(ctx.mint_manager.key),
             spl_token::instruction::AuthorityType::FreezeAccount,
-            ctx.authority.key,
+            ctx.holder.key,
             &[],
         )?,
-        &[ctx.mint.clone(), ctx.authority.clone()],
+        &[ctx.mint.clone(), ctx.holder.clone()],
     )?;
 
     // freeze holder token account
