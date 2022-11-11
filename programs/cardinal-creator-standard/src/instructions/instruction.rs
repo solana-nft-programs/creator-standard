@@ -197,7 +197,7 @@ pub fn approve(
             AccountMeta::new_readonly(delegate, false),
             AccountMeta::new_readonly(spl_token::id(), false),
         ],
-        data: CreatorStandardInstruction::Approve(ApproveIx { amount: amount })
+        data: CreatorStandardInstruction::Approve(ApproveIx { amount })
             .try_to_vec()
             .unwrap(),
     }
