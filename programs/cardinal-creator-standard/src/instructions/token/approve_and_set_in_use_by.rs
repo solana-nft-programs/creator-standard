@@ -50,6 +50,7 @@ impl<'a, 'info> ApproveAndSetInUseByCtx<'a, 'info> {
             unpack_checked_token_account(ctx.holder_token_account, Some("holder_token_account"))?;
 
         // mint_manager
+        assert_mut(ctx.mint_manager, "mint_manager")?;
         assert_address(&mint_manager.mint, ctx.mint.key, "mint_manager mint")?;
 
         ///// no checks for mint /////
@@ -163,6 +164,8 @@ pub fn handler(ctx: ApproveAndSetInUseByCtx, ix: ApproveAndSetInUseByIx) -> Prog
             .map(|s| s.as_slice())
             .collect::<Vec<&[u8]>>()],
     )?;
+
+    mint_manager.save(ctx.mint_manager)?;
 
     Ok(())
 }

@@ -290,7 +290,7 @@
       "accounts": [
         {
           "name": "mintManager",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {

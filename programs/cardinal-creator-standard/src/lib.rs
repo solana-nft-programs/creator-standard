@@ -86,7 +86,7 @@ pub enum CreatorStandardInstruction {
     #[account(5, name = "token_program")]
     Approve(ApproveIx),
 
-    #[account(0, name = "mint_manager")]
+    #[account(0, writable, name = "mint_manager")]
     #[account(1, name = "mint")]
     #[account(2, writable, name = "holder_token_account")]
     #[account(3, signer, name = "holder")]

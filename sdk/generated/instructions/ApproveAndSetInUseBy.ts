@@ -40,7 +40,7 @@ export const ApproveAndSetInUseByStruct = new beet.BeetArgsStruct<
 /**
  * Accounts required by the _ApproveAndSetInUseBy_ instruction
  *
- * @property [] mintManager
+ * @property [_writable_] mintManager
  * @property [] mint
  * @property [_writable_] holderTokenAccount
  * @property [**signer**] holder
@@ -82,7 +82,7 @@ export function createApproveAndSetInUseByInstruction(
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.mintManager,
-      isWritable: false,
+      isWritable: true,
       isSigner: false,
     },
     {
