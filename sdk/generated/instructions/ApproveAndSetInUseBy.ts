@@ -8,50 +8,76 @@
 import * as splToken from '@solana/spl-token'
 import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
+import {
+  ApproveAndSetInUseByIx,
+  approveAndSetInUseByIxBeet,
+} from '../types/ApproveAndSetInUseByIx'
 
 /**
  * @category Instructions
- * @category Revoke
+ * @category ApproveAndSetInUseBy
  * @category generated
  */
-export const RevokeStruct = new beet.BeetArgsStruct<{
-  instructionDiscriminator: number
-}>([['instructionDiscriminator', beet.u8]], 'RevokeInstructionArgs')
+export type ApproveAndSetInUseByInstructionArgs = {
+  approveAndSetInUseByIx: ApproveAndSetInUseByIx
+}
 /**
- * Accounts required by the _Revoke_ instruction
+ * @category Instructions
+ * @category ApproveAndSetInUseBy
+ * @category generated
+ */
+export const ApproveAndSetInUseByStruct = new beet.BeetArgsStruct<
+  ApproveAndSetInUseByInstructionArgs & {
+    instructionDiscriminator: number
+  }
+>(
+  [
+    ['instructionDiscriminator', beet.u8],
+    ['approveAndSetInUseByIx', approveAndSetInUseByIxBeet],
+  ],
+  'ApproveAndSetInUseByInstructionArgs'
+)
+/**
+ * Accounts required by the _ApproveAndSetInUseBy_ instruction
  *
  * @property [] mintManager
  * @property [] mint
  * @property [_writable_] holderTokenAccount
  * @property [**signer**] holder
+ * @property [] delegate
  * @category Instructions
- * @category Revoke
+ * @category ApproveAndSetInUseBy
  * @category generated
  */
-export type RevokeInstructionAccounts = {
+export type ApproveAndSetInUseByInstructionAccounts = {
   mintManager: web3.PublicKey
   mint: web3.PublicKey
   holderTokenAccount: web3.PublicKey
   holder: web3.PublicKey
+  delegate: web3.PublicKey
   tokenProgram?: web3.PublicKey
 }
 
-export const revokeInstructionDiscriminator = 12
+export const approveAndSetInUseByInstructionDiscriminator = 7
 
 /**
- * Creates a _Revoke_ instruction.
+ * Creates a _ApproveAndSetInUseBy_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
+ * @param args to provide as instruction data to the program
+ *
  * @category Instructions
- * @category Revoke
+ * @category ApproveAndSetInUseBy
  * @category generated
  */
-export function createRevokeInstruction(
-  accounts: RevokeInstructionAccounts,
+export function createApproveAndSetInUseByInstruction(
+  accounts: ApproveAndSetInUseByInstructionAccounts,
+  args: ApproveAndSetInUseByInstructionArgs,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
-  const [data] = RevokeStruct.serialize({
-    instructionDiscriminator: revokeInstructionDiscriminator,
+  const [data] = ApproveAndSetInUseByStruct.serialize({
+    instructionDiscriminator: approveAndSetInUseByInstructionDiscriminator,
+    ...args,
   })
   const keys: web3.AccountMeta[] = [
     {
@@ -73,6 +99,11 @@ export function createRevokeInstruction(
       pubkey: accounts.holder,
       isWritable: false,
       isSigner: true,
+    },
+    {
+      pubkey: accounts.delegate,
+      isWritable: false,
+      isSigner: false,
     },
     {
       pubkey: accounts.tokenProgram ?? splToken.TOKEN_PROGRAM_ID,

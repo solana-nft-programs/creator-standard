@@ -86,6 +86,14 @@ pub enum CreatorStandardInstruction {
     #[account(5, name = "token_program")]
     Approve(ApproveIx),
 
+    #[account(0, name = "mint_manager")]
+    #[account(1, name = "mint")]
+    #[account(2, writable, name = "holder_token_account")]
+    #[account(3, signer, name = "holder")]
+    #[account(4, name = "delegate")]
+    #[account(5, name = "token_program")]
+    ApproveAndSetInUseBy(ApproveAndSetInUseByIx),
+
     #[account(0, writable, name = "mint_manager")]
     #[account(1, writable, name = "mint")]
     #[account(2, writable, name = "holder_token_account")]
@@ -186,6 +194,11 @@ pub fn process_instruction(
             msg!("CreatorStandardInstruction::Approve");
             let ctx = ApproveCtx::load(accounts)?;
             instructions::token::approve::handler(ctx, ix)
+        }
+        CreatorStandardInstruction::ApproveAndSetInUseBy(ix) => {
+            msg!("CreatorStandardInstruction::Approve");
+            let ctx = ApproveAndSetInUseByCtx::load(accounts)?;
+            instructions::token::approve_and_set_in_use_by::handler(ctx, ix)
         }
         CreatorStandardInstruction::Burn => {
             msg!("CreatorStandardInstruction::Burn");

@@ -9,6 +9,7 @@ use crate::CreatorStandardInstruction;
 
 use super::{
     approve::ApproveIx,
+    approve_and_set_in_use_by::ApproveAndSetInUseByIx,
     mint_manager::{SetInUseByIx, UpdateMintManagerIx},
     InitRulesetIx, UpdateRulesetIx,
 };
@@ -200,6 +201,36 @@ pub fn approve(
         data: CreatorStandardInstruction::Approve(ApproveIx { amount })
             .try_to_vec()
             .unwrap(),
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn approve_and_set_in_use_by(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    mint: Pubkey,
+    holder_token_account: Pubkey,
+    holder: Pubkey,
+    delegate: Pubkey,
+    amount: u64,
+    in_use_by_address: Pubkey,
+) -> Instruction {
+    Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new_readonly(mint_manager, false),
+            AccountMeta::new_readonly(mint, false),
+            AccountMeta::new(holder_token_account, false),
+            AccountMeta::new_readonly(holder, true),
+            AccountMeta::new_readonly(delegate, false),
+            AccountMeta::new_readonly(spl_token::id(), false),
+        ],
+        data: CreatorStandardInstruction::ApproveAndSetInUseBy(ApproveAndSetInUseByIx {
+            amount,
+            in_use_by_address,
+        })
+        .try_to_vec()
+        .unwrap(),
     }
 }
 

@@ -1,4 +1,5 @@
 export * from './AccountType'
+export * from './ApproveAndSetInUseByIx'
 export * from './ApproveIx'
 export * from './InitRulesetIx'
 export * from './SetInUseByIx'

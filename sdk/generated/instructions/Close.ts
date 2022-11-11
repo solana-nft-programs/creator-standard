@@ -36,7 +36,7 @@ export type CloseInstructionAccounts = {
   tokenProgram?: web3.PublicKey
 }
 
-export const closeInstructionDiscriminator = 8
+export const closeInstructionDiscriminator = 9
 
 /**
  * Creates a _Close_ instruction.

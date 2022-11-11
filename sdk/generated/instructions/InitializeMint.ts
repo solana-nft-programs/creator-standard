@@ -50,7 +50,7 @@ export type InitializeMintInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const initializeMintInstructionDiscriminator = 10
+export const initializeMintInstructionDiscriminator = 11
 
 /**
  * Creates a _InitializeMint_ instruction.
