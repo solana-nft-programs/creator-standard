@@ -23,7 +23,7 @@ export const BurnStruct = new beet.BeetArgsStruct<{
  * @property [_writable_] mintManager
  * @property [_writable_] mint
  * @property [_writable_] holderTokenAccount
- * @property [**signer**] holder
+ * @property [_writable_, **signer**] holder
  * @category Instructions
  * @category Burn
  * @category generated
@@ -72,7 +72,7 @@ export function createBurnInstruction(
     },
     {
       pubkey: accounts.holder,
-      isWritable: false,
+      isWritable: true,
       isSigner: true,
     },
     {

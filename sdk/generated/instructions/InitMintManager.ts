@@ -27,7 +27,7 @@ export const InitMintManagerStruct = new beet.BeetArgsStruct<{
  * @property [_writable_] rulesetCollector
  * @property [_writable_] collector
  * @property [**signer**] authority
- * @property [**signer**] payer
+ * @property [_writable_, **signer**] payer
  * @category Instructions
  * @category InitMintManager
  * @category generated
@@ -100,7 +100,7 @@ export function createInitMintManagerInstruction(
     },
     {
       pubkey: accounts.payer,
-      isWritable: false,
+      isWritable: true,
       isSigner: true,
     },
     {

@@ -43,7 +43,7 @@ export const UpdateMintManagerStruct = new beet.BeetArgsStruct<
  * @property [] ruleset
  * @property [_writable_] collector
  * @property [**signer**] authority
- * @property [**signer**] payer
+ * @property [_writable_, **signer**] payer
  * @category Instructions
  * @category UpdateMintManager
  * @category generated
@@ -101,7 +101,7 @@ export function createUpdateMintManagerInstruction(
     },
     {
       pubkey: accounts.payer,
-      isWritable: false,
+      isWritable: true,
       isSigner: true,
     },
     {
