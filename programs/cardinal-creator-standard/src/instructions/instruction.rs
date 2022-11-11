@@ -162,12 +162,12 @@ pub fn set_in_use_by(
 }
 
 #[allow(clippy::too_many_arguments)]
-pub fn remove_in_use_by(program_id: Pubkey, mint_manager: Pubkey, holder: Pubkey) -> Instruction {
+pub fn remove_in_use_by(program_id: Pubkey, mint_manager: Pubkey, user: Pubkey) -> Instruction {
     Instruction {
         program_id,
         accounts: vec![
             AccountMeta::new(mint_manager, false),
-            AccountMeta::new_readonly(holder, true),
+            AccountMeta::new_readonly(user, true),
         ],
         data: CreatorStandardInstruction::RemoveInUseBy
             .try_to_vec()
