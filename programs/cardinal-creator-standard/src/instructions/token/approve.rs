@@ -8,12 +8,20 @@ use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use crate::utils::assert_with_msg;
 use crate::utils::unpack_checked_token_account;
+use borsh::BorshDeserialize;
+use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
 
+#[repr(C)]
+#[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
+#[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone)]
+pub struct ApproveIx {
+    pub amount: u64,
+}
 pub struct ApproveCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
     pub mint: &'a AccountInfo<'info>,
@@ -79,7 +87,7 @@ impl<'a, 'info> ApproveCtx<'a, 'info> {
     }
 }
 
-pub fn handler(ctx: ApproveCtx) -> ProgramResult {
+pub fn handler(ctx: ApproveCtx, ix: ApproveIx) -> ProgramResult {
     let mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
     if mint_manager.in_use_by.is_some() {
         return Err(ProgramError::from(ErrorCode::TokenCurentlyInUse));
@@ -115,7 +123,7 @@ pub fn handler(ctx: ApproveCtx) -> ProgramResult {
             ctx.delegate.key,
             ctx.holder.key,
             &[],
-            1,
+            ix.amount,
             0,
         )?,
         &[

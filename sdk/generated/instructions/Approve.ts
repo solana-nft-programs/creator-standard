@@ -8,15 +8,32 @@
 import * as splToken from '@solana/spl-token'
 import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
+import { ApproveIx, approveIxBeet } from '../types/ApproveIx'
 
 /**
  * @category Instructions
  * @category Approve
  * @category generated
  */
-export const ApproveStruct = new beet.BeetArgsStruct<{
-  instructionDiscriminator: number
-}>([['instructionDiscriminator', beet.u8]], 'ApproveInstructionArgs')
+export type ApproveInstructionArgs = {
+  approveIx: ApproveIx
+}
+/**
+ * @category Instructions
+ * @category Approve
+ * @category generated
+ */
+export const ApproveStruct = new beet.BeetArgsStruct<
+  ApproveInstructionArgs & {
+    instructionDiscriminator: number
+  }
+>(
+  [
+    ['instructionDiscriminator', beet.u8],
+    ['approveIx', approveIxBeet],
+  ],
+  'ApproveInstructionArgs'
+)
 /**
  * Accounts required by the _Approve_ instruction
  *
@@ -44,16 +61,20 @@ export const approveInstructionDiscriminator = 6
  * Creates a _Approve_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
+ * @param args to provide as instruction data to the program
+ *
  * @category Instructions
  * @category Approve
  * @category generated
  */
 export function createApproveInstruction(
   accounts: ApproveInstructionAccounts,
+  args: ApproveInstructionArgs,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
   const [data] = ApproveStruct.serialize({
     instructionDiscriminator: approveInstructionDiscriminator,
+    ...args,
   })
   const keys: web3.AccountMeta[] = [
     {
