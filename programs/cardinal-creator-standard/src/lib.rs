@@ -84,7 +84,7 @@ pub enum CreatorStandardInstruction {
     #[account(3, signer, name = "holder")]
     #[account(4, name = "delegate")]
     #[account(5, name = "token_program")]
-    Approve,
+    Approve(ApproveIx),
 
     #[account(0, writable, name = "mint_manager")]
     #[account(1, writable, name = "mint")]
@@ -182,10 +182,10 @@ pub fn process_instruction(
             let ctx = UpdateRulesetCtx::load(accounts)?;
             instructions::ruleset::update_ruleset::handler(ctx, ix)
         }
-        CreatorStandardInstruction::Approve => {
+        CreatorStandardInstruction::Approve(ix) => {
             msg!("CreatorStandardInstruction::Approve");
             let ctx = ApproveCtx::load(accounts)?;
-            instructions::token::approve::handler(ctx)
+            instructions::token::approve::handler(ctx, ix)
         }
         CreatorStandardInstruction::Burn => {
             msg!("CreatorStandardInstruction::Burn");

@@ -8,6 +8,7 @@ use solana_program::{
 use crate::CreatorStandardInstruction;
 
 use super::{
+    approve::ApproveIx,
     mint_manager::{SetInUseByIx, UpdateMintManagerIx},
     InitRulesetIx, UpdateRulesetIx,
 };
@@ -184,6 +185,7 @@ pub fn approve(
     holder_token_account: Pubkey,
     holder: Pubkey,
     delegate: Pubkey,
+    amount: u64,
 ) -> Instruction {
     Instruction {
         program_id,
@@ -195,7 +197,9 @@ pub fn approve(
             AccountMeta::new_readonly(delegate, false),
             AccountMeta::new_readonly(spl_token::id(), false),
         ],
-        data: CreatorStandardInstruction::Approve.try_to_vec().unwrap(),
+        data: CreatorStandardInstruction::Approve(ApproveIx { amount: amount })
+            .try_to_vec()
+            .unwrap(),
     }
 }
 
@@ -324,7 +328,7 @@ pub fn revoke(
             AccountMeta::new_readonly(holder, true),
             AccountMeta::new_readonly(spl_token::id(), false),
         ],
-        data: CreatorStandardInstruction::Approve.try_to_vec().unwrap(),
+        data: CreatorStandardInstruction::Revoke.try_to_vec().unwrap(),
     }
 }
 

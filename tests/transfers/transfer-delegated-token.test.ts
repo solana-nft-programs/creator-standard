@@ -111,13 +111,16 @@ test("Delegate", async () => {
   expect(fromAta.amount.toString()).toBe("1");
 
   tx.add(
-    createApproveInstruction({
-      mintManager: mintManagerId,
-      mint: mintKeypair.publicKey,
-      holderTokenAccount: fromAtaId,
-      holder: provider.wallet.publicKey,
-      delegate: delegate.publicKey,
-    })
+    createApproveInstruction(
+      {
+        mintManager: mintManagerId,
+        mint: mintKeypair.publicKey,
+        holderTokenAccount: fromAtaId,
+        holder: provider.wallet.publicKey,
+        delegate: delegate.publicKey,
+      },
+      { approveIx: { amount: 1 } }
+    )
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
