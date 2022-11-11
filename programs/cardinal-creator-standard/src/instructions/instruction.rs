@@ -150,7 +150,7 @@ pub fn set_in_use_by(
         program_id,
         accounts: vec![
             AccountMeta::new(mint_manager, false),
-            AccountMeta::new(holder, true),
+            AccountMeta::new_readonly(holder, true),
             AccountMeta::new_readonly(holder_token_account, false),
         ],
         data: CreatorStandardInstruction::SetInUseBy(SetInUseByIx { in_use_by_address })
@@ -165,7 +165,7 @@ pub fn remove_in_use_by(program_id: Pubkey, mint_manager: Pubkey, holder: Pubkey
         program_id,
         accounts: vec![
             AccountMeta::new(mint_manager, false),
-            AccountMeta::new(holder, true),
+            AccountMeta::new_readonly(holder, true),
         ],
         data: CreatorStandardInstruction::RemoveInUseBy
             .try_to_vec()
@@ -191,7 +191,7 @@ pub fn approve(
             AccountMeta::new_readonly(mint_manager, false),
             AccountMeta::new_readonly(mint, false),
             AccountMeta::new(holder_token_account, false),
-            AccountMeta::new(holder, true),
+            AccountMeta::new_readonly(holder, true),
             AccountMeta::new_readonly(delegate, false),
             AccountMeta::new_readonly(spl_token::id(), false),
         ],
@@ -296,7 +296,7 @@ pub fn initialize_mint(
             AccountMeta::new(collector, false),
             AccountMeta::new_readonly(authority, true),
             AccountMeta::new_readonly(payer, true),
-            AccountMeta::new(rent, false),
+            AccountMeta::new_readonly(rent, false),
             AccountMeta::new_readonly(solana_program::system_program::id(), false),
             AccountMeta::new_readonly(spl_associated_token_account::id(), false),
             AccountMeta::new_readonly(solana_program::system_program::id(), false),
@@ -321,7 +321,7 @@ pub fn revoke(
             AccountMeta::new_readonly(mint_manager, false),
             AccountMeta::new_readonly(mint, false),
             AccountMeta::new(holder_token_account, false),
-            AccountMeta::new(holder, true),
+            AccountMeta::new_readonly(holder, true),
             AccountMeta::new_readonly(spl_token::id(), false),
         ],
         data: CreatorStandardInstruction::Approve.try_to_vec().unwrap(),

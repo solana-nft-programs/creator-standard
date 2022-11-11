@@ -68,7 +68,6 @@ impl<'a, 'info> ApproveCtx<'a, 'info> {
         )?;
 
         // holder
-        assert_mut(ctx.holder, "holder")?;
         assert_signer(ctx.holder, "holder")?;
 
         ///// no checks for delegate /////

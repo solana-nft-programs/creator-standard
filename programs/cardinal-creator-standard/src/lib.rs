@@ -55,7 +55,7 @@ pub enum CreatorStandardInstruction {
     #[account(4, writable, name = "ruleset_collector")]
     #[account(5, writable, name = "collector")]
     #[account(6, signer, name = "authority")]
-    #[account(7, signer, name = "payer")]
+    #[account(7, writable, signer, name = "payer")]
     #[account(8, name = "token_program", desc = "Token program")]
     #[account(9, name = "system_program", desc = "System program")]
     InitMintManager,
@@ -64,7 +64,7 @@ pub enum CreatorStandardInstruction {
     #[account(1, name = "ruleset")]
     #[account(2, writable, name = "collector")]
     #[account(3, signer, name = "authority")]
-    #[account(4, signer, name = "payer")]
+    #[account(4, writable, signer, name = "payer")]
     #[account(5, name = "system_program", desc = "System program")]
     UpdateMintManager(UpdateMintManagerIx),
 
@@ -89,7 +89,7 @@ pub enum CreatorStandardInstruction {
     #[account(0, writable, name = "mint_manager")]
     #[account(1, writable, name = "mint")]
     #[account(2, writable, name = "holder_token_account")]
-    #[account(3, signer, name = "holder")]
+    #[account(3, writable, signer, name = "holder")]
     #[account(4, name = "token_program")]
     #[account(5, name = "system_program")]
     Burn,

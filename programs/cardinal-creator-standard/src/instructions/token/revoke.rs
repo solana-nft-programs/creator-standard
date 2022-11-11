@@ -66,7 +66,6 @@ impl<'a, 'info> RevokeCtx<'a, 'info> {
         )?;
 
         // holder
-        assert_mut(ctx.holder, "holder")?;
         assert_signer(ctx.holder, "holder")?;
 
         // token_program
