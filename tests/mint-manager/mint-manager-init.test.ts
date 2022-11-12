@@ -48,7 +48,7 @@ test("Init", async () => {
       mint: mintKeypair.publicKey,
       ruleset: RULESET_ID,
       holderTokenAccount: ata,
-      holder: provider.wallet.publicKey,
+      tokenAuthority: provider.wallet.publicKey,
       rulesetCollector: RULESET_COLLECTOR,
       collector: ruleset.collector,
       authority: provider.wallet.publicKey,

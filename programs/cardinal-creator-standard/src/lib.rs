@@ -52,7 +52,7 @@ pub enum CreatorStandardInstruction {
     #[account(1, writable, name = "mint")]
     #[account(2, name = "ruleset")]
     #[account(3, writable, name = "holder_token_account")]
-    #[account(4, signer, name = "holder")]
+    #[account(4, signer, name = "token_authority")]
     #[account(5, writable, name = "ruleset_collector")]
     #[account(6, writable, name = "collector")]
     #[account(7, name = "authority")]
