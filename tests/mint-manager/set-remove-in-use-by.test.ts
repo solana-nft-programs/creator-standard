@@ -5,7 +5,12 @@ import {
   getAssociatedTokenAddressSync,
   getMint,
 } from "@solana/spl-token";
-import { Keypair, LAMPORTS_PER_SOL, Transaction } from "@solana/web3.js";
+import {
+  Keypair,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  Transaction,
+} from "@solana/web3.js";
 
 import { Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
@@ -20,6 +25,9 @@ const mintKeypair = Keypair.generate();
 
 const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
+const RULESET_COLLECTOR = new PublicKey(
+  "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
+);
 const IN_USE_BY_AUTHORITY = Keypair.generate();
 
 let provider: CardinalProvider;
@@ -54,7 +62,7 @@ test("Initialize mint", async () => {
       rulesetCollector: ruleset.collector,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
-      collector: ruleset.collector,
+      collector: RULESET_COLLECTOR,
       associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
     })
   );

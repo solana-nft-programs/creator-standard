@@ -50,10 +50,10 @@ test("Init", async () => {
       ruleset: RULESET_ID,
       targetTokenAccount: targetTokenAccount,
       target: provider.wallet.publicKey,
-      rulesetCollector: RULESET_COLLECTOR,
+      rulesetCollector: ruleset.collector,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
-      collector: ruleset.collector,
+      collector: RULESET_COLLECTOR,
       associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
     })
   );

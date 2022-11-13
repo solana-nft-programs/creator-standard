@@ -178,9 +178,10 @@ export const secondaryConnectionFor = (
 export const createMintTx = async (
   connection: Connection,
   mint: PublicKey,
-  authority: PublicKey
+  authority: PublicKey,
+  target = authority
 ) => {
-  const ata = getAssociatedTokenAddressSync(mint, authority);
+  const ata = getAssociatedTokenAddressSync(mint, target);
   return new Transaction().add(
     SystemProgram.createAccount({
       fromPubkey: authority,
@@ -190,7 +191,7 @@ export const createMintTx = async (
       programId: TOKEN_PROGRAM_ID,
     }),
     createInitializeMint2Instruction(mint, 0, authority, authority),
-    createAssociatedTokenAccountInstruction(authority, ata, authority, mint),
+    createAssociatedTokenAccountInstruction(authority, ata, target, mint),
     createMintToInstruction(mint, ata, authority, 1)
   );
 };

@@ -123,6 +123,6 @@ const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
 };
 
 const params: CreateCSSTokenParams = {
-  target: new PublicKey("JBgna2pmtDJuUoAZ28j39LWWJTVGEoNUGDDGX87e58gC"),
+  target: new PublicKey(""),
 };
 main(params).catch((e) => console.log(e));

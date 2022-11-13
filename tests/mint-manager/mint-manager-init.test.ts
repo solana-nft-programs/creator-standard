@@ -49,8 +49,8 @@ test("Init", async () => {
       ruleset: RULESET_ID,
       holderTokenAccount: ata,
       tokenAuthority: provider.wallet.publicKey,
-      rulesetCollector: RULESET_COLLECTOR,
-      collector: ruleset.collector,
+      rulesetCollector: ruleset.collector,
+      collector: RULESET_COLLECTOR,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
     })
