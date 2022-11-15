@@ -239,7 +239,7 @@ checksum = "ec8a7b6a70fde80372154c65702f00a0f56f3e1c36abbc6c440484be248856db"
 
 [[package]]
 name = "cardinal-creator-standard"
-version = "1.1.19"
+version = "1.1.20"
 dependencies = [
  "anyhow",
  "arrayref",
@@ -1492,11 +1492,12 @@ dependencies = [
 
 [[package]]
 name = "spl-token"
-version = "3.2.0"
+version = "3.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "93bfdd5bd7c869cb565c7d7635c4fafe189b988a0bdef81063cd9585c6b8dc01"
+checksum = "8e85e168a785e82564160dcb87b2a8e04cee9bfd1f4d488c729d53d6a4bd300d"
 dependencies = [
  "arrayref",
+ "bytemuck",
  "num-derive",
  "num-traits",
  "num_enum",
