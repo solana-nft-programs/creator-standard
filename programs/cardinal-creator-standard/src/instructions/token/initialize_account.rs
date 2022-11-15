@@ -13,7 +13,7 @@ use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use solana_program::system_program;
 use solana_program::sysvar;
-use spl_associated_token_account::instruction::create_associated_token_account;
+use spl_associated_token_account::create_associated_token_account;
 
 #[allow(clippy::too_many_arguments)]
 pub fn initialize_account(

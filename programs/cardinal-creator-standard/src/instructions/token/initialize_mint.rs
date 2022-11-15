@@ -28,8 +28,8 @@ use solana_program::system_instruction::create_account;
 use solana_program::system_program;
 use solana_program::sysvar;
 use solana_program::sysvar::Sysvar;
+use spl_associated_token_account::create_associated_token_account;
 use spl_associated_token_account::get_associated_token_address;
-use spl_associated_token_account::instruction::create_associated_token_account;
 use std::str::FromStr;
 
 #[allow(clippy::too_many_arguments)]
