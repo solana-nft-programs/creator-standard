@@ -1,13 +1,39 @@
+use crate::CreatorStandardInstruction;
 use crate::state::assert_mint_manager_seeds;
 use crate::utils::assert_address;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use crate::utils::unpack_checked_token_account;
+use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
+use solana_program::pubkey::Pubkey;
+
+#[allow(clippy::too_many_arguments)]
+pub fn close(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    mint: Pubkey,
+    token_account: Pubkey,
+    owner: Pubkey,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new_readonly(mint_manager, false),
+            AccountMeta::new(mint, false),
+            AccountMeta::new(token_account, false),
+            AccountMeta::new_readonly(owner, true),
+            AccountMeta::new_readonly(spl_token::id(), false),
+        ],
+        data: CreatorStandardInstruction::Close.try_to_vec()?,
+    })
+}
 
 pub struct CloseCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,

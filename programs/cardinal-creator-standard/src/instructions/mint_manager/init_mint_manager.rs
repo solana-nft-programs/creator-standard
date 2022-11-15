@@ -15,9 +15,13 @@ use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use crate::utils::unpack_checked_mint_account;
 use crate::utils::unpack_checked_token_account;
+use crate::CreatorStandardInstruction;
+use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program::invoke;
 use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
@@ -26,6 +30,38 @@ use solana_program::rent::Rent;
 use solana_program::system_instruction::create_account;
 use solana_program::system_program;
 use solana_program::sysvar::Sysvar;
+
+#[allow(clippy::too_many_arguments)]
+pub fn init_mint_manager(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    mint: Pubkey,
+    ruleset: Pubkey,
+    holder_token_account: Pubkey,
+    token_authority: Pubkey,
+    ruleset_collector: Pubkey,
+    collector: Pubkey,
+    authority: Pubkey,
+    payer: Pubkey,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new(mint_manager, false),
+            AccountMeta::new(mint, false),
+            AccountMeta::new_readonly(ruleset, false),
+            AccountMeta::new(holder_token_account, false),
+            AccountMeta::new_readonly(token_authority, true),
+            AccountMeta::new(ruleset_collector, false),
+            AccountMeta::new(collector, false),
+            AccountMeta::new_readonly(authority, false),
+            AccountMeta::new(payer, true),
+            AccountMeta::new_readonly(spl_token::id(), false),
+            AccountMeta::new_readonly(solana_program::system_program::id(), false),
+        ],
+        data: CreatorStandardInstruction::InitMintManager.try_to_vec()?,
+    })
+}
 
 pub struct InitMintManagerCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,

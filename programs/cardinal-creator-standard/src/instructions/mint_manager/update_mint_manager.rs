@@ -4,14 +4,44 @@ use crate::state::Ruleset;
 use crate::utils::assert_address;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
+use crate::CreatorStandardInstruction;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 use solana_program::system_program;
+
+#[allow(clippy::too_many_arguments)]
+pub fn update_mint_manager(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    ruleset: Pubkey,
+    collector: Pubkey,
+    authority: Pubkey,
+    new_authority: Pubkey,
+    payer: Pubkey,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new(mint_manager, false),
+            AccountMeta::new_readonly(ruleset, false),
+            AccountMeta::new(collector, false),
+            AccountMeta::new_readonly(authority, true),
+            AccountMeta::new(payer, true),
+            AccountMeta::new_readonly(solana_program::system_program::id(), false),
+        ],
+        data: CreatorStandardInstruction::UpdateMintManager(UpdateMintManagerIx {
+            authority: new_authority,
+        })
+        .try_to_vec()?,
+    })
+}
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]

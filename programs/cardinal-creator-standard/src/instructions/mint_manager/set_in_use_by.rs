@@ -6,13 +6,36 @@ use crate::utils::assert_amount;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use crate::utils::unpack_checked_token_account;
+use crate::CreatorStandardInstruction;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
+
+#[allow(clippy::too_many_arguments)]
+pub fn set_in_use_by(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    holder: Pubkey,
+    holder_token_account: Pubkey,
+    in_use_by_address: Pubkey,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new(mint_manager, false),
+            AccountMeta::new_readonly(holder, true),
+            AccountMeta::new_readonly(holder_token_account, false),
+        ],
+        data: CreatorStandardInstruction::SetInUseBy(SetInUseByIx { in_use_by_address })
+            .try_to_vec()?,
+    })
+}
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]

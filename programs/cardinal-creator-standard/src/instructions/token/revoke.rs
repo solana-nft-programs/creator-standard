@@ -8,11 +8,37 @@ use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use crate::utils::assert_with_msg;
 use crate::utils::unpack_checked_token_account;
+use crate::CreatorStandardInstruction;
+use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
+use solana_program::pubkey::Pubkey;
+
+#[allow(clippy::too_many_arguments)]
+pub fn revoke(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    mint: Pubkey,
+    holder_token_account: Pubkey,
+    holder: Pubkey,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new_readonly(mint_manager, false),
+            AccountMeta::new_readonly(mint, false),
+            AccountMeta::new(holder_token_account, false),
+            AccountMeta::new_readonly(holder, true),
+            AccountMeta::new_readonly(spl_token::id(), false),
+        ],
+        data: CreatorStandardInstruction::Revoke.try_to_vec()?,
+    })
+}
 
 pub struct RevokeCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,

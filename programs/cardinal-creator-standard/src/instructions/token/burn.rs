@@ -8,12 +8,40 @@ use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use crate::utils::unpack_checked_mint_account;
 use crate::utils::unpack_checked_token_account;
+use crate::CreatorStandardInstruction;
+use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
+use solana_program::pubkey::Pubkey;
 use solana_program::system_program;
+
+#[allow(clippy::too_many_arguments)]
+pub fn burn(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    mint: Pubkey,
+    holder_token_account: Pubkey,
+    holder: Pubkey,
+    delegate: Pubkey,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new(mint_manager, false),
+            AccountMeta::new(mint, false),
+            AccountMeta::new(holder_token_account, false),
+            AccountMeta::new(holder, true),
+            AccountMeta::new_readonly(delegate, false),
+            AccountMeta::new_readonly(spl_token::id(), false),
+        ],
+        data: CreatorStandardInstruction::Burn.try_to_vec()?,
+    })
+}
 
 pub struct BurnCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,

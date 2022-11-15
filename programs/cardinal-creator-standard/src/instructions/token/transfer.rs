@@ -12,15 +12,47 @@ use crate::utils::assert_mut;
 use crate::utils::assert_program_account;
 use crate::utils::assert_signer;
 use crate::utils::unpack_checked_token_account;
+use crate::CreatorStandardInstruction;
+use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
+use solana_program::pubkey::Pubkey;
 use solana_program::serialize_utils::read_u16;
 use solana_program::system_program;
 use solana_program::sysvar;
 use solana_program::sysvar::instructions::load_instruction_at_checked;
+
+#[allow(clippy::too_many_arguments)]
+pub fn transfer(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    ruleset: Pubkey,
+    mint: Pubkey,
+    from: Pubkey,
+    to: Pubkey,
+    authority: Pubkey,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new_readonly(mint_manager, false),
+            AccountMeta::new_readonly(ruleset, false),
+            AccountMeta::new_readonly(mint, false),
+            AccountMeta::new(from, false),
+            AccountMeta::new(to, false),
+            AccountMeta::new_readonly(authority, true),
+            AccountMeta::new_readonly(spl_token::id(), false),
+            AccountMeta::new_readonly(solana_program::system_program::id(), false),
+            AccountMeta::new_readonly(sysvar::instructions::id(), false),
+        ],
+        data: CreatorStandardInstruction::Transfer.try_to_vec()?,
+    })
+}
 
 pub struct TransferCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,

@@ -4,11 +4,14 @@ use crate::state::Ruleset;
 use crate::utils::assert_address;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
+use crate::CreatorStandardInstruction;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program::invoke;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
@@ -16,6 +19,36 @@ use solana_program::rent::Rent;
 use solana_program::system_instruction::transfer;
 use solana_program::system_program;
 use solana_program::sysvar::Sysvar;
+
+#[allow(clippy::too_many_arguments)]
+pub fn update_ruleset(
+    program_id: Pubkey,
+    ruleset: Pubkey,
+    authority: Pubkey,
+    payer: Pubkey,
+    collector: Pubkey,
+    disallowed_addresses: Vec<Pubkey>,
+    allowed_programs: Vec<Pubkey>,
+    check_seller_fee_basis_points: bool,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new(ruleset, false),
+            AccountMeta::new_readonly(authority, true),
+            AccountMeta::new(payer, true),
+            AccountMeta::new_readonly(solana_program::system_program::id(), false),
+        ],
+        data: CreatorStandardInstruction::UpdateRuleset(UpdateRulesetIx {
+            authority,
+            collector,
+            disallowed_addresses,
+            allowed_programs,
+            check_seller_fee_basis_points,
+        })
+        .try_to_vec()?,
+    })
+}
 
 #[repr(C)]
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]

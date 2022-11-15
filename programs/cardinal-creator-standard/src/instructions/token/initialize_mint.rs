@@ -11,9 +11,13 @@ use crate::utils::assert_empty;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use crate::utils::unpack_checked_token_account;
+use crate::CreatorStandardInstruction;
+use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::instruction::AccountMeta;
+use solana_program::instruction::Instruction;
 use solana_program::program::invoke;
 use solana_program::program::invoke_signed;
 use solana_program::program_error::ProgramError;
@@ -27,6 +31,41 @@ use solana_program::sysvar::Sysvar;
 use spl_associated_token_account::get_associated_token_address;
 use spl_associated_token_account::instruction::create_associated_token_account;
 use std::str::FromStr;
+
+#[allow(clippy::too_many_arguments)]
+pub fn initialize_mint(
+    program_id: Pubkey,
+    mint_manager: Pubkey,
+    mint: Pubkey,
+    ruleset: Pubkey,
+    target_token_account: Pubkey,
+    target: Pubkey,
+    ruleset_collector: Pubkey,
+    collector: Pubkey,
+    authority: Pubkey,
+    payer: Pubkey,
+    rent: Pubkey,
+) -> Result<Instruction, ProgramError> {
+    Ok(Instruction {
+        program_id,
+        accounts: vec![
+            AccountMeta::new(mint_manager, false),
+            AccountMeta::new(mint, false),
+            AccountMeta::new_readonly(ruleset, false),
+            AccountMeta::new(target_token_account, false),
+            AccountMeta::new_readonly(target, true),
+            AccountMeta::new(ruleset_collector, false),
+            AccountMeta::new(collector, false),
+            AccountMeta::new_readonly(authority, true),
+            AccountMeta::new_readonly(payer, true),
+            AccountMeta::new_readonly(rent, false),
+            AccountMeta::new_readonly(spl_token::id(), false),
+            AccountMeta::new_readonly(spl_associated_token_account::id(), false),
+            AccountMeta::new_readonly(solana_program::system_program::id(), false),
+        ],
+        data: CreatorStandardInstruction::InitializeMint.try_to_vec()?,
+    })
+}
 
 pub struct InitializeMintCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,

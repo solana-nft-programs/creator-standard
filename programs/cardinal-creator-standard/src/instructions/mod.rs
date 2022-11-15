@@ -6,6 +6,3 @@ pub use ruleset::*;
 
 pub mod token;
 pub use token::*;
-
-pub mod instruction;
-pub use instruction::*;
