@@ -5,13 +5,17 @@ import {
   getAssociatedTokenAddressSync,
   getMint,
 } from "@solana/spl-token";
-import { Keypair, PublicKey, Transaction } from "@solana/web3.js";
+import { Keypair, Transaction } from "@solana/web3.js";
 
 import { Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createApproveInstruction } from "../../sdk/generated/instructions/Approve";
 import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
-import { findMintManagerId, findRulesetId } from "../../sdk/pda";
+import {
+  DEFAULT_COLLECTOR,
+  findMintManagerId,
+  findRulesetId,
+} from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import {
   executeTransaction,
@@ -24,9 +28,6 @@ const mintKeypair = Keypair.generate();
 
 const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
-const RULESET_COLLECTOR = new PublicKey(
-  "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
-);
 
 let provider: CardinalProvider;
 let delegate: Keypair;
@@ -58,7 +59,7 @@ test("Initialize mint", async () => {
       rulesetCollector: ruleset.collector,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
-      collector: RULESET_COLLECTOR,
+      collector: DEFAULT_COLLECTOR,
       associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
     })
   );
