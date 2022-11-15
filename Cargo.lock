@@ -239,7 +239,7 @@ checksum = "ec8a7b6a70fde80372154c65702f00a0f56f3e1c36abbc6c440484be248856db"
 
 [[package]]
 name = "cardinal-creator-standard"
-version = "1.1.14"
+version = "1.1.15"
 dependencies = [
  "anyhow",
  "arrayref",
