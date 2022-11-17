@@ -5,6 +5,7 @@ use solana_program::entrypoint::ProgramResult;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 
+use crate::hash::hash;
 use crate::utils::assert_with_msg;
 
 use std::collections::HashSet;
@@ -67,9 +68,9 @@ impl Display for AccountType {
 ///////////// CREATOR STANDARD ACCOUNT /////////////
 pub trait CreatorStandardAccount {
     fn account_type() -> AccountType;
-    fn set_account_type(&mut self);
     fn save(&self, account: &AccountInfo) -> ProgramResult;
     fn new() -> Self;
+    fn hash() -> [u8; 8];
 
     fn safe_deserialize<T: BorshDeserialize>(mut data: &[u8]) -> Result<T, BorshError> {
         if !is_correct_account_type(data, Self::account_type()) {
@@ -136,8 +137,8 @@ pub const MINT_MANAGER_SIZE: usize = std::mem::size_of::<MintManager>() + 64;
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
 #[derive(Clone, BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, ShankAccount)]
 pub struct MintManager {
-    pub account_type: u8, // account discriminator
-    pub version: u8,      // for potential future verisioning
+    pub account_type: [u8; 8], // account discriminator
+    pub version: u8,           // for potential future verisioning
     pub mint: Pubkey,
     pub authority: Pubkey,
     pub ruleset: Pubkey,
@@ -145,9 +146,16 @@ pub struct MintManager {
 }
 
 impl CreatorStandardAccount for MintManager {
+    fn hash() -> [u8; 8] {
+        let discriminator_preimage = format!("account:{}", "mint_manager");
+        let mut discriminator = [0u8; 8];
+        discriminator.copy_from_slice(&hash(discriminator_preimage.as_bytes()).to_bytes()[..8]);
+        discriminator
+    }
+
     fn new() -> Self {
         MintManager {
-            account_type: AccountType::MintManager as u8,
+            account_type: MintManager::hash(),
             version: 0,
             mint: Pubkey::default(),
             authority: Pubkey::default(),
@@ -160,13 +168,32 @@ impl CreatorStandardAccount for MintManager {
         AccountType::MintManager
     }
 
-    fn set_account_type(&mut self) {
-        self.account_type = AccountType::MintManager as u8
-    }
-
     fn save(&self, account: &AccountInfo) -> ProgramResult {
         BorshSerialize::serialize(self, &mut *account.data.borrow_mut())?;
         Ok(())
+    }
+
+    fn safe_deserialize<T: BorshDeserialize>(mut data: &[u8]) -> Result<T, BorshError> {
+        if !is_correct_account_type(data, Self::account_type()) {
+            return Err(BorshError::new(ErrorKind::Other, "InvalidAccountType"));
+        }
+
+        let result: Result<T, std::io::Error> = T::deserialize(&mut data);
+        if result.is_err() {
+            return Err(BorshError::new(ErrorKind::Other, "FailToDeserialize"));
+        }
+
+        Ok(result.unwrap())
+    }
+
+    fn from_account_info<T: BorshDeserialize>(account: &AccountInfo) -> Result<T, ProgramError> {
+        // check that account belongs in the program`
+        assert_owner(account, &id(), "account")?;
+
+        let account: T = Self::safe_deserialize(&account.data.borrow_mut())
+            .map_err(|_| ErrorCode::DataTypeMismatch)?;
+
+        Ok(account)
     }
 }
 ///////////// MINT MANAGER /////////////
@@ -210,8 +237,8 @@ pub fn calculate_ruleset_size(
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone, ShankAccount)]
 pub struct Ruleset {
-    pub account_type: u8, // account discriminator
-    pub version: u8,      // for potential future verisioning
+    pub account_type: [u8; 8], // account discriminator
+    pub version: u8,           // for potential future verisioning
     pub authority: Pubkey,
     pub collector: Pubkey,
     pub check_seller_fee_basis_points: bool,
@@ -221,9 +248,16 @@ pub struct Ruleset {
 }
 
 impl CreatorStandardAccount for Ruleset {
+    fn hash() -> [u8; 8] {
+        let discriminator_preimage = format!("account:{}", "ruleset");
+        let mut discriminator = [0u8; 8];
+        discriminator.copy_from_slice(&hash(discriminator_preimage.as_bytes()).to_bytes()[..8]);
+        discriminator
+    }
+
     fn new() -> Self {
         Ruleset {
-            account_type: AccountType::Ruleset as u8,
+            account_type: Ruleset::hash(),
             version: 0,
             authority: Pubkey::default(),
             collector: Pubkey::default(),
@@ -236,10 +270,6 @@ impl CreatorStandardAccount for Ruleset {
 
     fn account_type() -> AccountType {
         AccountType::Ruleset
-    }
-
-    fn set_account_type(&mut self) {
-        self.account_type = AccountType::Ruleset as u8
     }
 
     fn save(&self, account: &AccountInfo) -> ProgramResult {
