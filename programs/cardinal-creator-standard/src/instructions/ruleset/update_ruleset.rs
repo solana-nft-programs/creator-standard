@@ -105,7 +105,6 @@ impl<'a, 'info> UpdateRulesetCtx<'a, 'info> {
 pub fn handler(ctx: UpdateRulesetCtx, ix: UpdateRulesetIx) -> ProgramResult {
     let new_ruleset_space = calculate_ruleset_size(&ix.allowed_programs, &ix.disallowed_addresses);
     let mut ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
-    ruleset.set_account_type();
     ruleset.authority = ix.authority;
     ruleset.collector = ix.collector;
     ruleset.check_seller_fee_basis_points = ix.check_seller_fee_basis_points;

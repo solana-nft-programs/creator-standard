@@ -8,6 +8,7 @@ use solana_program::msg;
 use solana_program::pubkey::Pubkey;
 
 pub mod errors;
+pub mod hash;
 pub mod instructions;
 pub mod pda;
 pub mod state;
