@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use crate::state::calculate_ruleset_size;
 use crate::state::CreatorStandardAccount;
 use crate::state::Ruleset;
@@ -122,26 +124,30 @@ pub fn handler(ctx: UpdateRulesetCtx, ix: UpdateRulesetIx) -> ProgramResult {
     let rent = Rent::get()?;
     let new_minimum_balance = rent.minimum_balance(new_ruleset_space);
 
-    if new_minimum_balance > ctx.ruleset.lamports() {
-        let lamports_diff = new_minimum_balance.saturating_sub(ctx.ruleset.lamports());
-        invoke(
-            &transfer(ctx.payer.key, ctx.ruleset.key, lamports_diff),
-            &[
-                ctx.payer.clone(),
-                ctx.ruleset.clone(),
-                ctx.system_program.clone(),
-            ],
-        )?;
-    } else if new_minimum_balance < ctx.ruleset.lamports() {
-        let lamports_diff = ctx.ruleset.lamports().saturating_sub(new_minimum_balance);
-        invoke(
-            &transfer(ctx.ruleset.key, ctx.authority.key, lamports_diff),
-            &[
-                ctx.ruleset.clone(),
-                ctx.authority.clone(),
-                ctx.system_program.clone(),
-            ],
-        )?;
+    match new_minimum_balance.cmp(&ctx.ruleset.lamports()) {
+        Ordering::Less => {
+            let lamports_diff = ctx.ruleset.lamports().saturating_sub(new_minimum_balance);
+            invoke(
+                &transfer(ctx.ruleset.key, ctx.authority.key, lamports_diff),
+                &[
+                    ctx.ruleset.clone(),
+                    ctx.authority.clone(),
+                    ctx.system_program.clone(),
+                ],
+            )?;
+        }
+        Ordering::Greater => {
+            let lamports_diff = new_minimum_balance.saturating_sub(ctx.ruleset.lamports());
+            invoke(
+                &transfer(ctx.payer.key, ctx.ruleset.key, lamports_diff),
+                &[
+                    ctx.payer.clone(),
+                    ctx.ruleset.clone(),
+                    ctx.system_program.clone(),
+                ],
+            )?;
+        }
+        Ordering::Equal => {}
     }
 
     ctx.ruleset.realloc(new_ruleset_space, false)?;
