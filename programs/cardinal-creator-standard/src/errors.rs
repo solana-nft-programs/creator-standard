@@ -60,6 +60,8 @@ pub enum ErrorCode {
     InvalidFreezeAuthority,
     #[error("Invalid mint authority")]
     InvalidMintAuthority,
+    #[error("Not enought remaining accounts")]
+    NotEnoughRemainingAccounts,
 }
 
 impl PrintProgramError for ErrorCode {

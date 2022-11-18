@@ -229,8 +229,13 @@ pub fn assert_ruleset_seeds(
 pub fn calculate_ruleset_size(
     allowed_programs: &Vec<Pubkey>,
     disallowed_addresses: &Vec<Pubkey>,
+    extensions: &Vec<Pubkey>,
 ) -> usize {
-    std::mem::size_of::<Ruleset>() + allowed_programs.len() + disallowed_addresses.len() + 64
+    std::mem::size_of::<Ruleset>()
+        + allowed_programs.len()
+        + disallowed_addresses.len()
+        + extensions.len()
+        + 64
 }
 
 #[repr(C)]
@@ -245,6 +250,7 @@ pub struct Ruleset {
     pub name: String,
     pub allowed_programs: Vec<Pubkey>,
     pub disallowed_addresses: Vec<Pubkey>,
+    pub extensions: Vec<Pubkey>,
 }
 
 impl CreatorStandardAccount for Ruleset {
@@ -265,6 +271,7 @@ impl CreatorStandardAccount for Ruleset {
             name: String::from(""),
             allowed_programs: Vec::new(),
             disallowed_addresses: Vec::new(),
+            extensions: Vec::new(),
         }
     }
 
