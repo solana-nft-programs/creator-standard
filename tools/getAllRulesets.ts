@@ -42,6 +42,7 @@ const main = async (cluster = "devnet") => {
       ruleset[0].toString(),
       ruleset[1].name,
       ruleset[1].accountType.toString(),
+      ruleset[1].allowedPrograms,
     ])
   );
 };

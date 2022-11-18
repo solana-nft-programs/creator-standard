@@ -15,7 +15,7 @@ export type RulesetParams = {
 
 const wallet = Keypair.fromSecretKey(
   anchor.utils.bytes.bs58.decode(process.env.RULESET_AUTHORITY || "")
-); // your wallet's secret key // your wallet's secret key
+); // your wallet's secret key
 
 const main = async (params: RulesetParams, cluster = "devnet") => {
   const connection = connectionFor(cluster);
