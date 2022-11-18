@@ -875,132 +875,132 @@
   ],
   "errors": [
     {
-      "code": 0,
+      "code": 6000,
       "name": "InvalidAccountType",
       "msg": "Invalid account type"
     },
     {
-      "code": 1,
+      "code": 6001,
       "name": "DataTypeMismatch",
       "msg": "Data type mismatch"
     },
     {
-      "code": 2,
+      "code": 6002,
       "name": "InvalidMint",
       "msg": "Invalid mint"
     },
     {
-      "code": 3,
+      "code": 6003,
       "name": "InvalidAmount",
       "msg": "Invalid amount"
     },
     {
-      "code": 4,
+      "code": 6004,
       "name": "InvalidTokenAccount",
       "msg": "Invalid token account"
     },
     {
-      "code": 5,
+      "code": 6005,
       "name": "InvalidCollector",
       "msg": "Invalid collector address"
     },
     {
-      "code": 6,
+      "code": 6006,
       "name": "InvalidRulesetCollector",
       "msg": "Invalid ruleset collector address"
     },
     {
-      "code": 7,
+      "code": 6007,
       "name": "InvalidAuthority",
       "msg": "Invalid authority address"
     },
     {
-      "code": 8,
+      "code": 6008,
       "name": "InvalidMintManager",
       "msg": "Invalid mint manager"
     },
     {
-      "code": 9,
+      "code": 6009,
       "name": "InvlaidHolderTokenAccount",
       "msg": "Invalid holder token account"
     },
     {
-      "code": 10,
+      "code": 6010,
       "name": "InvalidTargetTokenAccount",
       "msg": "Invalid target token account"
     },
     {
-      "code": 11,
+      "code": 6011,
       "name": "InvalidCloseTokenAccount",
       "msg": "Invalid token account to close"
     },
     {
-      "code": 12,
+      "code": 6012,
       "name": "InvalidHolderTokenAccount",
       "msg": "Invalid holder token account"
     },
     {
-      "code": 13,
+      "code": 6013,
       "name": "InvalidRuleset",
       "msg": "Invalid ruleset"
     },
     {
-      "code": 14,
+      "code": 6014,
       "name": "InvalidPreTransferInstruction",
       "msg": "Invalid pre transfer instruction"
     },
     {
-      "code": 15,
+      "code": 6015,
       "name": "InvalidPostTransferInstruction",
       "msg": "Invalid post transfer instruction"
     },
     {
-      "code": 16,
+      "code": 6016,
       "name": "ProgramDisallowed",
       "msg": "Disallowed program included in transfer"
     },
     {
-      "code": 17,
+      "code": 6017,
       "name": "ProgramNotAllowed",
       "msg": "Program not allowed in allowed programs to transfer"
     },
     {
-      "code": 18,
+      "code": 6018,
       "name": "UnknownAccount",
       "msg": "Unknown account found in instruction"
     },
     {
-      "code": 19,
+      "code": 6019,
       "name": "AccountNotFound",
       "msg": "Account not found in instruction"
     },
     {
-      "code": 20,
+      "code": 6020,
       "name": "TokenAlreadyInUse",
       "msg": "Token already in use"
     },
     {
-      "code": 21,
+      "code": 6021,
       "name": "InvalidTokenUser",
       "msg": "Invalid token user"
     },
     {
-      "code": 22,
+      "code": 6022,
       "name": "TokenCurentlyInUse",
       "msg": "Token currently in use"
     },
     {
-      "code": 23,
+      "code": 6023,
       "name": "InvalidRulesetAuthority",
       "msg": "Invalid ruleset authority"
     },
     {
-      "code": 24,
+      "code": 6024,
       "name": "InvalidFreezeAuthority",
       "msg": "Invalid freeze authority"
     },
     {
-      "code": 25,
+      "code": 6025,
       "name": "InvalidMintAuthority",
       "msg": "Invalid mint authority"
     }

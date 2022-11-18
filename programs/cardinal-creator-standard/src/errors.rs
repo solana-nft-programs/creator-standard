@@ -9,7 +9,7 @@ use {num_derive::FromPrimitive, thiserror::Error};
 #[derive(Clone, Debug, Eq, Error, FromPrimitive, PartialEq)]
 pub enum ErrorCode {
     #[error("Invalid account type")]
-    InvalidAccountType,
+    InvalidAccountType = 6000,
     #[error("Data type mismatch")]
     DataTypeMismatch,
     #[error("Invalid mint")]
