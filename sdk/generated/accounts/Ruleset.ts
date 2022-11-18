@@ -15,7 +15,7 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type RulesetArgs = {
-  accountType: number
+  accountType: number[] /* size: 8 */
   version: number
   authority: web3.PublicKey
   collector: web3.PublicKey
@@ -33,7 +33,7 @@ export type RulesetArgs = {
  */
 export class Ruleset implements RulesetArgs {
   private constructor(
-    readonly accountType: number,
+    readonly accountType: number[] /* size: 8 */,
     readonly version: number,
     readonly authority: web3.PublicKey,
     readonly collector: web3.PublicKey,
@@ -172,7 +172,7 @@ export class Ruleset implements RulesetArgs {
  */
 export const rulesetBeet = new beet.FixableBeetStruct<Ruleset, RulesetArgs>(
   [
-    ['accountType', beet.u8],
+    ['accountType', beet.uniformFixedSizeArray(beet.u8, 8)],
     ['version', beet.u8],
     ['authority', beetSolana.publicKey],
     ['collector', beetSolana.publicKey],

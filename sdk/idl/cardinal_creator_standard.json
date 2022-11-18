@@ -656,7 +656,12 @@
         "fields": [
           {
             "name": "accountType",
-            "type": "u8"
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
           },
           {
             "name": "version",
@@ -690,7 +695,12 @@
         "fields": [
           {
             "name": "accountType",
-            "type": "u8"
+            "type": {
+              "array": [
+                "u8",
+                8
+              ]
+            }
           },
           {
             "name": "version",

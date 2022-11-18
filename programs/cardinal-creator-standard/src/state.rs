@@ -2,10 +2,10 @@ use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use shank::ShankAccount;
 use solana_program::entrypoint::ProgramResult;
+use solana_program::hash::hash;
 use solana_program::program_error::ProgramError;
 use solana_program::pubkey::Pubkey;
 
-use crate::hash::hash;
 use crate::utils::assert_with_msg;
 
 use std::collections::HashSet;

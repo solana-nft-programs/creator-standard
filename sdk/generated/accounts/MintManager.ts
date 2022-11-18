@@ -15,7 +15,7 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
  * @category generated
  */
 export type MintManagerArgs = {
-  accountType: number
+  accountType: number[] /* size: 8 */
   version: number
   mint: web3.PublicKey
   authority: web3.PublicKey
@@ -31,7 +31,7 @@ export type MintManagerArgs = {
  */
 export class MintManager implements MintManagerArgs {
   private constructor(
-    readonly accountType: number,
+    readonly accountType: number[] /* size: 8 */,
     readonly version: number,
     readonly mint: web3.PublicKey,
     readonly authority: web3.PublicKey,
@@ -167,7 +167,7 @@ export const mintManagerBeet = new beet.FixableBeetStruct<
   MintManagerArgs
 >(
   [
-    ['accountType', beet.u8],
+    ['accountType', beet.uniformFixedSizeArray(beet.u8, 8)],
     ['version', beet.u8],
     ['mint', beetSolana.publicKey],
     ['authority', beetSolana.publicKey],
