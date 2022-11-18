@@ -58,7 +58,7 @@ export type ApproveAndSetInUseByInstructionAccounts = {
   tokenProgram?: web3.PublicKey
 }
 
-export const approveAndSetInUseByInstructionDiscriminator = 7
+export const approveAndSetInUseByInstructionDiscriminator = 8
 
 /**
  * Creates a _ApproveAndSetInUseBy_ instruction.

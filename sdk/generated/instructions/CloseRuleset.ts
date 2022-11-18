@@ -10,52 +10,52 @@ import * as web3 from '@solana/web3.js'
 
 /**
  * @category Instructions
- * @category RemoveInUseBy
+ * @category CloseRuleset
  * @category generated
  */
-export const RemoveInUseByStruct = new beet.BeetArgsStruct<{
+export const CloseRulesetStruct = new beet.BeetArgsStruct<{
   instructionDiscriminator: number
-}>([['instructionDiscriminator', beet.u8]], 'RemoveInUseByInstructionArgs')
+}>([['instructionDiscriminator', beet.u8]], 'CloseRulesetInstructionArgs')
 /**
- * Accounts required by the _RemoveInUseBy_ instruction
+ * Accounts required by the _CloseRuleset_ instruction
  *
- * @property [_writable_] mintManager
- * @property [**signer**] user
+ * @property [_writable_] ruleset
+ * @property [_writable_, **signer**] authority
  * @category Instructions
- * @category RemoveInUseBy
+ * @category CloseRuleset
  * @category generated
  */
-export type RemoveInUseByInstructionAccounts = {
-  mintManager: web3.PublicKey
-  user: web3.PublicKey
+export type CloseRulesetInstructionAccounts = {
+  ruleset: web3.PublicKey
+  authority: web3.PublicKey
 }
 
-export const removeInUseByInstructionDiscriminator = 6
+export const closeRulesetInstructionDiscriminator = 2
 
 /**
- * Creates a _RemoveInUseBy_ instruction.
+ * Creates a _CloseRuleset_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
  * @category Instructions
- * @category RemoveInUseBy
+ * @category CloseRuleset
  * @category generated
  */
-export function createRemoveInUseByInstruction(
-  accounts: RemoveInUseByInstructionAccounts,
+export function createCloseRulesetInstruction(
+  accounts: CloseRulesetInstructionAccounts,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
-  const [data] = RemoveInUseByStruct.serialize({
-    instructionDiscriminator: removeInUseByInstructionDiscriminator,
+  const [data] = CloseRulesetStruct.serialize({
+    instructionDiscriminator: closeRulesetInstructionDiscriminator,
   })
   const keys: web3.AccountMeta[] = [
     {
-      pubkey: accounts.mintManager,
+      pubkey: accounts.ruleset,
       isWritable: true,
       isSigner: false,
     },
     {
-      pubkey: accounts.user,
-      isWritable: false,
+      pubkey: accounts.authority,
+      isWritable: true,
       isSigner: true,
     },
   ]

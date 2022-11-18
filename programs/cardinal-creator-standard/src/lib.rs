@@ -47,6 +47,10 @@ pub enum CreatorStandardInstruction {
     #[account(3, name = "system_program")]
     UpdateRuleset(UpdateRulesetIx),
 
+    #[account(0, writable, name = "ruleset")]
+    #[account(1, writable, signer, name = "authority")]
+    CloseRuleset,
+
     // mint_manager
     #[account(0, writable, name = "mint_manager")]
     #[account(1, writable, name = "mint")]
@@ -161,6 +165,21 @@ pub fn process_instruction(
 ) -> ProgramResult {
     let instruction = CreatorStandardInstruction::try_from_slice(instruction_data)?;
     match instruction {
+        CreatorStandardInstruction::InitRuleset(ix) => {
+            msg!("CreatorStandardInstruction::InitRuleset");
+            let ctx = InitRulesetCtx::load(accounts)?;
+            instructions::ruleset::init_ruleset::handler(ctx, ix)
+        }
+        CreatorStandardInstruction::UpdateRuleset(ix) => {
+            msg!("CreatorStandardInstruction::UpdateRuleset");
+            let ctx = UpdateRulesetCtx::load(accounts)?;
+            instructions::ruleset::update_ruleset::handler(ctx, ix)
+        }
+        CreatorStandardInstruction::CloseRuleset => {
+            msg!("CreatorStandardInstruction::CloseRuleset");
+            let ctx = CloseRulesetCtx::load(accounts)?;
+            instructions::ruleset::close_ruleset::handler(ctx)
+        }
         CreatorStandardInstruction::InitMintManager => {
             msg!("CreatorStandardInstruction::InitMintManager");
             let ctx = InitMintManagerCtx::load(accounts)?;
@@ -180,16 +199,6 @@ pub fn process_instruction(
             msg!("CreatorStandardInstruction::RemoveInUseBy");
             let ctx = RemoveInUseByCtx::load(accounts)?;
             instructions::mint_manager::remove_in_use_by::handler(ctx)
-        }
-        CreatorStandardInstruction::InitRuleset(ix) => {
-            msg!("CreatorStandardInstruction::InitRuleset");
-            let ctx = InitRulesetCtx::load(accounts)?;
-            instructions::ruleset::init_ruleset::handler(ctx, ix)
-        }
-        CreatorStandardInstruction::UpdateRuleset(ix) => {
-            msg!("CreatorStandardInstruction::UpdateRuleset");
-            let ctx = UpdateRulesetCtx::load(accounts)?;
-            instructions::ruleset::update_ruleset::handler(ctx, ix)
         }
         CreatorStandardInstruction::Approve(ix) => {
             msg!("CreatorStandardInstruction::Approve");

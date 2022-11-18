@@ -57,7 +57,7 @@ export type UpdateMintManagerInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const updateMintManagerInstructionDiscriminator = 3
+export const updateMintManagerInstructionDiscriminator = 4
 
 /**
  * Creates a _UpdateMintManager_ instruction.

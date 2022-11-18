@@ -40,7 +40,7 @@ export type InitializeAccountInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const initializeAccountInstructionDiscriminator = 10
+export const initializeAccountInstructionDiscriminator = 11
 
 /**
  * Creates a _InitializeAccount_ instruction.

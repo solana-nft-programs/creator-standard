@@ -55,7 +55,7 @@ export type ApproveInstructionAccounts = {
   tokenProgram?: web3.PublicKey
 }
 
-export const approveInstructionDiscriminator = 6
+export const approveInstructionDiscriminator = 7
 
 /**
  * Creates a _Approve_ instruction.

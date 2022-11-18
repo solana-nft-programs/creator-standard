@@ -37,7 +37,7 @@ export type BurnInstructionAccounts = {
   systemProgram?: web3.PublicKey
 }
 
-export const burnInstructionDiscriminator = 8
+export const burnInstructionDiscriminator = 9
 
 /**
  * Creates a _Burn_ instruction.
