@@ -1,3 +1,5 @@
+use std::cmp::Ordering;
+
 use crate::state::calculate_ruleset_size;
 use crate::state::CreatorStandardAccount;
 use crate::state::Ruleset;
@@ -27,9 +29,10 @@ pub fn update_ruleset(
     authority: Pubkey,
     payer: Pubkey,
     collector: Pubkey,
-    disallowed_addresses: Vec<Pubkey>,
-    allowed_programs: Vec<Pubkey>,
     check_seller_fee_basis_points: bool,
+    allowed_programs: Vec<Pubkey>,
+    disallowed_addresses: Vec<Pubkey>,
+    extensions: Vec<Pubkey>,
 ) -> Result<Instruction, ProgramError> {
     Ok(Instruction {
         program_id,
@@ -42,9 +45,10 @@ pub fn update_ruleset(
         data: CreatorStandardInstruction::UpdateRuleset(UpdateRulesetIx {
             authority,
             collector,
-            disallowed_addresses,
-            allowed_programs,
             check_seller_fee_basis_points,
+            allowed_programs,
+            disallowed_addresses,
+            extensions,
         })
         .try_to_vec()?,
     })
@@ -56,9 +60,10 @@ pub fn update_ruleset(
 pub struct UpdateRulesetIx {
     pub authority: Pubkey,
     pub collector: Pubkey,
-    pub disallowed_addresses: Vec<Pubkey>,
-    pub allowed_programs: Vec<Pubkey>,
     pub check_seller_fee_basis_points: bool,
+    pub allowed_programs: Vec<Pubkey>,
+    pub disallowed_addresses: Vec<Pubkey>,
+    pub extensions: Vec<Pubkey>,
 }
 
 pub struct UpdateRulesetCtx<'a, 'info> {
@@ -103,37 +108,46 @@ impl<'a, 'info> UpdateRulesetCtx<'a, 'info> {
 }
 
 pub fn handler(ctx: UpdateRulesetCtx, ix: UpdateRulesetIx) -> ProgramResult {
-    let new_ruleset_space = calculate_ruleset_size(&ix.allowed_programs, &ix.disallowed_addresses);
+    let new_ruleset_space = calculate_ruleset_size(
+        &ix.allowed_programs,
+        &ix.disallowed_addresses,
+        &ix.extensions,
+    );
     let mut ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
     ruleset.authority = ix.authority;
     ruleset.collector = ix.collector;
     ruleset.check_seller_fee_basis_points = ix.check_seller_fee_basis_points;
     ruleset.allowed_programs = ix.allowed_programs;
     ruleset.disallowed_addresses = ix.disallowed_addresses;
+    ruleset.extensions = ix.extensions;
 
     let rent = Rent::get()?;
     let new_minimum_balance = rent.minimum_balance(new_ruleset_space);
 
-    if new_minimum_balance > ctx.ruleset.lamports() {
-        let lamports_diff = new_minimum_balance.saturating_sub(ctx.ruleset.lamports());
-        invoke(
-            &transfer(ctx.payer.key, ctx.ruleset.key, lamports_diff),
-            &[
-                ctx.payer.clone(),
-                ctx.ruleset.clone(),
-                ctx.system_program.clone(),
-            ],
-        )?;
-    } else if new_minimum_balance < ctx.ruleset.lamports() {
-        let lamports_diff = ctx.ruleset.lamports().saturating_sub(new_minimum_balance);
-        invoke(
-            &transfer(ctx.ruleset.key, ctx.authority.key, lamports_diff),
-            &[
-                ctx.ruleset.clone(),
-                ctx.authority.clone(),
-                ctx.system_program.clone(),
-            ],
-        )?;
+    match new_minimum_balance.cmp(&ctx.ruleset.lamports()) {
+        Ordering::Less => {
+            let lamports_diff = ctx.ruleset.lamports().saturating_sub(new_minimum_balance);
+            invoke(
+                &transfer(ctx.ruleset.key, ctx.authority.key, lamports_diff),
+                &[
+                    ctx.ruleset.clone(),
+                    ctx.authority.clone(),
+                    ctx.system_program.clone(),
+                ],
+            )?;
+        }
+        Ordering::Greater => {
+            let lamports_diff = new_minimum_balance.saturating_sub(ctx.ruleset.lamports());
+            invoke(
+                &transfer(ctx.payer.key, ctx.ruleset.key, lamports_diff),
+                &[
+                    ctx.payer.clone(),
+                    ctx.ruleset.clone(),
+                    ctx.system_program.clone(),
+                ],
+            )?;
+        }
+        Ordering::Equal => {}
     }
 
     ctx.ruleset.realloc(new_ruleset_space, false)?;

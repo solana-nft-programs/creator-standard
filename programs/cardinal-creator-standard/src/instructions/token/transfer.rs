@@ -64,6 +64,7 @@ pub struct TransferCtx<'a, 'info> {
     pub token_program: &'a AccountInfo<'info>,
     pub system_program: &'a AccountInfo<'info>,
     pub instructions: &'a AccountInfo<'info>,
+    pub remaining_accounts: Vec<&'a AccountInfo<'info>>,
 }
 
 impl<'a, 'info> TransferCtx<'a, 'info> {
@@ -79,6 +80,7 @@ impl<'a, 'info> TransferCtx<'a, 'info> {
             token_program: next_account_info(account_iter)?,
             system_program: next_account_info(account_iter)?,
             instructions: next_account_info(account_iter)?,
+            remaining_accounts: account_iter.collect(),
         };
         // deserializations
         let mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
@@ -149,12 +151,35 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
     /////////////// check allowed / disallowed ///////////////
     let mut allowed_programs = HashSet::new();
     for program_id in &ruleset.allowed_programs {
-        allowed_programs.insert(program_id);
+        allowed_programs.insert(program_id.to_string());
     }
 
     let mut disallowed_addresses = HashSet::new();
     for program_id in &ruleset.disallowed_addresses {
-        disallowed_addresses.insert(program_id);
+        disallowed_addresses.insert(program_id.to_string());
+    }
+
+    let mut count: usize = 0;
+    for ruleset_pubkey in &ruleset.extensions {
+        let extension_ruleset_info_uncheked = ctx.remaining_accounts.get(count);
+        count += 1;
+        if extension_ruleset_info_uncheked.is_none() {
+            return Err(ProgramError::from(ErrorCode::NotEnoughRemainingAccounts));
+        }
+        let extension_ruleset_info = extension_ruleset_info_uncheked.unwrap();
+        if extension_ruleset_info.key != ruleset_pubkey {
+            return Err(ProgramError::from(ErrorCode::InvalidRuleset));
+        }
+        let extension_ruleset: Ruleset = Ruleset::from_account_info(extension_ruleset_info)
+            .expect("Invalid ruleset remaining account");
+
+        for program_id in extension_ruleset.allowed_programs {
+            allowed_programs.insert(program_id.to_string().clone());
+        }
+
+        for program_id in extension_ruleset.disallowed_addresses {
+            disallowed_addresses.insert(program_id.to_string().clone());
+        }
     }
 
     for i in 0..num_instructions {
@@ -163,13 +188,15 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
 
         if !allowed_programs.is_empty()
             && !is_default_program(&ix.program_id)
-            && !allowed_programs.contains(&ix.program_id)
+            && !allowed_programs.contains(&ix.program_id.to_string())
         {
             return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));
         }
 
         for account in ix.accounts {
-            if !disallowed_addresses.is_empty() && disallowed_addresses.contains(&account.pubkey) {
+            if !disallowed_addresses.is_empty()
+                && disallowed_addresses.contains(&account.pubkey.to_string())
+            {
                 return Err(ProgramError::from(ErrorCode::ProgramDisallowed));
             }
         }

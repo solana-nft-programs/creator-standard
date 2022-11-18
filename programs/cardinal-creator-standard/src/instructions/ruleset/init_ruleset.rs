@@ -35,9 +35,10 @@ pub fn init_ruleset(
     payer: Pubkey,
     name: String,
     collector: Pubkey,
-    disallowed_addresses: Vec<Pubkey>,
-    allowed_programs: Vec<Pubkey>,
     check_seller_fee_basis_points: bool,
+    allowed_programs: Vec<Pubkey>,
+    disallowed_addresses: Vec<Pubkey>,
+    extensions: Vec<Pubkey>,
 ) -> Result<Instruction, ProgramError> {
     Ok(Instruction {
         program_id,
@@ -50,9 +51,10 @@ pub fn init_ruleset(
         data: CreatorStandardInstruction::InitRuleset(InitRulesetIx {
             name,
             collector,
+            check_seller_fee_basis_points,
             disallowed_addresses,
             allowed_programs,
-            check_seller_fee_basis_points,
+            extensions,
         })
         .try_to_vec()?,
     })
@@ -64,9 +66,10 @@ pub fn init_ruleset(
 pub struct InitRulesetIx {
     pub name: String,
     pub collector: Pubkey,
-    pub disallowed_addresses: Vec<Pubkey>,
-    pub allowed_programs: Vec<Pubkey>,
     pub check_seller_fee_basis_points: bool,
+    pub allowed_programs: Vec<Pubkey>,
+    pub disallowed_addresses: Vec<Pubkey>,
+    pub extensions: Vec<Pubkey>,
 }
 
 pub struct InitRulesetCtx<'a, 'info> {
@@ -114,7 +117,11 @@ impl<'a, 'info> InitRulesetCtx<'a, 'info> {
 
 pub fn handler(ctx: InitRulesetCtx, ix: InitRulesetIx) -> ProgramResult {
     let ruleset_seeds = assert_ruleset_seeds(&ix.name, ctx.ruleset.key)?;
-    let ruleset_space = calculate_ruleset_size(&ix.allowed_programs, &ix.disallowed_addresses);
+    let ruleset_space = calculate_ruleset_size(
+        &ix.allowed_programs,
+        &ix.disallowed_addresses,
+        &ix.extensions,
+    );
     invoke_signed(
         &create_account(
             ctx.payer.key,
@@ -138,6 +145,7 @@ pub fn handler(ctx: InitRulesetCtx, ix: InitRulesetIx) -> ProgramResult {
     ruleset.name = ix.name;
     ruleset.allowed_programs = ix.allowed_programs;
     ruleset.disallowed_addresses = ix.disallowed_addresses;
+    ruleset.extensions = ix.extensions;
     ruleset.save(ctx.ruleset)?;
 
     Ok(())
