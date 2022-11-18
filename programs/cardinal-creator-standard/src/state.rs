@@ -147,7 +147,7 @@ pub struct MintManager {
 
 impl CreatorStandardAccount for MintManager {
     fn hash() -> [u8; 8] {
-        let discriminator_preimage = format!("account:{}", "mint_manager");
+        let discriminator_preimage = format!("account:{}", "MintManager");
         let mut discriminator = [0u8; 8];
         discriminator.copy_from_slice(&hash(discriminator_preimage.as_bytes()).to_bytes()[..8]);
         discriminator
@@ -249,7 +249,7 @@ pub struct Ruleset {
 
 impl CreatorStandardAccount for Ruleset {
     fn hash() -> [u8; 8] {
-        let discriminator_preimage = format!("account:{}", "ruleset");
+        let discriminator_preimage = format!("account:{}", "Ruleset");
         let mut discriminator = [0u8; 8];
         discriminator.copy_from_slice(&hash(discriminator_preimage.as_bytes()).to_bytes()[..8]);
         discriminator

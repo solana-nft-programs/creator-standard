@@ -1,4 +1,5 @@
 import * as anchor from "@project-serum/anchor";
+import { BorshAccountsCoder } from "@project-serum/anchor";
 import { PublicKey } from "@solana/web3.js";
 import dotenv from "dotenv";
 
@@ -22,7 +23,7 @@ const main = async (cluster = "devnet") => {
           memcmp: {
             offset: 0,
             bytes: anchor.utils.bytes.bs58.encode(
-              new anchor.BN(0).toArrayLike(Buffer, "le", 1)
+              BorshAccountsCoder.accountDiscriminator("ruleset")
             ),
           },
         },
