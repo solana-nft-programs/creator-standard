@@ -38,6 +38,7 @@ export const ApproveStruct = new beet.BeetArgsStruct<
  * Accounts required by the _Approve_ instruction
  *
  * @property [] mintManager
+ * @property [] ruleset
  * @property [] mint
  * @property [_writable_] holderTokenAccount
  * @property [**signer**] holder
@@ -48,6 +49,7 @@ export const ApproveStruct = new beet.BeetArgsStruct<
  */
 export type ApproveInstructionAccounts = {
   mintManager: web3.PublicKey
+  ruleset: web3.PublicKey
   mint: web3.PublicKey
   holderTokenAccount: web3.PublicKey
   holder: web3.PublicKey
@@ -79,6 +81,11 @@ export function createApproveInstruction(
   const keys: web3.AccountMeta[] = [
     {
       pubkey: accounts.mintManager,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.ruleset,
       isWritable: false,
       isSigner: false,
     },

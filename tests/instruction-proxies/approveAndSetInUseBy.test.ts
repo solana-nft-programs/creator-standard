@@ -109,7 +109,9 @@ test("Delegate and set in_use_by", async () => {
     createApproveAndSetInUseByInstruction(
       {
         mintManager: mintManagerId,
+        ruleset: RULESET_ID,
         mint: mintKeypair.publicKey,
+        inUseByAddress: inUseByAddress.publicKey,
         holderTokenAccount: holderAtaId,
         holder: provider.wallet.publicKey,
         delegate: delegate.publicKey,
@@ -117,7 +119,6 @@ test("Delegate and set in_use_by", async () => {
       {
         approveAndSetInUseByIx: {
           amount: 1,
-          inUseByAddress: inUseByAddress.publicKey,
         },
       }
     )

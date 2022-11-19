@@ -36,6 +36,7 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
           checkSellerFeeBasisPoints: false,
           disallowedAddresses: [],
           allowedPrograms: [],
+          extensions: [],
         },
       }
     )

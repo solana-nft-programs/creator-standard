@@ -1,7 +1,6 @@
 use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::is_default_program;
-use crate::state::AccountType;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
@@ -74,7 +73,7 @@ impl<'a, 'info> SetInUseByCtx<'a, 'info> {
 
         // ruleset
         assert_address(&mint_manager.ruleset, ctx.ruleset.key, "ruleset")?;
-        assert_program_account(ctx.ruleset, &AccountType::Ruleset)?;
+        assert_program_account(ctx.ruleset, Ruleset::hash())?;
 
         ///// no checks for in_use_by_address /////
 

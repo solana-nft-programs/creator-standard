@@ -24,7 +24,7 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
   if (!params.pubkey && !params.name)
     throw new Error("No name or pubkey provided");
 
-  const rulesetId = params.pubkey || findRulesetId(params.name!);
+  const rulesetId = params.pubkey || findRulesetId(params.name || "");
   transaction.add(
     createCloseRulesetInstruction({
       ruleset: rulesetId,

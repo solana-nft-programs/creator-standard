@@ -73,7 +73,7 @@ pub trait CreatorStandardAccount {
     fn hash() -> [u8; 8];
 
     fn safe_deserialize<T: BorshDeserialize>(mut data: &[u8]) -> Result<T, BorshError> {
-        if !is_correct_account_type(data, Self::account_type()) {
+        if !is_correct_account_type(data, Self::hash()) {
             return Err(BorshError::new(ErrorKind::Other, "InvalidAccountType"));
         }
 
@@ -96,8 +96,8 @@ pub trait CreatorStandardAccount {
     }
 }
 
-pub fn is_correct_account_type(data: &[u8], data_type: AccountType) -> bool {
-    data[0] == data_type as u8
+pub fn is_correct_account_type(data: &[u8], discriminator: [u8; 8]) -> bool {
+    data[..8] == discriminator
 }
 ///////////// CREATOR STANDARD ACCOUNT /////////////
 
@@ -174,7 +174,7 @@ impl CreatorStandardAccount for MintManager {
     }
 
     fn safe_deserialize<T: BorshDeserialize>(mut data: &[u8]) -> Result<T, BorshError> {
-        if !is_correct_account_type(data, Self::account_type()) {
+        if !is_correct_account_type(data, Self::hash()) {
             return Err(BorshError::new(ErrorKind::Other, "InvalidAccountType"));
         }
 
@@ -305,10 +305,10 @@ pub fn allowlist_disallowlist(
     let mut count: usize = 0;
     for ruleset_pubkey in &ruleset.extensions {
         let extension_ruleset_info_uncheked = remaining_accounts.get(count);
-        count += 1;
         if extension_ruleset_info_uncheked.is_none() {
             return Err(ProgramError::from(ErrorCode::NotEnoughRemainingAccounts));
         }
+        count += 1;
         let extension_ruleset_info = extension_ruleset_info_uncheked.unwrap();
         if extension_ruleset_info.key != ruleset_pubkey {
             return Err(ProgramError::from(ErrorCode::InvalidRuleset));

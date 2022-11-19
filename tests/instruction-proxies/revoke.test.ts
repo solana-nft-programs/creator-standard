@@ -103,6 +103,7 @@ test("Delegate", async () => {
     createApproveInstruction(
       {
         mintManager: mintManagerId,
+        ruleset: RULESET_ID,
         mint: mintKeypair.publicKey,
         holderTokenAccount: holderAtaId,
         holder: provider.wallet.publicKey,
