@@ -115,14 +115,15 @@ pub fn handler(ctx: SetInUseByCtx) -> ProgramResult {
     let [allowed_programs, disallowed_addresses] =
         allowlist_disallowlist(&ruleset, ctx.remaining_accounts)?;
     if !allowed_programs.is_empty()
-        && !is_default_program(&ctx.in_use_by_address.owner)
+        && !is_default_program(ctx.in_use_by_address.owner)
         && !allowed_programs.contains(&ctx.in_use_by_address.owner.to_string())
     {
         return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));
     }
 
-    if disallowed_addresses.contains(&ctx.in_use_by_address.owner.to_string())
-        || disallowed_addresses.contains(&ctx.in_use_by_address.key.to_string())
+    if !disallowed_addresses.is_empty()
+        && (disallowed_addresses.contains(&ctx.in_use_by_address.owner.to_string())
+            || disallowed_addresses.contains(&ctx.in_use_by_address.key.to_string()))
     {
         return Err(ProgramError::from(ErrorCode::AddressDisallowed));
     }

@@ -159,8 +159,9 @@ pub fn handler(ctx: ApproveAndSetInUseByCtx, ix: ApproveAndSetInUseByIx) -> Prog
         return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));
     }
 
-    if disallowed_addresses.contains(&ctx.in_use_by_address.owner.to_string())
-        || disallowed_addresses.contains(&ctx.in_use_by_address.key.to_string())
+    if !disallowed_addresses.is_empty()
+        && (disallowed_addresses.contains(&ctx.in_use_by_address.owner.to_string())
+            || disallowed_addresses.contains(&ctx.in_use_by_address.key.to_string()))
     {
         return Err(ProgramError::from(ErrorCode::AddressDisallowed));
     }

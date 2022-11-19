@@ -149,8 +149,9 @@ pub fn handler(ctx: ApproveCtx, ix: ApproveIx) -> ProgramResult {
         return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));
     }
 
-    if disallowed_addresses.contains(&ctx.delegate.owner.to_string())
-        || disallowed_addresses.contains(&ctx.delegate.key.to_string())
+    if !disallowed_addresses.is_empty()
+        && (disallowed_addresses.contains(&ctx.delegate.owner.to_string())
+            || disallowed_addresses.contains(&ctx.delegate.key.to_string()))
     {
         return Err(ProgramError::from(ErrorCode::AddressDisallowed));
     }

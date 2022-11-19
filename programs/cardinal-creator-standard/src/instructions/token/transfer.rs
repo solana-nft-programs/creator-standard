@@ -160,7 +160,8 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
 
         for account in ix.accounts {
             if !disallowed_addresses.is_empty()
-                && disallowed_addresses.contains(&account.pubkey.to_string())
+                && (disallowed_addresses.contains(&ix.program_id.to_string())
+                    || disallowed_addresses.contains(&account.pubkey.to_string()))
             {
                 return Err(ProgramError::from(ErrorCode::AddressDisallowed));
             }
