@@ -386,26 +386,26 @@ createErrorFromNameLookup.set(
 )
 
 /**
- * ProgramDisallowed: 'Disallowed program included in transfer'
+ * AddressDisallowed: 'Disallowed address included'
  *
  * @category Errors
  * @category generated
  */
-export class ProgramDisallowedError extends Error {
+export class AddressDisallowedError extends Error {
   readonly code: number = 0x1780
-  readonly name: string = 'ProgramDisallowed'
+  readonly name: string = 'AddressDisallowed'
   constructor() {
-    super('Disallowed program included in transfer')
+    super('Disallowed address included')
     if (typeof Error.captureStackTrace === 'function') {
-      Error.captureStackTrace(this, ProgramDisallowedError)
+      Error.captureStackTrace(this, AddressDisallowedError)
     }
   }
 }
 
-createErrorFromCodeLookup.set(0x1780, () => new ProgramDisallowedError())
+createErrorFromCodeLookup.set(0x1780, () => new AddressDisallowedError())
 createErrorFromNameLookup.set(
-  'ProgramDisallowed',
-  () => new ProgramDisallowedError()
+  'AddressDisallowed',
+  () => new AddressDisallowedError()
 )
 
 /**
@@ -610,6 +610,32 @@ createErrorFromCodeLookup.set(0x1789, () => new InvalidMintAuthorityError())
 createErrorFromNameLookup.set(
   'InvalidMintAuthority',
   () => new InvalidMintAuthorityError()
+)
+
+/**
+ * NotEnoughRemainingAccounts: 'Not enought remaining accounts'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class NotEnoughRemainingAccountsError extends Error {
+  readonly code: number = 0x178a
+  readonly name: string = 'NotEnoughRemainingAccounts'
+  constructor() {
+    super('Not enought remaining accounts')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, NotEnoughRemainingAccountsError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(
+  0x178a,
+  () => new NotEnoughRemainingAccountsError()
+)
+createErrorFromNameLookup.set(
+  'NotEnoughRemainingAccounts',
+  () => new NotEnoughRemainingAccountsError()
 )
 
 /**

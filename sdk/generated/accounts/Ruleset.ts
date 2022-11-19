@@ -23,6 +23,7 @@ export type RulesetArgs = {
   name: string
   allowedPrograms: web3.PublicKey[]
   disallowedAddresses: web3.PublicKey[]
+  extensions: web3.PublicKey[]
 }
 /**
  * Holds the data for the {@link Ruleset} Account and provides de/serialization
@@ -40,7 +41,8 @@ export class Ruleset implements RulesetArgs {
     readonly checkSellerFeeBasisPoints: boolean,
     readonly name: string,
     readonly allowedPrograms: web3.PublicKey[],
-    readonly disallowedAddresses: web3.PublicKey[]
+    readonly disallowedAddresses: web3.PublicKey[],
+    readonly extensions: web3.PublicKey[]
   ) {}
 
   /**
@@ -55,7 +57,8 @@ export class Ruleset implements RulesetArgs {
       args.checkSellerFeeBasisPoints,
       args.name,
       args.allowedPrograms,
-      args.disallowedAddresses
+      args.disallowedAddresses,
+      args.extensions
     )
   }
 
@@ -162,6 +165,7 @@ export class Ruleset implements RulesetArgs {
       name: this.name,
       allowedPrograms: this.allowedPrograms,
       disallowedAddresses: this.disallowedAddresses,
+      extensions: this.extensions,
     }
   }
 }
@@ -180,6 +184,7 @@ export const rulesetBeet = new beet.FixableBeetStruct<Ruleset, RulesetArgs>(
     ['name', beet.utf8String],
     ['allowedPrograms', beet.array(beetSolana.publicKey)],
     ['disallowedAddresses', beet.array(beetSolana.publicKey)],
+    ['extensions', beet.array(beetSolana.publicKey)],
   ],
   Ruleset.fromArgs,
   'Ruleset'

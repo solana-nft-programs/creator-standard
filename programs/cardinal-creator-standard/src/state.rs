@@ -288,28 +288,43 @@ impl CreatorStandardAccount for Ruleset {
 ///////////// RULESET /////////////
 
 ///////////// UTILS /////////////
-pub fn check_program(program_id: Pubkey, ruleset: &Ruleset) -> bool {
+pub fn allowlist_disallowlist(
+    ruleset: &Ruleset,
+    remaining_accounts: Vec<&AccountInfo>,
+) -> Result<[HashSet<String>; 2], ProgramError> {
     let mut allowed_programs = HashSet::new();
     for program_id in &ruleset.allowed_programs {
-        allowed_programs.insert(program_id);
+        allowed_programs.insert(program_id.to_string());
     }
 
     let mut disallowed_addresses = HashSet::new();
     for program_id in &ruleset.disallowed_addresses {
-        disallowed_addresses.insert(program_id);
+        disallowed_addresses.insert(program_id.to_string());
     }
 
-    if !allowed_programs.is_empty()
-        && !is_default_program(&program_id)
-        && !allowed_programs.contains(&program_id)
-    {
-        return false;
+    let mut count: usize = 0;
+    for ruleset_pubkey in &ruleset.extensions {
+        let extension_ruleset_info_uncheked = remaining_accounts.get(count);
+        count += 1;
+        if extension_ruleset_info_uncheked.is_none() {
+            return Err(ProgramError::from(ErrorCode::NotEnoughRemainingAccounts));
+        }
+        let extension_ruleset_info = extension_ruleset_info_uncheked.unwrap();
+        if extension_ruleset_info.key != ruleset_pubkey {
+            return Err(ProgramError::from(ErrorCode::InvalidRuleset));
+        }
+        let extension_ruleset: Ruleset = Ruleset::from_account_info(extension_ruleset_info)
+            .expect("Invalid ruleset remaining account");
+
+        for program_id in extension_ruleset.allowed_programs {
+            allowed_programs.insert(program_id.to_string().clone());
+        }
+
+        for program_id in extension_ruleset.disallowed_addresses {
+            disallowed_addresses.insert(program_id.to_string().clone());
+        }
     }
 
-    if !disallowed_addresses.is_empty() && disallowed_addresses.contains(&program_id) {
-        return false;
-    }
-
-    return true;
+    return Ok([allowed_programs, disallowed_addresses]);
 }
 ///////////// UTILS /////////////
