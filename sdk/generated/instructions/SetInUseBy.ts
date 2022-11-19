@@ -7,32 +7,15 @@
 
 import * as beet from '@metaplex-foundation/beet'
 import * as web3 from '@solana/web3.js'
-import { SetInUseByIx, setInUseByIxBeet } from '../types/SetInUseByIx'
 
 /**
  * @category Instructions
  * @category SetInUseBy
  * @category generated
  */
-export type SetInUseByInstructionArgs = {
-  setInUseByIx: SetInUseByIx
-}
-/**
- * @category Instructions
- * @category SetInUseBy
- * @category generated
- */
-export const SetInUseByStruct = new beet.BeetArgsStruct<
-  SetInUseByInstructionArgs & {
-    instructionDiscriminator: number
-  }
->(
-  [
-    ['instructionDiscriminator', beet.u8],
-    ['setInUseByIx', setInUseByIxBeet],
-  ],
-  'SetInUseByInstructionArgs'
-)
+export const SetInUseByStruct = new beet.BeetArgsStruct<{
+  instructionDiscriminator: number
+}>([['instructionDiscriminator', beet.u8]], 'SetInUseByInstructionArgs')
 /**
  * Accounts required by the _SetInUseBy_ instruction
  *
@@ -55,20 +38,16 @@ export const setInUseByInstructionDiscriminator = 5
  * Creates a _SetInUseBy_ instruction.
  *
  * @param accounts that will be accessed while the instruction is processed
- * @param args to provide as instruction data to the program
- *
  * @category Instructions
  * @category SetInUseBy
  * @category generated
  */
 export function createSetInUseByInstruction(
   accounts: SetInUseByInstructionAccounts,
-  args: SetInUseByInstructionArgs,
   programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
 ) {
   const [data] = SetInUseByStruct.serialize({
     instructionDiscriminator: setInUseByInstructionDiscriminator,
-    ...args,
   })
   const keys: web3.AccountMeta[] = [
     {

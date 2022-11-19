@@ -1,10 +1,15 @@
 use crate::errors::ErrorCode;
+use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
+use crate::state::is_default_program;
+use crate::state::AccountType;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
+use crate::state::Ruleset;
 use crate::utils::assert_address;
 use crate::utils::assert_amount;
 use crate::utils::assert_mut;
+use crate::utils::assert_program_account;
 use crate::utils::assert_signer;
 use crate::utils::assert_with_msg;
 use crate::utils::unpack_checked_token_account;
@@ -24,6 +29,7 @@ use solana_program::pubkey::Pubkey;
 pub fn approve_and_set_in_use_by(
     program_id: Pubkey,
     mint_manager: Pubkey,
+    ruleset: Pubkey,
     mint: Pubkey,
     holder_token_account: Pubkey,
     holder: Pubkey,
@@ -35,17 +41,16 @@ pub fn approve_and_set_in_use_by(
         program_id,
         accounts: vec![
             AccountMeta::new(mint_manager, false),
+            AccountMeta::new_readonly(ruleset, false),
             AccountMeta::new_readonly(mint, false),
+            AccountMeta::new_readonly(in_use_by_address, false),
             AccountMeta::new(holder_token_account, false),
             AccountMeta::new_readonly(holder, true),
             AccountMeta::new_readonly(delegate, false),
             AccountMeta::new_readonly(spl_token::id(), false),
         ],
-        data: CreatorStandardInstruction::ApproveAndSetInUseBy(ApproveAndSetInUseByIx {
-            amount,
-            in_use_by_address,
-        })
-        .try_to_vec()?,
+        data: CreatorStandardInstruction::ApproveAndSetInUseBy(ApproveAndSetInUseByIx { amount })
+            .try_to_vec()?,
     })
 }
 
@@ -54,15 +59,17 @@ pub fn approve_and_set_in_use_by(
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone)]
 pub struct ApproveAndSetInUseByIx {
     pub amount: u64,
-    pub in_use_by_address: Pubkey,
 }
 pub struct ApproveAndSetInUseByCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
+    pub ruleset: &'a AccountInfo<'info>,
     pub mint: &'a AccountInfo<'info>,
+    pub in_use_by_address: &'a AccountInfo<'info>,
     pub holder_token_account: &'a AccountInfo<'info>,
     pub holder: &'a AccountInfo<'info>,
     pub delegate: &'a AccountInfo<'info>,
     pub token_program: &'a AccountInfo<'info>,
+    pub remaining_accounts: Vec<&'a AccountInfo<'info>>,
 }
 
 impl<'a, 'info> ApproveAndSetInUseByCtx<'a, 'info> {
@@ -70,11 +77,14 @@ impl<'a, 'info> ApproveAndSetInUseByCtx<'a, 'info> {
         let account_iter = &mut accounts.iter();
         let ctx = Self {
             mint_manager: next_account_info(account_iter)?,
+            ruleset: next_account_info(account_iter)?,
             mint: next_account_info(account_iter)?,
+            in_use_by_address: next_account_info(account_iter)?,
             holder_token_account: next_account_info(account_iter)?,
             holder: next_account_info(account_iter)?,
             delegate: next_account_info(account_iter)?,
             token_program: next_account_info(account_iter)?,
+            remaining_accounts: account_iter.collect(),
         };
         // deserializations
         let mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
@@ -85,7 +95,13 @@ impl<'a, 'info> ApproveAndSetInUseByCtx<'a, 'info> {
         assert_mut(ctx.mint_manager, "mint_manager")?;
         assert_address(&mint_manager.mint, ctx.mint.key, "mint_manager mint")?;
 
+        // ruleset
+        assert_address(&mint_manager.ruleset, ctx.ruleset.key, "ruleset")?;
+        assert_program_account(ctx.ruleset, &AccountType::Ruleset)?;
+
         ///// no checks for mint /////
+
+        ///// no checks for in_use_by_address /////
 
         // holder_token_account
         assert_mut(ctx.holder_token_account, "holder_token_account")?;
@@ -123,6 +139,7 @@ impl<'a, 'info> ApproveAndSetInUseByCtx<'a, 'info> {
 }
 
 pub fn handler(ctx: ApproveAndSetInUseByCtx, ix: ApproveAndSetInUseByIx) -> ProgramResult {
+    let ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
     let mint_manager: &mut MintManager = &mut MintManager::from_account_info(ctx.mint_manager)?;
     if mint_manager.in_use_by.is_some() {
         return Err(ProgramError::from(ErrorCode::TokenCurentlyInUse));
@@ -130,7 +147,24 @@ pub fn handler(ctx: ApproveAndSetInUseByCtx, ix: ApproveAndSetInUseByIx) -> Prog
     let mint_manager_seeds = assert_mint_manager_seeds(ctx.mint.key, ctx.mint_manager.key)?;
 
     // set_in_use_by
-    mint_manager.in_use_by = Some(ix.in_use_by_address);
+    mint_manager.in_use_by = Some(*ctx.in_use_by_address.key);
+
+    /////////////// check allowed / disallowed ///////////////
+    let [allowed_programs, disallowed_addresses] =
+        allowlist_disallowlist(&ruleset, ctx.remaining_accounts)?;
+    if !allowed_programs.is_empty()
+        && !is_default_program(&ctx.in_use_by_address.owner)
+        && !allowed_programs.contains(&ctx.in_use_by_address.owner.to_string())
+    {
+        return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));
+    }
+
+    if disallowed_addresses.contains(&ctx.in_use_by_address.owner.to_string())
+        || disallowed_addresses.contains(&ctx.in_use_by_address.key.to_string())
+    {
+        return Err(ProgramError::from(ErrorCode::AddressDisallowed));
+    }
+    ////////////////////////////////////////////////////////////
 
     // thaw account
     invoke_signed(

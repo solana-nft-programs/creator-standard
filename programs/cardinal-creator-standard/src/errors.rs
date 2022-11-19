@@ -40,8 +40,8 @@ pub enum ErrorCode {
     InvalidPreTransferInstruction,
     #[error("Invalid post transfer instruction")]
     InvalidPostTransferInstruction,
-    #[error("Disallowed program included in transfer")]
-    ProgramDisallowed,
+    #[error("Disallowed address included")]
+    AddressDisallowed,
     #[error("Program not allowed in allowed programs to transfer")]
     ProgramNotAllowed,
     #[error("Unknown account found in instruction")]

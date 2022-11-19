@@ -11,9 +11,10 @@ import * as beetSolana from '@metaplex-foundation/beet-solana'
 export type InitRulesetIx = {
   name: string
   collector: web3.PublicKey
-  disallowedAddresses: web3.PublicKey[]
-  allowedPrograms: web3.PublicKey[]
   checkSellerFeeBasisPoints: boolean
+  allowedPrograms: web3.PublicKey[]
+  disallowedAddresses: web3.PublicKey[]
+  extensions: web3.PublicKey[]
 }
 
 /**
@@ -24,9 +25,10 @@ export const initRulesetIxBeet = new beet.FixableBeetArgsStruct<InitRulesetIx>(
   [
     ['name', beet.utf8String],
     ['collector', beetSolana.publicKey],
-    ['disallowedAddresses', beet.array(beetSolana.publicKey)],
-    ['allowedPrograms', beet.array(beetSolana.publicKey)],
     ['checkSellerFeeBasisPoints', beet.bool],
+    ['allowedPrograms', beet.array(beetSolana.publicKey)],
+    ['disallowedAddresses', beet.array(beetSolana.publicKey)],
+    ['extensions', beet.array(beetSolana.publicKey)],
   ],
   'InitRulesetIx'
 )

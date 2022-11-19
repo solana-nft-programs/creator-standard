@@ -6,11 +6,8 @@
  */
 
 import * as beet from '@metaplex-foundation/beet'
-import * as web3 from '@solana/web3.js'
-import * as beetSolana from '@metaplex-foundation/beet-solana'
 export type ApproveAndSetInUseByIx = {
   amount: beet.bignum
-  inUseByAddress: web3.PublicKey
 }
 
 /**
@@ -19,9 +16,6 @@ export type ApproveAndSetInUseByIx = {
  */
 export const approveAndSetInUseByIxBeet =
   new beet.BeetArgsStruct<ApproveAndSetInUseByIx>(
-    [
-      ['amount', beet.u64],
-      ['inUseByAddress', beetSolana.publicKey],
-    ],
+    [['amount', beet.u64]],
     'ApproveAndSetInUseByIx'
   )

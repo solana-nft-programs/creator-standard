@@ -230,14 +230,7 @@
           "isSigner": false
         }
       ],
-      "args": [
-        {
-          "name": "setInUseByIx",
-          "type": {
-            "defined": "SetInUseByIx"
-          }
-        }
-      ],
+      "args": [],
       "discriminant": {
         "type": "u8",
         "value": 5
@@ -733,6 +726,12 @@
             "type": {
               "vec": "publicKey"
             }
+          },
+          {
+            "name": "extensions",
+            "type": {
+              "vec": "publicKey"
+            }
           }
         ]
       }
@@ -759,10 +758,6 @@
           {
             "name": "amount",
             "type": "u64"
-          },
-          {
-            "name": "inUseByAddress",
-            "type": "publicKey"
           }
         ]
       }
@@ -781,10 +776,8 @@
             "type": "publicKey"
           },
           {
-            "name": "disallowedAddresses",
-            "type": {
-              "vec": "publicKey"
-            }
+            "name": "checkSellerFeeBasisPoints",
+            "type": "bool"
           },
           {
             "name": "allowedPrograms",
@@ -793,20 +786,16 @@
             }
           },
           {
-            "name": "checkSellerFeeBasisPoints",
-            "type": "bool"
-          }
-        ]
-      }
-    },
-    {
-      "name": "SetInUseByIx",
-      "type": {
-        "kind": "struct",
-        "fields": [
+            "name": "disallowedAddresses",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
           {
-            "name": "inUseByAddress",
-            "type": "publicKey"
+            "name": "extensions",
+            "type": {
+              "vec": "publicKey"
+            }
           }
         ]
       }
@@ -837,10 +826,8 @@
             "type": "publicKey"
           },
           {
-            "name": "disallowedAddresses",
-            "type": {
-              "vec": "publicKey"
-            }
+            "name": "checkSellerFeeBasisPoints",
+            "type": "bool"
           },
           {
             "name": "allowedPrograms",
@@ -849,8 +836,16 @@
             }
           },
           {
-            "name": "checkSellerFeeBasisPoints",
-            "type": "bool"
+            "name": "disallowedAddresses",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "extensions",
+            "type": {
+              "vec": "publicKey"
+            }
           }
         ]
       }
@@ -956,8 +951,8 @@
     },
     {
       "code": 6016,
-      "name": "ProgramDisallowed",
-      "msg": "Disallowed program included in transfer"
+      "name": "AddressDisallowed",
+      "msg": "Disallowed address included"
     },
     {
       "code": 6017,
@@ -1003,6 +998,11 @@
       "code": 6025,
       "name": "InvalidMintAuthority",
       "msg": "Invalid mint authority"
+    },
+    {
+      "code": 6026,
+      "name": "NotEnoughRemainingAccounts",
+      "msg": "Not enought remaining accounts"
     }
   ],
   "metadata": {

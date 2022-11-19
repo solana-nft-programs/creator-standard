@@ -1,6 +1,5 @@
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use instructions::mint_manager::SetInUseByIx;
 use shank::ShankInstruction;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
@@ -76,7 +75,7 @@ pub enum CreatorStandardInstruction {
     #[account(0, writable, name = "mint_manager")]
     #[account(1, signer, name = "holder")]
     #[account(2, name = "holder_token_account")]
-    SetInUseBy(SetInUseByIx),
+    SetInUseBy,
 
     #[account(0, writable, name = "mint_manager")]
     #[account(1, signer, name = "user")]
@@ -190,10 +189,10 @@ pub fn process_instruction(
             let ctx = UpdateMintManagerCtx::load(accounts)?;
             instructions::mint_manager::update_mint_manager::handler(ctx, ix)
         }
-        CreatorStandardInstruction::SetInUseBy(ix) => {
+        CreatorStandardInstruction::SetInUseBy => {
             msg!("CreatorStandardInstruction::SetInUseBy");
             let ctx = mint_manager::SetInUseByCtx::load(accounts)?;
-            instructions::mint_manager::set_in_use_by::handler(ctx, ix)
+            instructions::mint_manager::set_in_use_by::handler(ctx)
         }
         CreatorStandardInstruction::RemoveInUseBy => {
             msg!("CreatorStandardInstruction::RemoveInUseBy");
