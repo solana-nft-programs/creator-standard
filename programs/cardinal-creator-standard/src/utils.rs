@@ -9,7 +9,7 @@ use spl_token::state::Mint;
 
 use crate::errors::ErrorCode;
 use crate::id;
-use crate::state::AccountType;
+use crate::state::is_correct_account_type;
 
 #[inline(always)]
 pub fn assert_with_msg(v: bool, err: impl Into<ProgramError>, msg: &str) -> ProgramResult {
@@ -77,12 +77,12 @@ pub fn assert_address(address_one: &Pubkey, address_two: &Pubkey, name: &str) ->
 }
 
 #[inline(always)]
-pub fn assert_program_account(account: &AccountInfo, account_type: &AccountType) -> ProgramResult {
+pub fn assert_program_account(account: &AccountInfo, discriminator: [u8; 8]) -> ProgramResult {
     let data = &account.data.borrow_mut();
     assert_with_msg(
-        data[0] == *account_type as u8 && *account.owner == id(),
+        is_correct_account_type(data, discriminator) && *account.owner == id(),
         ProgramError::InvalidInstructionData,
-        format!("{} must be account type {}", account.key, account_type).as_str(),
+        format!("Invalid account type for {}", account.key).as_str(),
     )
 }
 

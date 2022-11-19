@@ -20,6 +20,8 @@ export const SetInUseByStruct = new beet.BeetArgsStruct<{
  * Accounts required by the _SetInUseBy_ instruction
  *
  * @property [_writable_] mintManager
+ * @property [] ruleset
+ * @property [] inUseByAddress
  * @property [**signer**] holder
  * @property [] holderTokenAccount
  * @category Instructions
@@ -28,6 +30,8 @@ export const SetInUseByStruct = new beet.BeetArgsStruct<{
  */
 export type SetInUseByInstructionAccounts = {
   mintManager: web3.PublicKey
+  ruleset: web3.PublicKey
+  inUseByAddress: web3.PublicKey
   holder: web3.PublicKey
   holderTokenAccount: web3.PublicKey
 }
@@ -53,6 +57,16 @@ export function createSetInUseByInstruction(
     {
       pubkey: accounts.mintManager,
       isWritable: true,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.ruleset,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.inUseByAddress,
+      isWritable: false,
       isSigner: false,
     },
     {

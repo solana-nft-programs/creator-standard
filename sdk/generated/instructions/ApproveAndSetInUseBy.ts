@@ -41,7 +41,9 @@ export const ApproveAndSetInUseByStruct = new beet.BeetArgsStruct<
  * Accounts required by the _ApproveAndSetInUseBy_ instruction
  *
  * @property [_writable_] mintManager
+ * @property [] ruleset
  * @property [] mint
+ * @property [] inUseByAddress
  * @property [_writable_] holderTokenAccount
  * @property [**signer**] holder
  * @property [] delegate
@@ -51,7 +53,9 @@ export const ApproveAndSetInUseByStruct = new beet.BeetArgsStruct<
  */
 export type ApproveAndSetInUseByInstructionAccounts = {
   mintManager: web3.PublicKey
+  ruleset: web3.PublicKey
   mint: web3.PublicKey
+  inUseByAddress: web3.PublicKey
   holderTokenAccount: web3.PublicKey
   holder: web3.PublicKey
   delegate: web3.PublicKey
@@ -86,7 +90,17 @@ export function createApproveAndSetInUseByInstruction(
       isSigner: false,
     },
     {
+      pubkey: accounts.ruleset,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
       pubkey: accounts.mint,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
+      pubkey: accounts.inUseByAddress,
       isWritable: false,
       isSigner: false,
     },

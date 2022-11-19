@@ -29,7 +29,7 @@ const mintKeypair = Keypair.generate();
 
 const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
-const IN_USE_BY_AUTHORITY = Keypair.generate();
+const inUseByAddress = Keypair.generate();
 
 let provider: CardinalProvider;
 
@@ -101,18 +101,13 @@ test("Set in use by", async () => {
 
   const tx = new Transaction();
   tx.add(
-    createSetInUseByInstruction(
-      {
-        mintManager: mintManagerId,
-        holder: provider.wallet.publicKey,
-        holderTokenAccount: holderAtaId,
-      },
-      {
-        setInUseByIx: {
-          inUseByAddress: IN_USE_BY_AUTHORITY.publicKey,
-        },
-      }
-    )
+    createSetInUseByInstruction({
+      mintManager: mintManagerId,
+      ruleset: RULESET_ID,
+      inUseByAddress: inUseByAddress.publicKey,
+      holder: provider.wallet.publicKey,
+      holderTokenAccount: holderAtaId,
+    })
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
@@ -123,7 +118,7 @@ test("Set in use by", async () => {
   );
   expect(mintManager.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(mintManager.inUseBy?.toString()).toBe(
-    IN_USE_BY_AUTHORITY.publicKey.toString()
+    inUseByAddress.publicKey.toString()
   );
   expect(mintManager.authority.toString()).toBe(
     provider.wallet.publicKey.toString()

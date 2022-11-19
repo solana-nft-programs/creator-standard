@@ -220,6 +220,16 @@
           "isSigner": false
         },
         {
+          "name": "ruleset",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "inUseByAddress",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "holder",
           "isMut": false,
           "isSigner": true
@@ -261,6 +271,11 @@
       "accounts": [
         {
           "name": "mintManager",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "ruleset",
           "isMut": false,
           "isSigner": false
         },
@@ -312,7 +327,17 @@
           "isSigner": false
         },
         {
+          "name": "ruleset",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "inUseByAddress",
           "isMut": false,
           "isSigner": false
         },

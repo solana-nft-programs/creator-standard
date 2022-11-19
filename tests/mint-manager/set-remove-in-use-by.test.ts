@@ -24,14 +24,14 @@ const mintKeypair = Keypair.generate();
 
 const RULESET_NAME = "ruleset-no-checks";
 const RULESET_ID = findRulesetId(RULESET_NAME);
-const IN_USE_BY_AUTHORITY = Keypair.generate();
+const inUseByAddress = Keypair.generate();
 
 let provider: CardinalProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
   const signature = await provider.connection.requestAirdrop(
-    IN_USE_BY_AUTHORITY.publicKey,
+    inUseByAddress.publicKey,
     LAMPORTS_PER_SOL
   );
   await provider.connection.confirmTransaction(signature, "confirmed");
@@ -100,18 +100,13 @@ test("Set in use by", async () => {
 
   const tx = new Transaction();
   tx.add(
-    createSetInUseByInstruction(
-      {
-        mintManager: mintManagerId,
-        holder: provider.wallet.publicKey,
-        holderTokenAccount: holderAtaId,
-      },
-      {
-        setInUseByIx: {
-          inUseByAddress: IN_USE_BY_AUTHORITY.publicKey,
-        },
-      }
-    )
+    createSetInUseByInstruction({
+      mintManager: mintManagerId,
+      ruleset: RULESET_ID,
+      inUseByAddress: inUseByAddress.publicKey,
+      holder: provider.wallet.publicKey,
+      holderTokenAccount: holderAtaId,
+    })
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
@@ -122,7 +117,7 @@ test("Set in use by", async () => {
   );
   expect(mintManager.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(mintManager.inUseBy?.toString()).toBe(
-    IN_USE_BY_AUTHORITY.publicKey.toString()
+    inUseByAddress.publicKey.toString()
   );
   expect(mintManager.authority.toString()).toBe(
     provider.wallet.publicKey.toString()
@@ -139,14 +134,10 @@ test("Remove in use by", async () => {
   tx.add(
     createRemoveInUseByInstruction({
       mintManager: mintManagerId,
-      user: IN_USE_BY_AUTHORITY.publicKey,
+      user: inUseByAddress.publicKey,
     })
   );
-  await executeTransaction(
-    provider.connection,
-    tx,
-    new Wallet(IN_USE_BY_AUTHORITY)
-  );
+  await executeTransaction(provider.connection, tx, new Wallet(inUseByAddress));
 
   // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
