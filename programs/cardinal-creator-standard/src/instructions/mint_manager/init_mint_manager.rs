@@ -14,12 +14,10 @@ use crate::utils::assert_amount;
 use crate::utils::assert_empty;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
-use crate::utils::assert_with_msg;
 use crate::utils::unpack_checked_mint_account;
 use crate::utils::unpack_checked_token_account;
 use crate::CreatorStandardInstruction;
 use borsh::BorshSerialize;
-use mpl_token_metadata::pda::find_metadata_account;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
@@ -42,7 +40,6 @@ pub fn init_mint_manager(
     ruleset: Pubkey,
     holder_token_account: Pubkey,
     token_authority: Pubkey,
-    mint_metadata: Pubkey,
     ruleset_collector: Pubkey,
     collector: Pubkey,
     authority: Pubkey,
@@ -56,7 +53,6 @@ pub fn init_mint_manager(
             AccountMeta::new_readonly(ruleset, false),
             AccountMeta::new(holder_token_account, false),
             AccountMeta::new_readonly(token_authority, true),
-            AccountMeta::new_readonly(mint_metadata, false),
             AccountMeta::new(ruleset_collector, false),
             AccountMeta::new(collector, false),
             AccountMeta::new_readonly(authority, false),
@@ -74,7 +70,6 @@ pub struct InitMintManagerCtx<'a, 'info> {
     pub ruleset: &'a AccountInfo<'info>,
     pub holder_token_account: &'a AccountInfo<'info>,
     pub token_authority: &'a AccountInfo<'info>,
-    pub mint_metadata: &'a AccountInfo<'info>,
     pub ruleset_collector: &'a AccountInfo<'info>,
     pub collector: &'a AccountInfo<'info>,
     pub authority: &'a AccountInfo<'info>,
@@ -93,7 +88,6 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
             ruleset: next_account_info(account_iter)?,
             holder_token_account: next_account_info(account_iter)?,
             token_authority: next_account_info(account_iter)?,
-            mint_metadata: next_account_info(account_iter)?,
             ruleset_collector: next_account_info(account_iter)?,
             collector: next_account_info(account_iter)?,
             authority: next_account_info(account_iter)?,
@@ -134,12 +128,12 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         assert_signer(ctx.token_authority, "token_authority")?;
 
         // mint_metadata
-        let mint_metadata_id = find_metadata_account(ctx.mint.key).0;
-        assert_with_msg(
-            ctx.mint_metadata.key == &mint_metadata_id,
-            ErrorCode::InvalidMintMetadata,
-            "Invalid mint metadata address",
-        )?;
+        // let mint_metadata_id = find_metadata_account(ctx.mint.key).0;
+        // assert_with_msg(
+        //     ctx.mint_metadata.key == &mint_metadata_id,
+        //     ErrorCode::InvalidMintMetadata,
+        //     "Invalid mint metadata address",
+        // )?;
 
         // ruleset_collector
         assert_mut(ctx.ruleset_collector, "ruleset_collector")?;
