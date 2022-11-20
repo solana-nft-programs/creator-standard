@@ -125,7 +125,7 @@ pub fn assert_mint_manager_seeds(
     assert_with_msg(
         expected_key == &key,
         ProgramError::InvalidInstructionData,
-        "Invalid mint manager seeds",
+        "Invalid mint manager seeds".to_string(),
     )?;
     Ok(seeds)
 }
@@ -220,7 +220,7 @@ pub fn assert_ruleset_seeds(
     assert_with_msg(
         expected_key == &key,
         ProgramError::InvalidInstructionData,
-        "Invalid ruleset seeds",
+        "Invalid ruleset seeds".to_string(),
     )?;
     Ok(seeds)
 }

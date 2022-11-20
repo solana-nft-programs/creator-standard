@@ -15,6 +15,7 @@ use crate::utils::unpack_checked_token_account;
 use crate::CreatorStandardInstruction;
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
+use lazy_format::lazy_format;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
@@ -85,6 +86,7 @@ impl<'a, 'info> ApproveAndSetInUseByCtx<'a, 'info> {
             token_program: next_account_info(account_iter)?,
             remaining_accounts: account_iter.collect(),
         };
+
         // deserializations
         let mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
         let holder_token_account =
@@ -122,7 +124,7 @@ impl<'a, 'info> ApproveAndSetInUseByCtx<'a, 'info> {
         assert_with_msg(
             holder_token_account.delegate.is_none(),
             ProgramError::InvalidInstructionData,
-            format!("{} must be none", "holder_token_account").as_str(),
+            lazy_format!("{} must be none", "holder_token_account"),
         )?;
 
         // holder

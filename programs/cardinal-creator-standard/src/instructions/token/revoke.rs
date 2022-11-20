@@ -10,6 +10,7 @@ use crate::utils::assert_with_msg;
 use crate::utils::unpack_checked_token_account;
 use crate::CreatorStandardInstruction;
 use borsh::BorshSerialize;
+use lazy_format::lazy_format;
 use solana_program::account_info::next_account_info;
 use solana_program::account_info::AccountInfo;
 use solana_program::entrypoint::ProgramResult;
@@ -88,7 +89,7 @@ impl<'a, 'info> RevokeCtx<'a, 'info> {
         assert_with_msg(
             holder_token_account.delegate.is_some(),
             ProgramError::InvalidInstructionData,
-            format!("{} must not be none", "holder_token_account").as_str(),
+            lazy_format!("{} must not be none", "holder_token_account"),
         )?;
 
         // holder
