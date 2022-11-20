@@ -1,12 +1,12 @@
-import { TransactionInstruction } from "@solana/web3.js";
+import type { TransactionInstruction } from "@solana/web3.js";
 
-import { Ruleset } from "./generated";
+import type { Ruleset } from "./generated";
 
 // Needed for transfer, approve, set_in_use_by, approve_and_set_in_use_by instructions
-export const handleRemainingAccountsForRuleset = async (
+export const handleRemainingAccountsForRuleset = (
   ix: TransactionInstruction,
   rulesetData: Ruleset
-): Promise<TransactionInstruction> => {
+): TransactionInstruction => {
   for (const extension of rulesetData.extensions) {
     ix.keys.push({
       pubkey: extension,

@@ -111,7 +111,7 @@ test("Set in use by", async () => {
     holder: provider.wallet.publicKey,
     holderTokenAccount: holderAtaId,
   });
-  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  handleRemainingAccountsForRuleset(ix, rulesetData);
   tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
@@ -169,7 +169,7 @@ test("Transfer", async () => {
     authority: provider.wallet.publicKey,
     instructions: SYSVAR_INSTRUCTIONS_PUBKEY,
   });
-  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  handleRemainingAccountsForRuleset(ix, rulesetData);
   tx.add(ix);
   await expect(
     executeTransaction(provider.connection, tx, provider.wallet)

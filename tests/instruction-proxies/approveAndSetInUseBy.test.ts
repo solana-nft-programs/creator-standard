@@ -128,8 +128,7 @@ test("Delegate and set in_use_by", async () => {
       },
     }
   );
-  tx.add(ix);
-  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  handleRemainingAccountsForRuleset(ix, rulesetData);
   tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 

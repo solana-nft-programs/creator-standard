@@ -106,7 +106,7 @@ test("Set in use by", async () => {
     holder: provider.wallet.publicKey,
     holderTokenAccount: holderAtaId,
   });
-  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  handleRemainingAccountsForRuleset(ix, rulesetData);
   tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
@@ -154,7 +154,7 @@ test("Delegate", async () => {
     },
     { approveIx: { amount: 1 } }
   );
-  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  handleRemainingAccountsForRuleset(ix, rulesetData);
   tx.add(ix);
   await expect(
     executeTransaction(provider.connection, tx, provider.wallet)
