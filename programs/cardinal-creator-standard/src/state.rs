@@ -327,4 +327,26 @@ pub fn allowlist_disallowlist(
 
     return Ok([allowed_programs, disallowed_addresses]);
 }
+
+pub fn check_allowlist_disallowlist(
+    account_id: &Pubkey,
+    ruleset: &Ruleset,
+    remaining_accounts: Vec<&AccountInfo>,
+) -> Result<bool, ProgramError> {
+    let [allowed_programs, disallowed_addresses] =
+        allowlist_disallowlist(&ruleset, remaining_accounts)?;
+
+    if !allowed_programs.is_empty()
+        && !is_default_program(account_id)
+        && !allowed_programs.contains(&account_id.to_string())
+    {
+        return Ok(false);
+    }
+
+    if !disallowed_addresses.is_empty() && disallowed_addresses.contains(&account_id.to_string()) {
+        return Ok(false);
+    }
+
+    Ok(true)
+}
 ///////////// UTILS /////////////
