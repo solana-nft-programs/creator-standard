@@ -1,6 +1,7 @@
 use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
+use crate::state::check_creators;
 use crate::state::is_default_program;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
@@ -137,10 +138,11 @@ pub fn handler(ctx: ApproveCtx, ix: ApproveIx) -> ProgramResult {
         return Err(ProgramError::from(ErrorCode::TokenCurentlyInUse));
     }
     let mint_manager_seeds = assert_mint_manager_seeds(ctx.mint.key, ctx.mint_manager.key)?;
+    let remaining_accounts = &mut ctx.remaining_accounts.iter();
 
     /////////////// check allowed / disallowed ///////////////
     let [allowed_programs, disallowed_addresses] =
-        allowlist_disallowlist(&ruleset, ctx.remaining_accounts)?;
+        allowlist_disallowlist(&ruleset, remaining_accounts)?;
 
     if !allowed_programs.is_empty()
         && !is_default_program(&ctx.delegate.owner)
@@ -155,7 +157,8 @@ pub fn handler(ctx: ApproveCtx, ix: ApproveIx) -> ProgramResult {
     {
         return Err(ProgramError::from(ErrorCode::AddressDisallowed));
     }
-    ////////////////////////////////////////////////////////////
+    /////////////// check creators ///////////////
+    check_creators(ctx.mint.key, &ruleset, remaining_accounts)?;
 
     // thaw account
     invoke_signed(

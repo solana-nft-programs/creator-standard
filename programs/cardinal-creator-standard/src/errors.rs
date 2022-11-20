@@ -26,6 +26,10 @@ pub enum ErrorCode {
     InvalidAuthority,
     #[error("Invalid mint manager")]
     InvalidMintManager,
+    #[error("Invalid mint metadata")]
+    InvalidMintMetadata,
+    #[error("Insufficient minimum creator share")]
+    InusufficientMinimumCreatorShare,
     #[error("Invalid holder token account")]
     InvlaidHolderTokenAccount,
     #[error("Invalid target token account")]

@@ -1,6 +1,7 @@
 use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
+use crate::state::check_creators;
 use crate::state::is_default_program;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
@@ -150,9 +151,10 @@ pub fn handler(ctx: ApproveAndSetInUseByCtx, ix: ApproveAndSetInUseByIx) -> Prog
     // set_in_use_by
     mint_manager.in_use_by = Some(*ctx.in_use_by_address.key);
 
+    let remaining_accounts = &mut ctx.remaining_accounts.iter();
     /////////////// check allowed / disallowed ///////////////
     let [allowed_programs, disallowed_addresses] =
-        allowlist_disallowlist(&ruleset, ctx.remaining_accounts)?;
+        allowlist_disallowlist(&ruleset, remaining_accounts)?;
     if !allowed_programs.is_empty()
         && !is_default_program(ctx.in_use_by_address.owner)
         && !allowed_programs.contains(&ctx.in_use_by_address.owner.to_string())
@@ -166,7 +168,8 @@ pub fn handler(ctx: ApproveAndSetInUseByCtx, ix: ApproveAndSetInUseByIx) -> Prog
     {
         return Err(ProgramError::from(ErrorCode::AddressDisallowed));
     }
-    ////////////////////////////////////////////////////////////
+    /////////////// check creators ///////////////
+    check_creators(ctx.mint.key, &ruleset, remaining_accounts)?;
 
     // thaw account
     invoke_signed(

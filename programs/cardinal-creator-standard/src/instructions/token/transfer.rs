@@ -1,6 +1,7 @@
 use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
+use crate::state::check_creators;
 use crate::state::is_default_program;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
@@ -143,8 +144,9 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
     }
 
     /////////////// check allowed / disallowed ///////////////
+    let remaining_accounts = &mut ctx.remaining_accounts.iter();
     let [allowed_programs, disallowed_addresses] =
-        allowlist_disallowlist(&ruleset, ctx.remaining_accounts)?;
+        allowlist_disallowlist(&ruleset, remaining_accounts)?;
 
     for i in 0..num_instructions {
         let ix = load_instruction_at_checked(i.into(), ctx.instructions)
@@ -166,7 +168,9 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
             }
         }
     }
-    ////////////////////////////////////////////////////////////
+
+    /////////////// check creators ///////////////
+    check_creators(ctx.mint.key, &ruleset, remaining_accounts)?;
 
     ///////////////// handle transfer /////////////////
 
