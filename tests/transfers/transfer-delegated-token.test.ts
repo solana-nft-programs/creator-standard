@@ -13,7 +13,7 @@ import {
   Transaction,
 } from "@solana/web3.js";
 
-import { Ruleset } from "../../sdk";
+import { handleRemainingAccountsForRuleset, Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createApproveInstruction } from "../../sdk/generated/instructions/Approve";
 import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
@@ -99,6 +99,10 @@ test("Initialize mint", async () => {
 });
 
 test("Delegate", async () => {
+  const rulesetData = await Ruleset.fromAccountAddress(
+    provider.connection,
+    RULESET_ID
+  );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const fromAtaId = getAssociatedTokenAddressSync(
@@ -110,19 +114,19 @@ test("Delegate", async () => {
   expect(fromAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(fromAta.amount.toString()).toBe("1");
 
-  tx.add(
-    createApproveInstruction(
-      {
-        mintManager: mintManagerId,
-        ruleset: RULESET_ID,
-        mint: mintKeypair.publicKey,
-        holderTokenAccount: fromAtaId,
-        holder: provider.wallet.publicKey,
-        delegate: delegate.publicKey,
-      },
-      { approveIx: { amount: 1 } }
-    )
+  const ix = createApproveInstruction(
+    {
+      mintManager: mintManagerId,
+      ruleset: RULESET_ID,
+      mint: mintKeypair.publicKey,
+      holderTokenAccount: fromAtaId,
+      holder: provider.wallet.publicKey,
+      delegate: delegate.publicKey,
+    },
+    { approveIx: { amount: 1 } }
   );
+  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   const fromAtaCheck = await getAccount(provider.connection, fromAtaId);
@@ -134,6 +138,10 @@ test("Delegate", async () => {
 });
 
 test("Transfer", async () => {
+  const rulesetData = await Ruleset.fromAccountAddress(
+    provider.connection,
+    RULESET_ID
+  );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const recipient = Keypair.generate();
@@ -151,23 +159,25 @@ test("Transfer", async () => {
   expect(fromAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(fromAta.amount.toString()).toBe("1");
 
+  const ix = createTransferInstruction({
+    mintManager: mintManagerId,
+    ruleset: RULESET_ID,
+    mint: mintKeypair.publicKey,
+    from: fromAtaId,
+    to: toAtaId,
+    authority: delegate.publicKey,
+    instructions: SYSVAR_INSTRUCTIONS_PUBKEY,
+  });
   tx.add(
     createAssociatedTokenAccountInstruction(
       delegate.publicKey,
       toAtaId,
       recipient.publicKey,
       mintKeypair.publicKey
-    ),
-    createTransferInstruction({
-      mintManager: mintManagerId,
-      ruleset: RULESET_ID,
-      mint: mintKeypair.publicKey,
-      from: fromAtaId,
-      to: toAtaId,
-      authority: delegate.publicKey,
-      instructions: SYSVAR_INSTRUCTIONS_PUBKEY,
-    })
+    )
   );
+  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  tx.add(ix);
   await executeTransaction(provider.connection, tx, new Wallet(delegate));
 
   const fromAtaCheck = await getAccount(provider.connection, fromAtaId);

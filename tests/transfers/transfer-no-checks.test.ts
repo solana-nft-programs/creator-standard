@@ -12,7 +12,7 @@ import {
   Transaction,
 } from "@solana/web3.js";
 
-import { Ruleset } from "../../sdk";
+import { handleRemainingAccountsForRuleset, Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
 import { createTransferInstruction } from "../../sdk/generated/instructions/Transfer";
@@ -91,6 +91,10 @@ test("Init", async () => {
 });
 
 test("Transfer", async () => {
+  const rulesetData = await Ruleset.fromAccountAddress(
+    provider.connection,
+    RULESET_ID
+  );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const recipient = Keypair.generate();
@@ -112,17 +116,19 @@ test("Transfer", async () => {
       toAtaId,
       recipient.publicKey,
       mintKeypair.publicKey
-    ),
-    createTransferInstruction({
-      mintManager: mintManagerId,
-      ruleset: RULESET_ID,
-      mint: mintKeypair.publicKey,
-      from: fromAtaId,
-      to: toAtaId,
-      authority: provider.wallet.publicKey,
-      instructions: SYSVAR_INSTRUCTIONS_PUBKEY,
-    })
+    )
   );
+  const ix = createTransferInstruction({
+    mintManager: mintManagerId,
+    ruleset: RULESET_ID,
+    mint: mintKeypair.publicKey,
+    from: fromAtaId,
+    to: toAtaId,
+    authority: provider.wallet.publicKey,
+    instructions: SYSVAR_INSTRUCTIONS_PUBKEY,
+  });
+  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   const fromAtaCheck = await tryGetAccount(() =>

@@ -7,7 +7,7 @@ import {
 } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import { Ruleset } from "../../sdk";
+import { handleRemainingAccountsForRuleset, Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createApproveInstruction } from "../../sdk/generated/instructions/Approve";
 import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
@@ -91,6 +91,10 @@ test("Init", async () => {
 });
 
 test("Delegate", async () => {
+  const rulesetData = await Ruleset.fromAccountAddress(
+    provider.connection,
+    RULESET_ID
+  );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const holderAtaId = getAssociatedTokenAddressSync(
@@ -102,19 +106,19 @@ test("Delegate", async () => {
   expect(holderAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(holderAta.amount.toString()).toBe("1");
 
-  tx.add(
-    createApproveInstruction(
-      {
-        mintManager: mintManagerId,
-        ruleset: RULESET_ID,
-        mint: mintKeypair.publicKey,
-        holderTokenAccount: holderAtaId,
-        holder: provider.wallet.publicKey,
-        delegate: delegate.publicKey,
-      },
-      { approveIx: { amount: 1 } }
-    )
+  const ix = createApproveInstruction(
+    {
+      mintManager: mintManagerId,
+      ruleset: RULESET_ID,
+      mint: mintKeypair.publicKey,
+      holderTokenAccount: holderAtaId,
+      holder: provider.wallet.publicKey,
+      delegate: delegate.publicKey,
+    },
+    { approveIx: { amount: 1 } }
   );
+  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   const holderAtaCheck = await getAccount(provider.connection, holderAtaId);
@@ -128,6 +132,10 @@ test("Delegate", async () => {
 });
 
 test("Set in use by", async () => {
+  const rulesetData = await Ruleset.fromAccountAddress(
+    provider.connection,
+    RULESET_ID
+  );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const holderAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
@@ -135,15 +143,15 @@ test("Set in use by", async () => {
   );
 
   const tx = new Transaction();
-  tx.add(
-    createSetInUseByInstruction({
-      mintManager: mintManagerId,
-      ruleset: RULESET_ID,
-      inUseByAddress: inUseByAddress.publicKey,
-      holder: provider.wallet.publicKey,
-      holderTokenAccount: holderAtaId,
-    })
-  );
+  const ix = createSetInUseByInstruction({
+    mintManager: mintManagerId,
+    ruleset: RULESET_ID,
+    inUseByAddress: inUseByAddress.publicKey,
+    holder: provider.wallet.publicKey,
+    holderTokenAccount: holderAtaId,
+  });
+  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   // check mint manager

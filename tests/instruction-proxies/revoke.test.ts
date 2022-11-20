@@ -7,7 +7,7 @@ import {
 } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import { Ruleset } from "../../sdk";
+import { handleRemainingAccountsForRuleset, Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createApproveInstruction } from "../../sdk/generated/instructions/Approve";
 import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
@@ -89,6 +89,10 @@ test("Initialize mint", async () => {
 });
 
 test("Delegate", async () => {
+  const rulesetData = await Ruleset.fromAccountAddress(
+    provider.connection,
+    RULESET_ID
+  );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const holderAtaId = getAssociatedTokenAddressSync(
@@ -99,19 +103,20 @@ test("Delegate", async () => {
   expect(holderAta.isFrozen).toBe(true);
   expect(holderAta.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(holderAta.amount.toString()).toBe("1");
-  tx.add(
-    createApproveInstruction(
-      {
-        mintManager: mintManagerId,
-        ruleset: RULESET_ID,
-        mint: mintKeypair.publicKey,
-        holderTokenAccount: holderAtaId,
-        holder: provider.wallet.publicKey,
-        delegate: delegate.publicKey,
-      },
-      { approveIx: { amount: 1 } }
-    )
+
+  const ix = createApproveInstruction(
+    {
+      mintManager: mintManagerId,
+      ruleset: RULESET_ID,
+      mint: mintKeypair.publicKey,
+      holderTokenAccount: holderAtaId,
+      holder: provider.wallet.publicKey,
+      delegate: delegate.publicKey,
+    },
+    { approveIx: { amount: 1 } }
   );
+  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   const holderAtaCheck = await getAccount(provider.connection, holderAtaId);

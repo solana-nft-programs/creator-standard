@@ -7,7 +7,7 @@ import {
 } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import { Ruleset } from "../../sdk";
+import { handleRemainingAccountsForRuleset, Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createBurnInstruction } from "../../sdk/generated/instructions/Burn";
 import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
@@ -88,6 +88,10 @@ test("Init", async () => {
 });
 
 test("Set in use by", async () => {
+  const rulesetData = await Ruleset.fromAccountAddress(
+    provider.connection,
+    RULESET_ID
+  );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const holderAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
@@ -95,15 +99,15 @@ test("Set in use by", async () => {
   );
 
   const tx = new Transaction();
-  tx.add(
-    createSetInUseByInstruction({
-      mintManager: mintManagerId,
-      ruleset: RULESET_ID,
-      inUseByAddress: inUseByAddress.publicKey,
-      holder: provider.wallet.publicKey,
-      holderTokenAccount: holderAtaId,
-    })
-  );
+  const ix = createSetInUseByInstruction({
+    mintManager: mintManagerId,
+    ruleset: RULESET_ID,
+    inUseByAddress: inUseByAddress.publicKey,
+    holder: provider.wallet.publicKey,
+    holderTokenAccount: holderAtaId,
+  });
+  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   // check mint manager

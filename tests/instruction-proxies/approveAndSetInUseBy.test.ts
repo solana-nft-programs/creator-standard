@@ -7,7 +7,11 @@ import {
 } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import { createApproveAndSetInUseByInstruction, Ruleset } from "../../sdk";
+import {
+  createApproveAndSetInUseByInstruction,
+  handleRemainingAccountsForRuleset,
+  Ruleset,
+} from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
 import {
@@ -92,6 +96,10 @@ test("Initialize mint", async () => {
 });
 
 test("Delegate and set in_use_by", async () => {
+  const rulesetData = await Ruleset.fromAccountAddress(
+    provider.connection,
+    RULESET_ID
+  );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const holderAtaId = getAssociatedTokenAddressSync(
@@ -104,25 +112,25 @@ test("Delegate and set in_use_by", async () => {
   expect(holderAta.amount.toString()).toBe("1");
   const inUseByAddress = Keypair.generate();
 
-  tx.add(
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-    createApproveAndSetInUseByInstruction(
-      {
-        mintManager: mintManagerId,
-        ruleset: RULESET_ID,
-        mint: mintKeypair.publicKey,
-        inUseByAddress: inUseByAddress.publicKey,
-        holderTokenAccount: holderAtaId,
-        holder: provider.wallet.publicKey,
-        delegate: delegate.publicKey,
+  const ix = createApproveAndSetInUseByInstruction(
+    {
+      mintManager: mintManagerId,
+      ruleset: RULESET_ID,
+      mint: mintKeypair.publicKey,
+      inUseByAddress: inUseByAddress.publicKey,
+      holderTokenAccount: holderAtaId,
+      holder: provider.wallet.publicKey,
+      delegate: delegate.publicKey,
+    },
+    {
+      approveAndSetInUseByIx: {
+        amount: 1,
       },
-      {
-        approveAndSetInUseByIx: {
-          amount: 1,
-        },
-      }
-    )
+    }
   );
+  tx.add(ix);
+  await handleRemainingAccountsForRuleset(ix, rulesetData);
+  tx.add(ix);
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   const mintManager = await MintManager.fromAccountAddress(
