@@ -36,7 +36,7 @@ export type RevokeInstructionAccounts = {
   tokenProgram?: web3.PublicKey
 }
 
-export const revokeInstructionDiscriminator = 13
+export const revokeInstructionDiscriminator = 12
 
 /**
  * Creates a _Revoke_ instruction.

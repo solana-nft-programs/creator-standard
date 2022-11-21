@@ -30,13 +30,13 @@ use crate::utils::assert_owner;
 pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const DEFAULT_REQUIRED_CREATOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const DEFAULT_MINIMUM_CREATOR_SHARE: u8 = 5;
-pub const DEFAULT_PROGRAMS: [&str; 2] = [
+pub const BASE_PROGRAMS: [&str; 2] = [
     "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
     "mccsLbWK9m7pbFotPmPGBhN37WnsfHG6SRsmeRTJSiP",
 ];
 
-pub fn is_default_program(program_id: &Pubkey) -> bool {
-    DEFAULT_PROGRAMS.contains(&&program_id.to_string()[..])
+pub fn is_base_program(program_id: &Pubkey) -> bool {
+    BASE_PROGRAMS.contains(&&program_id.to_string()[..])
 }
 ///////////// CONSTANTS /////////////
 
@@ -334,7 +334,7 @@ pub fn check_allowlist_disallowlist<'info>(
         allowlist_disallowlist(ruleset, remaining_accounts)?;
 
     if !allowed_programs.is_empty()
-        && !is_default_program(account_id)
+        && !is_base_program(account_id)
         && !allowed_programs.contains(&account_id.to_string())
     {
         return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));

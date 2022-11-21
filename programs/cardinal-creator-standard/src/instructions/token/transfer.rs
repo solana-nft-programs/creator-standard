@@ -2,7 +2,7 @@ use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
 use crate::state::check_creators;
-use crate::state::is_default_program;
+use crate::state::is_base_program;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
@@ -155,7 +155,7 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
             .expect("Failed to get instruction");
 
         if !allowed_programs.is_empty()
-            && !is_default_program(&ix.program_id)
+            && !is_base_program(&ix.program_id)
             && !allowed_programs.contains(&ix.program_id.to_string())
         {
             return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));

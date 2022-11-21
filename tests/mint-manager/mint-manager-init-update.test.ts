@@ -4,7 +4,6 @@ import { Keypair, Transaction } from "@solana/web3.js";
 
 import { createInitMintManagerInstruction } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
-import { Ruleset } from "../../sdk/generated/accounts/Ruleset";
 import { createUpdateMintManagerInstruction } from "../../sdk/generated/instructions/UpdateMintManager";
 import {
   findMintManagerId,
@@ -36,10 +35,6 @@ beforeAll(async () => {
 test("Init mint manager", async () => {
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
-  const ruleset = await Ruleset.fromAccountAddress(
-    provider.connection,
-    RULESET_ID_1
-  );
 
   const ata = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
@@ -53,8 +48,6 @@ test("Init mint manager", async () => {
       ruleset: RULESET_ID_1,
       holderTokenAccount: ata,
       tokenAuthority: provider.wallet.publicKey,
-      rulesetCollector: ruleset.collector,
-      collector: ruleset.collector,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
     })
@@ -79,10 +72,6 @@ test("Update mint manager", async () => {
   const newAuthority = Keypair.generate();
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
-  const ruleset = await Ruleset.fromAccountAddress(
-    provider.connection,
-    RULESET_ID_1
-  );
 
   tx.add(
     createUpdateMintManagerInstruction(
@@ -90,7 +79,6 @@ test("Update mint manager", async () => {
         mintManager: mintManagerId,
         authority: provider.wallet.publicKey,
         payer: provider.wallet.publicKey,
-        collector: ruleset.collector,
         ruleset: findRulesetId(RULESET_NAME_2),
       },
       {

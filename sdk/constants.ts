@@ -7,6 +7,7 @@ export type RulesetData = {
   name: string;
   allowedPrograms: PublicKey[];
   disallowedAddresses: PublicKey[];
+  extensions: PublicKey[] | null;
 };
 
 export type MintManagerData = {

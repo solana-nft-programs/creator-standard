@@ -20,7 +20,6 @@ pub fn update_mint_manager(
     program_id: Pubkey,
     mint_manager: Pubkey,
     ruleset: Pubkey,
-    collector: Pubkey,
     authority: Pubkey,
     new_authority: Pubkey,
     payer: Pubkey,
@@ -30,7 +29,6 @@ pub fn update_mint_manager(
         accounts: vec![
             AccountMeta::new(mint_manager, false),
             AccountMeta::new_readonly(ruleset, false),
-            AccountMeta::new(collector, false),
             AccountMeta::new_readonly(authority, true),
             AccountMeta::new(payer, true),
             AccountMeta::new_readonly(solana_program::system_program::id(), false),

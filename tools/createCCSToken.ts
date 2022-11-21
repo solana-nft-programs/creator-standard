@@ -10,7 +10,7 @@ import { Keypair, PublicKey } from "@solana/web3.js";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-import { createInitMintManagerInstruction, Ruleset } from "../sdk";
+import { createInitMintManagerInstruction } from "../sdk";
 import {
   findMintManagerId,
   findMintMetadataId,
@@ -36,7 +36,6 @@ const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
 
   const mintKeypair = Keypair.generate();
   const rulesetId = findRulesetId(params.rulesetName ?? DEFAULT_RULESET);
-  const rulesetData = await Ruleset.fromAccountAddress(connection, rulesetId);
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const holdetAta = await findAta(
     mintKeypair.publicKey,
@@ -106,8 +105,6 @@ const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
       ruleset: rulesetId,
       holderTokenAccount: holdetAta,
       tokenAuthority: wallet.publicKey,
-      rulesetCollector: rulesetData.collector,
-      collector: rulesetData.collector,
       authority: wallet.publicKey,
       payer: wallet.publicKey,
     })

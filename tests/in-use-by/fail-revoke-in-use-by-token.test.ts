@@ -1,6 +1,5 @@
 import { expect, test } from "@jest/globals";
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
   getAccount,
   getAssociatedTokenAddressSync,
   getMint,
@@ -10,16 +9,16 @@ import { Keypair, Transaction } from "@solana/web3.js";
 import { handleRemainingAccountsForRuleset, Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createApproveInstruction } from "../../sdk/generated/instructions/Approve";
-import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
 import { createRevokeInstruction } from "../../sdk/generated/instructions/Revoke";
 import { createSetInUseByInstruction } from "../../sdk/generated/instructions/SetInUseBy";
-import {
-  DEFAULT_COLLECTOR,
-  findMintManagerId,
-  findRulesetId,
-} from "../../sdk/pda";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
-import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
+import {
+  createCCSMintTx,
+  executeTransaction,
+  getProvider,
+  tryGetAccount,
+} from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
@@ -37,29 +36,12 @@ beforeAll(async () => {
 
 test("Init", async () => {
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
-  const ruleset = await Ruleset.fromAccountAddress(
-    provider.connection,
-    RULESET_ID
-  );
-  const targetTokenAccount = getAssociatedTokenAddressSync(
-    mintKeypair.publicKey,
-    provider.wallet.publicKey
-  );
 
-  const tx = new Transaction();
-  tx.add(
-    createInitializeMintInstruction({
-      mintManager: mintManagerId,
-      mint: mintKeypair.publicKey,
-      ruleset: RULESET_ID,
-      targetTokenAccount: targetTokenAccount,
-      target: provider.wallet.publicKey,
-      rulesetCollector: ruleset.collector,
-      authority: provider.wallet.publicKey,
-      payer: provider.wallet.publicKey,
-      collector: DEFAULT_COLLECTOR,
-      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-    })
+  const tx = await createCCSMintTx(
+    provider.connection,
+    mintKeypair.publicKey,
+    provider.wallet.publicKey,
+    RULESET_ID
   );
   await executeTransaction(provider.connection, tx, provider.wallet, [
     mintKeypair,

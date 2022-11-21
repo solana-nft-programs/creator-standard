@@ -1,22 +1,17 @@
 import { beforeAll, expect, test } from "@jest/globals";
 import { Wallet } from "@project-serum/anchor";
-import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  getAssociatedTokenAddressSync,
-  getMint,
-} from "@solana/spl-token";
+import { getAssociatedTokenAddressSync, getMint } from "@solana/spl-token";
 import { Keypair, LAMPORTS_PER_SOL, Transaction } from "@solana/web3.js";
 
-import { handleRemainingAccountsForRuleset, Ruleset } from "../../sdk";
+import {
+  createInitMintManagerInstruction,
+  handleRemainingAccountsForRuleset,
+  Ruleset,
+} from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
-import { createInitializeMintInstruction } from "../../sdk/generated/instructions/InitializeMint";
 import { createRemoveInUseByInstruction } from "../../sdk/generated/instructions/RemoveInUseBy";
 import { createSetInUseByInstruction } from "../../sdk/generated/instructions/SetInUseBy";
-import {
-  DEFAULT_COLLECTOR,
-  findMintManagerId,
-  findRulesetId,
-} from "../../sdk/pda";
+import { findMintManagerId, findRulesetId } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 
@@ -39,27 +34,22 @@ beforeAll(async () => {
 
 test("Initialize mint", async () => {
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
-  const ruleset = await Ruleset.fromAccountAddress(
-    provider.connection,
-    RULESET_ID
+  const ata = getAssociatedTokenAddressSync(
+    mintKeypair.publicKey,
+    provider.wallet.publicKey
   );
 
   const tx = new Transaction();
   tx.add(
-    createInitializeMintInstruction({
+    createInitMintManagerInstruction({
       mintManager: mintManagerId,
       mint: mintKeypair.publicKey,
+      mintMetadata: mintManagerId,
       ruleset: RULESET_ID,
-      targetTokenAccount: getAssociatedTokenAddressSync(
-        mintKeypair.publicKey,
-        provider.wallet.publicKey
-      ),
-      target: provider.wallet.publicKey,
-      rulesetCollector: ruleset.collector,
+      holderTokenAccount: ata,
+      tokenAuthority: provider.wallet.publicKey,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
-      collector: DEFAULT_COLLECTOR,
-      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
     })
   );
   await executeTransaction(provider.connection, tx, provider.wallet, [

@@ -65,10 +65,9 @@ pub enum CreatorStandardInstruction {
 
     #[account(0, writable, name = "mint_manager")]
     #[account(1, name = "ruleset")]
-    #[account(2, writable, name = "collector")]
-    #[account(3, signer, name = "authority")]
-    #[account(4, writable, signer, name = "payer")]
-    #[account(5, name = "system_program", desc = "System program")]
+    #[account(2, signer, name = "authority")]
+    #[account(3, writable, signer, name = "payer")]
+    #[account(4, name = "system_program", desc = "System program")]
     UpdateMintManager(UpdateMintManagerIx),
 
     #[account(0, writable, name = "mint_manager")]
@@ -126,19 +125,6 @@ pub enum CreatorStandardInstruction {
     #[account(6, name = "associated_token_program")]
     #[account(7, name = "system_program")]
     InitializeAccount,
-
-    #[account(0, writable, name = "mint_manager")]
-    #[account(1, writable, signer, name = "mint")]
-    #[account(2, name = "ruleset")]
-    #[account(3, writable, name = "target_token_account")]
-    #[account(4, signer, name = "target")]
-    #[account(5, signer, name = "authority")]
-    #[account(6, signer, name = "payer")]
-    #[account(7, name = "rent")]
-    #[account(8, name = "token_program")]
-    #[account(9, name = "associated_token_program")]
-    #[account(10, name = "system_program")]
-    InitializeMint,
 
     #[account(0, name = "mint_manager")]
     #[account(1, name = "mint")]
@@ -226,11 +212,6 @@ pub fn process_instruction(
             msg!("CreatorStandardInstruction::InitializeAccount");
             let ctx = InitializeAccountCtx::load(accounts)?;
             instructions::token::initialize_account::handler(ctx)
-        }
-        CreatorStandardInstruction::InitializeMint => {
-            msg!("CreatorStandardInstruction::InitializeMint");
-            let ctx = InitializeMintCtx::load(accounts)?;
-            instructions::token::initialize_mint::handler(ctx)
         }
         CreatorStandardInstruction::Revoke => {
             msg!("CreatorStandardInstruction::Revoke");

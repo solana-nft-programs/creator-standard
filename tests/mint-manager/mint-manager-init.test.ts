@@ -2,10 +2,9 @@ import { beforeAll, expect, test } from "@jest/globals";
 import { getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import { createInitMintManagerInstruction, Ruleset } from "../../sdk";
+import { createInitMintManagerInstruction } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import {
-  DEFAULT_COLLECTOR,
   findMintManagerId,
   findMintMetadataId,
   findRulesetId,
@@ -35,10 +34,6 @@ beforeAll(async () => {
 test("Init", async () => {
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
-  const ruleset = await Ruleset.fromAccountAddress(
-    provider.connection,
-    RULESET_ID
-  );
 
   const ata = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
@@ -52,8 +47,6 @@ test("Init", async () => {
       ruleset: RULESET_ID,
       holderTokenAccount: ata,
       tokenAuthority: provider.wallet.publicKey,
-      rulesetCollector: ruleset.collector,
-      collector: DEFAULT_COLLECTOR,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
     })

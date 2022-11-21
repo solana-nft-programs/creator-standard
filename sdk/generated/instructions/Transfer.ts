@@ -45,7 +45,7 @@ export type TransferInstructionAccounts = {
   instructions: web3.PublicKey
 }
 
-export const transferInstructionDiscriminator = 14
+export const transferInstructionDiscriminator = 13
 
 /**
  * Creates a _Transfer_ instruction.

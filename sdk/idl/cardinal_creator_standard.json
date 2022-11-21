@@ -173,11 +173,6 @@
           "isSigner": false
         },
         {
-          "name": "collector",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "authority",
           "isMut": false,
           "isSigner": true
@@ -497,71 +492,6 @@
       }
     },
     {
-      "name": "InitializeMint",
-      "accounts": [
-        {
-          "name": "mintManager",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "mint",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "ruleset",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "targetTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "target",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "payer",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "rent",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [],
-      "discriminant": {
-        "type": "u8",
-        "value": 12
-      }
-    },
-    {
       "name": "Revoke",
       "accounts": [
         {
@@ -593,7 +523,7 @@
       "args": [],
       "discriminant": {
         "type": "u8",
-        "value": 13
+        "value": 12
       }
     },
     {
@@ -654,7 +584,7 @@
       "args": [],
       "discriminant": {
         "type": "u8",
-        "value": 14
+        "value": 13
       }
     }
   ],
