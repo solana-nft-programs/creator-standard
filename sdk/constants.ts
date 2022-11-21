@@ -1,3 +1,3 @@
 export const DEFAULT_REQUIRED_CREATOR =
   "cteamyte8zjZTeexp3qTzvpb24TKRSL3HFad9SzNaNJ";
-export const DEFAULT_MINIMUM_CREATOR_SHARE = 5;
+export const DEFAULT_MINIMUM_CREATOR_SHARE = 10;

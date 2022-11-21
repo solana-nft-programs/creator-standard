@@ -6,11 +6,16 @@ import {
   Metadata,
 } from "@metaplex-foundation/mpl-token-metadata";
 import * as anchor from "@project-serum/anchor";
-import { Keypair, PublicKey } from "@solana/web3.js";
+import type { PublicKey } from "@solana/web3.js";
+import { Keypair } from "@solana/web3.js";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-import { createInitMintManagerInstruction } from "../sdk";
+import {
+  createInitMintManagerInstruction,
+  DEFAULT_MINIMUM_CREATOR_SHARE,
+  DEFAULT_REQUIRED_CREATOR,
+} from "../sdk";
 import {
   findMintManagerId,
   findMintMetadataId,
@@ -83,7 +88,12 @@ const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
             new Creator({
               address: wallet.publicKey.toString(),
               verified: false,
-              share: 100,
+              share: 100 - DEFAULT_MINIMUM_CREATOR_SHARE,
+            }),
+            new Creator({
+              address: DEFAULT_REQUIRED_CREATOR,
+              verified: false,
+              share: DEFAULT_MINIMUM_CREATOR_SHARE,
             }),
           ],
           collection: null,
@@ -124,7 +134,5 @@ const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
   }
 };
 
-const params: CreateCSSTokenParams = {
-  target: new PublicKey(""),
-};
+const params: CreateCSSTokenParams = {};
 main(params).catch((e) => console.log(e));
