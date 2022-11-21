@@ -362,20 +362,22 @@ pub fn check_creators<'info>(
         ErrorCode::InvalidMintMetadata,
         "Invalid mint metadata address",
     )?;
-    let mint_metadata = Metadata::from_account_info(mint_metadata_account_info)?;
-    if let Some(creators) = mint_metadata.data.creators {
-        let mut allowed = false;
-        for creator in creators {
-            if creator.address.to_string() == DEFAULT_REQUIRED_CREATOR
-                && creator.share >= DEFAULT_MINIMUM_CREATOR_SHARE
-            {
-                allowed = true;
+    if !mint_metadata_account_info.data_is_empty() {
+        let mint_metadata = Metadata::from_account_info(mint_metadata_account_info)?;
+        if let Some(creators) = mint_metadata.data.creators {
+            let mut allowed = false;
+            for creator in creators {
+                if creator.address.to_string() == DEFAULT_REQUIRED_CREATOR
+                    && creator.share >= DEFAULT_MINIMUM_CREATOR_SHARE
+                {
+                    allowed = true;
+                }
             }
-        }
-        if !allowed {
-            return Err(ProgramError::from(
-                ErrorCode::InusufficientMinimumCreatorShare,
-            ));
+            if !allowed {
+                return Err(ProgramError::from(
+                    ErrorCode::InusufficientMinimumCreatorShare,
+                ));
+            }
         }
     }
     Ok(true)

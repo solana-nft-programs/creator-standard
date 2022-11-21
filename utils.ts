@@ -36,7 +36,7 @@ export async function newAccountWithLamports(
 }
 
 export function getConnection(): Connection {
-  const url = "http://localhost:8899";
+  const url = "http://127.0.0.1:8899";
   return new Connection(url, "confirmed");
 }
 
