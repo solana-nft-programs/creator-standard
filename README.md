@@ -4,9 +4,9 @@
   <img style="width: full" src="./doc-assets/banner.png" />
 </div>
 
-## Read the GitBook: [details](https://cardinal-labs.notion.site/The-Creator-Standard-v1-5fce56a1d8bb440f849205e9fb5befc2)
+## Read the [GitBook](https://cardinal-so.gitbook.io/creator-standard/)
 
-> Link to: High level non-techincal proposal that includes background, motivation and proposed solution
+> Contains the entire end-to-end proposal that includes background, proposed solution, pricing and examples of technical integration.
 
 # Background
 
