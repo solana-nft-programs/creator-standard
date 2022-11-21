@@ -30,8 +30,9 @@ use solana_program::sysvar::instructions::load_instruction_at_checked;
 pub fn transfer(
     program_id: Pubkey,
     mint_manager: Pubkey,
-    ruleset: Pubkey,
     mint: Pubkey,
+    mint_metadata: Pubkey,
+    ruleset: Pubkey,
     from: Pubkey,
     to: Pubkey,
     authority: Pubkey,
@@ -40,8 +41,9 @@ pub fn transfer(
         program_id,
         accounts: vec![
             AccountMeta::new_readonly(mint_manager, false),
-            AccountMeta::new_readonly(ruleset, false),
             AccountMeta::new_readonly(mint, false),
+            AccountMeta::new_readonly(mint_metadata, false),
+            AccountMeta::new_readonly(ruleset, false),
             AccountMeta::new(from, false),
             AccountMeta::new(to, false),
             AccountMeta::new_readonly(authority, true),
@@ -55,9 +57,9 @@ pub fn transfer(
 
 pub struct TransferCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
-    pub ruleset: &'a AccountInfo<'info>,
     pub mint: &'a AccountInfo<'info>,
     pub mint_metadata: &'a AccountInfo<'info>,
+    pub ruleset: &'a AccountInfo<'info>,
     pub from: &'a AccountInfo<'info>,
     pub to: &'a AccountInfo<'info>,
     pub authority: &'a AccountInfo<'info>,
@@ -72,9 +74,9 @@ impl<'a, 'info> TransferCtx<'a, 'info> {
         let account_iter = &mut accounts.iter();
         let ctx = Self {
             mint_manager: next_account_info(account_iter)?,
-            ruleset: next_account_info(account_iter)?,
             mint: next_account_info(account_iter)?,
             mint_metadata: next_account_info(account_iter)?,
+            ruleset: next_account_info(account_iter)?,
             from: next_account_info(account_iter)?,
             to: next_account_info(account_iter)?,
             authority: next_account_info(account_iter)?,

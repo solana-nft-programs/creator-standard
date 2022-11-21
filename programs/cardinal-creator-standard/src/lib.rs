@@ -134,9 +134,9 @@ pub enum CreatorStandardInstruction {
     Revoke,
 
     #[account(0, name = "mint_manager")]
-    #[account(1, name = "ruleset")]
-    #[account(2, name = "mint")]
-    #[account(3, name = "mint_metadata", desc = "Mint metadata")]
+    #[account(1, name = "mint")]
+    #[account(2, name = "mint_metadata", desc = "Mint metadata")]
+    #[account(3, name = "ruleset")]
     #[account(4, writable, name = "from")]
     #[account(5, writable, name = "to")]
     #[account(6, signer, name = "authority")]

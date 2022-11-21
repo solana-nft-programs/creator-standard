@@ -1,5 +1,5 @@
 {
-  "version": "2.1.1",
+  "version": "2.1.2",
   "name": "cardinal_creator_standard",
   "instructions": [
     {
@@ -535,11 +535,6 @@
           "isSigner": false
         },
         {
-          "name": "ruleset",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
           "name": "mint",
           "isMut": false,
           "isSigner": false
@@ -549,6 +544,11 @@
           "isMut": false,
           "isSigner": false,
           "desc": "Mint metadata"
+        },
+        {
+          "name": "ruleset",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "from",

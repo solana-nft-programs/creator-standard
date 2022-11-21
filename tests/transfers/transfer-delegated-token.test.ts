@@ -142,9 +142,9 @@ test("Transfer", async () => {
 
   const ix = createTransferInstruction({
     mintManager: mintManagerId,
+    mint: mintKeypair.publicKey,
     mintMetadata: mintMetadataId,
     ruleset: RULESET_ID,
-    mint: mintKeypair.publicKey,
     from: fromAtaId,
     to: toAtaId,
     authority: delegate.publicKey,

@@ -34,6 +34,7 @@ pub fn init_mint_manager(
     program_id: Pubkey,
     mint_manager: Pubkey,
     mint: Pubkey,
+    mint_metadata: Pubkey,
     ruleset: Pubkey,
     holder_token_account: Pubkey,
     token_authority: Pubkey,
@@ -45,6 +46,7 @@ pub fn init_mint_manager(
         accounts: vec![
             AccountMeta::new(mint_manager, false),
             AccountMeta::new(mint, false),
+            AccountMeta::new_readonly(mint_metadata, false),
             AccountMeta::new_readonly(ruleset, false),
             AccountMeta::new(holder_token_account, false),
             AccountMeta::new_readonly(token_authority, true),
