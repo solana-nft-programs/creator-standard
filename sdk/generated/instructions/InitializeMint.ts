@@ -25,8 +25,6 @@ export const InitializeMintStruct = new beet.BeetArgsStruct<{
  * @property [] ruleset
  * @property [_writable_] targetTokenAccount
  * @property [**signer**] target
- * @property [_writable_] rulesetCollector
- * @property [_writable_] collector
  * @property [**signer**] authority
  * @property [**signer**] payer
  * @property [] associatedTokenProgram
@@ -40,8 +38,6 @@ export type InitializeMintInstructionAccounts = {
   ruleset: web3.PublicKey
   targetTokenAccount: web3.PublicKey
   target: web3.PublicKey
-  rulesetCollector: web3.PublicKey
-  collector: web3.PublicKey
   authority: web3.PublicKey
   payer: web3.PublicKey
   rent?: web3.PublicKey
@@ -92,16 +88,6 @@ export function createInitializeMintInstruction(
       pubkey: accounts.target,
       isWritable: false,
       isSigner: true,
-    },
-    {
-      pubkey: accounts.rulesetCollector,
-      isWritable: true,
-      isSigner: false,
-    },
-    {
-      pubkey: accounts.collector,
-      isWritable: true,
-      isSigner: false,
     },
     {
       pubkey: accounts.authority,

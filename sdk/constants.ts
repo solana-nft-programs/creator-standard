@@ -4,8 +4,6 @@ export type RulesetData = {
   accountType: number;
   version: number;
   authority: PublicKey;
-  collector: PublicKey;
-  checkSellerFeeBasisPoint: boolean;
   name: string;
   allowedPrograms: PublicKey[];
   disallowedAddresses: PublicKey[];

@@ -28,8 +28,6 @@ pub fn update_ruleset(
     ruleset: Pubkey,
     authority: Pubkey,
     payer: Pubkey,
-    collector: Pubkey,
-    check_seller_fee_basis_points: bool,
     allowed_programs: Vec<Pubkey>,
     disallowed_addresses: Vec<Pubkey>,
     extensions: Vec<Pubkey>,
@@ -44,8 +42,6 @@ pub fn update_ruleset(
         ],
         data: CreatorStandardInstruction::UpdateRuleset(UpdateRulesetIx {
             authority,
-            collector,
-            check_seller_fee_basis_points,
             allowed_programs,
             disallowed_addresses,
             extensions,
@@ -59,8 +55,6 @@ pub fn update_ruleset(
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone)]
 pub struct UpdateRulesetIx {
     pub authority: Pubkey,
-    pub collector: Pubkey,
-    pub check_seller_fee_basis_points: bool,
     pub allowed_programs: Vec<Pubkey>,
     pub disallowed_addresses: Vec<Pubkey>,
     pub extensions: Vec<Pubkey>,
@@ -115,8 +109,6 @@ pub fn handler(ctx: UpdateRulesetCtx, ix: UpdateRulesetIx) -> ProgramResult {
     );
     let mut ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
     ruleset.authority = ix.authority;
-    ruleset.collector = ix.collector;
-    ruleset.check_seller_fee_basis_points = ix.check_seller_fee_basis_points;
     ruleset.allowed_programs = ix.allowed_programs;
     ruleset.disallowed_addresses = ix.disallowed_addresses;
     ruleset.extensions = ix.extensions;
