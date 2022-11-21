@@ -53,15 +53,16 @@ pub enum CreatorStandardInstruction {
     // mint_manager
     #[account(0, writable, name = "mint_manager")]
     #[account(1, writable, name = "mint")]
-    #[account(2, name = "ruleset")]
-    #[account(3, writable, name = "holder_token_account")]
-    #[account(4, signer, name = "token_authority")]
-    #[account(5, writable, name = "ruleset_collector")]
-    #[account(6, writable, name = "collector")]
-    #[account(7, name = "authority")]
-    #[account(8, writable, signer, name = "payer")]
-    #[account(9, name = "token_program", desc = "Token program")]
-    #[account(10, name = "system_program", desc = "System program")]
+    #[account(2, name = "mint_metadata", desc = "Mint metadata")]
+    #[account(3, name = "ruleset")]
+    #[account(4, writable, name = "holder_token_account")]
+    #[account(5, signer, name = "token_authority")]
+    #[account(6, writable, name = "ruleset_collector")]
+    #[account(7, writable, name = "collector")]
+    #[account(8, name = "authority")]
+    #[account(9, writable, signer, name = "payer")]
+    #[account(10, name = "token_program", desc = "Token program")]
+    #[account(11, name = "system_program", desc = "System program")]
     InitMintManager,
 
     #[account(0, writable, name = "mint_manager")]
@@ -73,10 +74,11 @@ pub enum CreatorStandardInstruction {
     UpdateMintManager(UpdateMintManagerIx),
 
     #[account(0, writable, name = "mint_manager")]
-    #[account(1, name = "ruleset")]
-    #[account(2, name = "in_use_by_address")]
-    #[account(3, signer, name = "holder")]
-    #[account(4, name = "holder_token_account")]
+    #[account(1, name = "mint_metadata", desc = "Mint metadata")]
+    #[account(2, name = "ruleset")]
+    #[account(3, name = "in_use_by_address")]
+    #[account(4, signer, name = "holder")]
+    #[account(5, name = "holder_token_account")]
     SetInUseBy,
 
     #[account(0, writable, name = "mint_manager")]
@@ -87,20 +89,22 @@ pub enum CreatorStandardInstruction {
     #[account(0, name = "mint_manager")]
     #[account(1, name = "ruleset")]
     #[account(2, name = "mint")]
-    #[account(3, writable, name = "holder_token_account")]
-    #[account(4, signer, name = "holder")]
-    #[account(5, name = "delegate")]
-    #[account(6, name = "token_program")]
+    #[account(3, name = "mint_metadata", desc = "Mint metadata")]
+    #[account(4, writable, name = "holder_token_account")]
+    #[account(5, signer, name = "holder")]
+    #[account(6, name = "delegate")]
+    #[account(7, name = "token_program")]
     Approve(ApproveIx),
 
     #[account(0, writable, name = "mint_manager")]
     #[account(1, name = "ruleset")]
     #[account(2, name = "mint")]
-    #[account(3, name = "in_use_by_address")]
-    #[account(4, writable, name = "holder_token_account")]
-    #[account(5, signer, name = "holder")]
-    #[account(6, name = "delegate")]
-    #[account(7, name = "token_program")]
+    #[account(3, name = "mint_metadata", desc = "Mint metadata")]
+    #[account(4, name = "in_use_by_address")]
+    #[account(5, writable, name = "holder_token_account")]
+    #[account(6, signer, name = "holder")]
+    #[account(7, name = "delegate")]
+    #[account(8, name = "token_program")]
     ApproveAndSetInUseBy(ApproveAndSetInUseByIx),
 
     #[account(0, writable, name = "mint_manager")]
@@ -153,12 +157,13 @@ pub enum CreatorStandardInstruction {
     #[account(0, name = "mint_manager")]
     #[account(1, name = "ruleset")]
     #[account(2, name = "mint")]
-    #[account(3, writable, name = "from")]
-    #[account(4, writable, name = "to")]
-    #[account(5, signer, name = "authority")]
-    #[account(6, name = "token_program")]
-    #[account(7, name = "system_program")]
-    #[account(8, name = "instructions")]
+    #[account(3, name = "mint_metadata", desc = "Mint metadata")]
+    #[account(4, writable, name = "from")]
+    #[account(5, writable, name = "to")]
+    #[account(6, signer, name = "authority")]
+    #[account(7, name = "token_program")]
+    #[account(8, name = "system_program")]
+    #[account(9, name = "instructions")]
     Transfer,
 }
 

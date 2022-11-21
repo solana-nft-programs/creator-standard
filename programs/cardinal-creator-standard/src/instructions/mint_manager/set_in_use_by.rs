@@ -46,6 +46,7 @@ pub fn set_in_use_by(
 
 pub struct SetInUseByCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
+    pub mint_metadata: &'a AccountInfo<'info>,
     pub ruleset: &'a AccountInfo<'info>,
     pub in_use_by_address: &'a AccountInfo<'info>,
     pub holder: &'a AccountInfo<'info>,
@@ -58,6 +59,7 @@ impl<'a, 'info> SetInUseByCtx<'a, 'info> {
         let account_iter = &mut accounts.iter();
         let ctx = Self {
             mint_manager: next_account_info(account_iter)?,
+            mint_metadata: next_account_info(account_iter)?,
             ruleset: next_account_info(account_iter)?,
             in_use_by_address: next_account_info(account_iter)?,
             holder: next_account_info(account_iter)?,
@@ -98,6 +100,8 @@ impl<'a, 'info> SetInUseByCtx<'a, 'info> {
             "holder_token_account mint",
         )?;
 
+        ///// no checks for mint_metadata /////
+
         Ok(ctx)
     }
 }
@@ -111,6 +115,9 @@ pub fn handler(ctx: SetInUseByCtx) -> ProgramResult {
     mint_manager.in_use_by = Some(*ctx.in_use_by_address.key);
     mint_manager.save(ctx.mint_manager)?;
     let remaining_accounts = &mut ctx.remaining_accounts.iter();
+
+    /////////////// check creators ///////////////
+    check_creators(&mint_manager.mint, &ruleset, ctx.mint_metadata)?;
 
     /////////////// check allowed / disallowed ///////////////
     let [allowed_programs, disallowed_addresses] =
@@ -128,8 +135,5 @@ pub fn handler(ctx: SetInUseByCtx) -> ProgramResult {
     {
         return Err(ProgramError::from(ErrorCode::AddressDisallowed));
     }
-    /////////////// check creators ///////////////
-    check_creators(&mint_manager.mint, &ruleset, remaining_accounts)?;
-
     Ok(())
 }

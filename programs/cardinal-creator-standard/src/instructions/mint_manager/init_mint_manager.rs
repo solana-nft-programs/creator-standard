@@ -67,6 +67,7 @@ pub fn init_mint_manager(
 pub struct InitMintManagerCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
     pub mint: &'a AccountInfo<'info>,
+    pub mint_metadata: &'a AccountInfo<'info>,
     pub ruleset: &'a AccountInfo<'info>,
     pub holder_token_account: &'a AccountInfo<'info>,
     pub token_authority: &'a AccountInfo<'info>,
@@ -85,6 +86,7 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         let ctx = Self {
             mint_manager: next_account_info(account_iter)?,
             mint: next_account_info(account_iter)?,
+            mint_metadata: next_account_info(account_iter)?,
             ruleset: next_account_info(account_iter)?,
             holder_token_account: next_account_info(account_iter)?,
             token_authority: next_account_info(account_iter)?,
@@ -214,8 +216,7 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
 
     /////////////// check creators ///////////////
     let ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
-    let remaining_accounts = &mut ctx.remaining_accounts.iter();
-    check_creators(&mint_manager.mint, &ruleset, remaining_accounts)?;
+    check_creators(&mint_manager.mint, &ruleset, ctx.mint_metadata)?;
 
     // set mint authority
     invoke(

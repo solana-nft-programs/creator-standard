@@ -4,7 +4,6 @@ use mpl_token_metadata::pda::find_metadata_account;
 use mpl_token_metadata::state::Metadata;
 use mpl_token_metadata::state::TokenMetadataAccount;
 use shank::ShankAccount;
-use solana_program::account_info::next_account_info;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::hash::hash;
 use solana_program::program_error::ProgramError;
@@ -331,14 +330,32 @@ pub fn allowlist_disallowlist<'info>(
     return Ok([allowed_programs, disallowed_addresses]);
 }
 
+pub fn check_allowlist_disallowlist<'info>(
+    account_id: &Pubkey,
+    ruleset: &Ruleset,
+    remaining_accounts: &mut Iter<&AccountInfo<'info>>,
+) -> Result<bool, ProgramError> {
+    let [allowed_programs, disallowed_addresses] =
+        allowlist_disallowlist(&ruleset, remaining_accounts)?;
+
+    if !allowed_programs.is_empty()
+        && !is_default_program(account_id)
+        && !allowed_programs.contains(&account_id.to_string())
+    {
+        return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));
+    }
+
+    if !disallowed_addresses.is_empty() && disallowed_addresses.contains(&account_id.to_string()) {
+        return Err(ProgramError::from(ErrorCode::AddressDisallowed));
+    }
+    Ok(true)
+}
+
 pub fn check_creators<'info>(
     mint: &Pubkey,
     _ruleset: &Ruleset,
-    remaining_accounts: &mut Iter<&AccountInfo<'info>>,
+    mint_metadata_account_info: &AccountInfo<'info>,
 ) -> Result<bool, ProgramError> {
-    let mint_metadata_account_info = remaining_accounts
-        .next()
-        .ok_or(ProgramError::NotEnoughAccountKeys)?;
     let mint_metadata_id = find_metadata_account(mint).0;
     assert_with_msg(
         mint_metadata_account_info.key == &mint_metadata_id,
