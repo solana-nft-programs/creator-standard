@@ -18,10 +18,6 @@ pub enum ErrorCode {
     InvalidAmount,
     #[error("Invalid token account")]
     InvalidTokenAccount,
-    #[error("Invalid collector address")]
-    InvalidCollector,
-    #[error("Invalid ruleset collector address")]
-    InvalidRulesetCollector,
     #[error("Invalid authority address")]
     InvalidAuthority,
     #[error("Invalid mint manager")]

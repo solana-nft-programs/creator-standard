@@ -64,10 +64,6 @@ pub struct Ruleset {
     pub version: u8,
     // authority who can update this ruleset
     pub authority: Pubkey,
-    // collector who collects anything from this ruleset
-    pub collector: Pubkey,
-    // whether to check the seller_fee_basis_points using post-transfer
-    pub check_seller_fee_basis_points: bool,
     // name for this ruleset (also used to derive ruleset address)
     pub name: String,
     // vector of allowed programs that can interact with this nft

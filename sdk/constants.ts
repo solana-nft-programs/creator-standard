@@ -1,21 +1,3 @@
-import type { PublicKey } from "@solana/web3.js";
-
-export type RulesetData = {
-  accountType: number;
-  version: number;
-  authority: PublicKey;
-  collector: PublicKey;
-  checkSellerFeeBasisPoint: boolean;
-  name: string;
-  allowedPrograms: PublicKey[];
-  disallowedAddresses: PublicKey[];
-};
-
-export type MintManagerData = {
-  accountType: number;
-  version: number;
-  mint: PublicKey;
-  authority: PublicKey;
-  ruleset: PublicKey;
-  inUseBy: PublicKey | null;
-};
+export const DEFAULT_REQUIRED_CREATOR =
+  "cteamyte8zjZTeexp3qTzvpb24TKRSL3HFad9SzNaNJ";
+export const DEFAULT_MINIMUM_CREATOR_SHARE = 5;

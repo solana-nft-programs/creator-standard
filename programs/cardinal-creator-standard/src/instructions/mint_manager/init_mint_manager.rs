@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use crate::errors::ErrorCode;
 use crate::id;
 use crate::state::assert_mint_manager_seeds;
@@ -7,7 +5,6 @@ use crate::state::check_creators;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
-use crate::state::COLLECTOR;
 use crate::state::MINT_MANAGER_SIZE;
 use crate::utils::assert_address;
 use crate::utils::assert_amount;
@@ -40,8 +37,6 @@ pub fn init_mint_manager(
     ruleset: Pubkey,
     holder_token_account: Pubkey,
     token_authority: Pubkey,
-    ruleset_collector: Pubkey,
-    collector: Pubkey,
     authority: Pubkey,
     payer: Pubkey,
 ) -> Result<Instruction, ProgramError> {
@@ -53,8 +48,6 @@ pub fn init_mint_manager(
             AccountMeta::new_readonly(ruleset, false),
             AccountMeta::new(holder_token_account, false),
             AccountMeta::new_readonly(token_authority, true),
-            AccountMeta::new(ruleset_collector, false),
-            AccountMeta::new(collector, false),
             AccountMeta::new_readonly(authority, false),
             AccountMeta::new(payer, true),
             AccountMeta::new_readonly(spl_token::id(), false),
@@ -71,8 +64,6 @@ pub struct InitMintManagerCtx<'a, 'info> {
     pub ruleset: &'a AccountInfo<'info>,
     pub holder_token_account: &'a AccountInfo<'info>,
     pub token_authority: &'a AccountInfo<'info>,
-    pub ruleset_collector: &'a AccountInfo<'info>,
-    pub collector: &'a AccountInfo<'info>,
     pub authority: &'a AccountInfo<'info>,
     pub payer: &'a AccountInfo<'info>,
     pub token_program: &'a AccountInfo<'info>,
@@ -89,15 +80,12 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
             ruleset: next_account_info(account_iter)?,
             holder_token_account: next_account_info(account_iter)?,
             token_authority: next_account_info(account_iter)?,
-            ruleset_collector: next_account_info(account_iter)?,
-            collector: next_account_info(account_iter)?,
             authority: next_account_info(account_iter)?,
             payer: next_account_info(account_iter)?,
             token_program: next_account_info(account_iter)?,
             system_program: next_account_info(account_iter)?,
         };
         // deserializations
-        let ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
         let holder_token_account =
             unpack_checked_token_account(ctx.holder_token_account, Some("holder_token_account"))?;
 
@@ -129,22 +117,6 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
 
         // mint_metadata
         // checked when deserialized
-
-        // ruleset_collector
-        assert_mut(ctx.ruleset_collector, "ruleset_collector")?;
-        assert_address(
-            ctx.ruleset_collector.key,
-            &ruleset.collector,
-            "ruleset_collector",
-        )?;
-
-        // collector
-        assert_mut(ctx.collector, "collector")?;
-        assert_address(
-            ctx.collector.key,
-            &Pubkey::from_str(COLLECTOR).expect("Invalid collector pubkey"),
-            "collector",
-        )?;
 
         ///// no checks for authority, potentially they are also signer that is why leaving here and not passing as ix /////
 

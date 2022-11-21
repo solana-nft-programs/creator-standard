@@ -34,8 +34,6 @@ pub fn init_ruleset(
     authority: Pubkey,
     payer: Pubkey,
     name: String,
-    collector: Pubkey,
-    check_seller_fee_basis_points: bool,
     allowed_programs: Vec<Pubkey>,
     disallowed_addresses: Vec<Pubkey>,
     extensions: Vec<Pubkey>,
@@ -50,8 +48,6 @@ pub fn init_ruleset(
         ],
         data: CreatorStandardInstruction::InitRuleset(InitRulesetIx {
             name,
-            collector,
-            check_seller_fee_basis_points,
             disallowed_addresses,
             allowed_programs,
             extensions,
@@ -65,8 +61,6 @@ pub fn init_ruleset(
 #[derive(BorshSerialize, BorshDeserialize, PartialEq, Eq, Debug, Clone)]
 pub struct InitRulesetIx {
     pub name: String,
-    pub collector: Pubkey,
-    pub check_seller_fee_basis_points: bool,
     pub allowed_programs: Vec<Pubkey>,
     pub disallowed_addresses: Vec<Pubkey>,
     pub extensions: Vec<Pubkey>,
@@ -140,8 +134,6 @@ pub fn handler(ctx: InitRulesetCtx, ix: InitRulesetIx) -> ProgramResult {
     let mut ruleset: Ruleset = Ruleset::new();
     ruleset.version = 0;
     ruleset.authority = *ctx.authority.key;
-    ruleset.collector = ix.collector;
-    ruleset.check_seller_fee_basis_points = ix.check_seller_fee_basis_points;
     ruleset.name = ix.name;
     ruleset.allowed_programs = ix.allowed_programs;
     ruleset.disallowed_addresses = ix.disallowed_addresses;

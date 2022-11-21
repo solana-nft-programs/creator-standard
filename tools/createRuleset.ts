@@ -32,8 +32,6 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
       {
         initRulesetIx: {
           name: params.name,
-          collector: wallet.publicKey,
-          checkSellerFeeBasisPoints: false,
           disallowedAddresses: [],
           allowedPrograms: [],
           extensions: [],
@@ -65,6 +63,6 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
 };
 
 const params: RulesetParams = {
-  name: "ruleset-no-checks",
+  name: "",
 };
 main(params).catch((e) => console.log(e));

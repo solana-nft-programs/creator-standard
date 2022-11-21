@@ -27,17 +27,16 @@ use crate::id;
 use crate::utils::assert_owner;
 
 ///////////// CONSTANTS /////////////
-pub const COLLECTOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
-pub const DEFAULT_REQUIRED_CREATOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
+pub const DEFAULT_REQUIRED_CREATOR: &str = "cteamyte8zjZTeexp3qTzvpb24TKRSL3HFad9SzNaNJ";
 pub const DEFAULT_MINIMUM_CREATOR_SHARE: u8 = 5;
-pub const DEFAULT_PROGRAMS: [&str; 2] = [
+pub const BASE_PROGRAMS: [&str; 2] = [
     "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
     "mccsLbWK9m7pbFotPmPGBhN37WnsfHG6SRsmeRTJSiP",
 ];
 
-pub fn is_default_program(program_id: &Pubkey) -> bool {
-    DEFAULT_PROGRAMS.contains(&&program_id.to_string()[..])
+pub fn is_base_program(program_id: &Pubkey) -> bool {
+    BASE_PROGRAMS.contains(&&program_id.to_string()[..])
 }
 ///////////// CONSTANTS /////////////
 
@@ -251,8 +250,6 @@ pub struct Ruleset {
     pub account_type: [u8; 8], // account discriminator
     pub version: u8,           // for potential future verisioning
     pub authority: Pubkey,
-    pub collector: Pubkey,
-    pub check_seller_fee_basis_points: bool,
     pub name: String,
     pub allowed_programs: Vec<Pubkey>,
     pub disallowed_addresses: Vec<Pubkey>,
@@ -272,8 +269,6 @@ impl CreatorStandardAccount for Ruleset {
             account_type: Ruleset::hash(),
             version: 0,
             authority: Pubkey::default(),
-            collector: Pubkey::default(),
-            check_seller_fee_basis_points: true,
             name: String::from(""),
             allowed_programs: Vec::new(),
             disallowed_addresses: Vec::new(),
@@ -339,7 +334,7 @@ pub fn check_allowlist_disallowlist<'info>(
         allowlist_disallowlist(ruleset, remaining_accounts)?;
 
     if !allowed_programs.is_empty()
-        && !is_default_program(account_id)
+        && !is_base_program(account_id)
         && !allowed_programs.contains(&account_id.to_string())
     {
         return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));

@@ -1,6 +1,5 @@
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
-use crate::state::Ruleset;
 use crate::utils::assert_address;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
@@ -21,7 +20,6 @@ pub fn update_mint_manager(
     program_id: Pubkey,
     mint_manager: Pubkey,
     ruleset: Pubkey,
-    collector: Pubkey,
     authority: Pubkey,
     new_authority: Pubkey,
     payer: Pubkey,
@@ -31,7 +29,6 @@ pub fn update_mint_manager(
         accounts: vec![
             AccountMeta::new(mint_manager, false),
             AccountMeta::new_readonly(ruleset, false),
-            AccountMeta::new(collector, false),
             AccountMeta::new_readonly(authority, true),
             AccountMeta::new(payer, true),
             AccountMeta::new_readonly(solana_program::system_program::id(), false),
@@ -53,7 +50,6 @@ pub struct UpdateMintManagerIx {
 pub struct UpdateMintManagerCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
     pub ruleset: &'a AccountInfo<'info>,
-    pub collector: &'a AccountInfo<'info>,
     pub authority: &'a AccountInfo<'info>,
     pub payer: &'a AccountInfo<'info>,
     pub system_program: &'a AccountInfo<'info>,
@@ -65,23 +61,17 @@ impl<'a, 'info> UpdateMintManagerCtx<'a, 'info> {
         let ctx = Self {
             mint_manager: next_account_info(account_iter)?,
             ruleset: next_account_info(account_iter)?,
-            collector: next_account_info(account_iter)?,
             authority: next_account_info(account_iter)?,
             payer: next_account_info(account_iter)?,
             system_program: next_account_info(account_iter)?,
         };
         // deserializations
         let mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
-        let ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
 
         // mint_manager
         assert_mut(ctx.mint_manager, "mint_manager")?;
 
         ///// no checks for ruleset /////
-
-        // rulese_collector
-        assert_mut(ctx.collector, "collector")?;
-        assert_address(ctx.collector.key, &ruleset.collector, "collector")?;
 
         // authority
         assert_signer(ctx.authority, "authority")?;

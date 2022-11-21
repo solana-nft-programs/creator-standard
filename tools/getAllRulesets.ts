@@ -31,6 +31,7 @@ const main = async (cluster = "devnet") => {
     }
   );
   const rulesets: [PublicKey, Ruleset][] = [];
+  console.log(programAccounts.map((acc) => acc.pubkey.toString()));
   programAccounts.forEach((account) => {
     rulesets.push([
       account.pubkey,

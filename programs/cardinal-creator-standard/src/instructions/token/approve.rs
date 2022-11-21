@@ -1,7 +1,7 @@
 use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
-use crate::state::is_default_program;
+use crate::state::is_base_program;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
@@ -144,7 +144,7 @@ pub fn handler(ctx: ApproveCtx, ix: ApproveIx) -> ProgramResult {
         allowlist_disallowlist(&ruleset, remaining_accounts)?;
 
     if !allowed_programs.is_empty()
-        && !is_default_program(ctx.delegate.owner)
+        && !is_base_program(ctx.delegate.owner)
         && !allowed_programs.contains(&ctx.delegate.owner.to_string())
     {
         return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));

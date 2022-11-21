@@ -1,3 +1,4 @@
+import { findAta } from "@cardinal/common";
 import { utils, Wallet } from "@project-serum/anchor";
 import {
   createAssociatedTokenAccountInstruction,
@@ -18,8 +19,12 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
+import { findMintManagerId, findMintMetadataId } from "./sdk";
 
-import { PROGRAM_ADDRESS } from "./sdk/generated";
+import {
+  createInitMintManagerInstruction,
+  PROGRAM_ADDRESS,
+} from "./sdk/generated";
 
 export async function newAccountWithLamports(
   connection: Connection,
@@ -190,6 +195,31 @@ export const createMintTx = async (
     createAssociatedTokenAccountInstruction(authority, ata, target, mint),
     createMintToInstruction(mint, ata, authority, 1)
   );
+};
+
+export const createCCSMintTx = async (
+  connection: Connection,
+  mint: PublicKey,
+  authority: PublicKey,
+  rulesetId: PublicKey
+): Promise<Transaction> => {
+  const tx = await createMintTx(connection, mint, authority);
+  const mintManagerId = findMintManagerId(mint);
+  const mintMetadataId = findMintMetadataId(mint);
+  const targetTokenAccountId = await findAta(mint, authority, true);
+  tx.add(
+    createInitMintManagerInstruction({
+      mintManager: mintManagerId,
+      mint: mint,
+      mintMetadata: mintMetadataId,
+      ruleset: rulesetId,
+      holderTokenAccount: targetTokenAccountId,
+      tokenAuthority: authority,
+      authority: authority,
+      payer: authority,
+    })
+  );
+  return tx;
 };
 
 type AccountFn<T> = () => Promise<T>;

@@ -4,17 +4,13 @@ import { PublicKey } from "@solana/web3.js";
 
 import { PROGRAM_ID } from "./generated";
 
-export const DEFAULT_COLLECTOR = new PublicKey(
-  "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"
-);
-
 export const METADATA_PROGRAM_ID = new PublicKey(
   "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
 );
 
-export const findRulesetId = (name: string): PublicKey => {
+export const findRulesetId = (name?: string): PublicKey => {
   return findProgramAddressSync(
-    [utils.bytes.utf8.encode("ruleset"), utils.bytes.utf8.encode(name)],
+    [utils.bytes.utf8.encode("ruleset"), utils.bytes.utf8.encode(name || "")],
     PROGRAM_ID
   )[0];
 };
