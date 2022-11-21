@@ -21,8 +21,7 @@ import {
 
 const mintKeypair = Keypair.generate();
 
-const RULESET_NAME = "ruleset-no-checks";
-const RULESET_ID = findRulesetId(RULESET_NAME);
+const RULESET_ID = findRulesetId();
 const inUseByAddress = Keypair.generate();
 
 let provider: CardinalProvider;
@@ -64,9 +63,7 @@ test("Init", async () => {
   expect(mintManager.authority.toString()).toBe(
     provider.wallet.publicKey.toString()
   );
-  expect(mintManager.ruleset.toString()).toBe(
-    findRulesetId(RULESET_NAME).toString()
-  );
+  expect(mintManager.ruleset.toString()).toBe(RULESET_ID.toString());
 });
 
 test("Set in use by", async () => {
@@ -104,9 +101,7 @@ test("Set in use by", async () => {
   expect(mintManager.authority.toString()).toBe(
     provider.wallet.publicKey.toString()
   );
-  expect(mintManager.ruleset.toString()).toBe(
-    findRulesetId(RULESET_NAME).toString()
-  );
+  expect(mintManager.ruleset.toString()).toBe(RULESET_ID.toString());
 });
 
 test("Delegate", async () => {

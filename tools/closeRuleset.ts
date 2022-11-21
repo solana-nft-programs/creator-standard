@@ -50,6 +50,6 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
 };
 
 const params: RulesetParams = {
-  pubkey: new PublicKey("EBs1boZXeJHZpNxi6WJeWN3sBtZH1fMe5x8owCg2Z4Z7"),
+  pubkey: new PublicKey(""),
 };
 main(params).catch((e) => console.log(e));

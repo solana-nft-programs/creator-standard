@@ -14,9 +14,8 @@ import type { CardinalProvider } from "../../utils";
 import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
-const RULESET_NAME_1 = "ruleset-no-checks";
 const RULESET_NAME_2 = "ruleset-no-checks-2";
-const RULESET_ID_1 = findRulesetId(RULESET_NAME_1);
+const RULESET_ID_1 = findRulesetId();
 const RULESET_ID_2 = findRulesetId(RULESET_NAME_2);
 let provider: CardinalProvider;
 
@@ -64,9 +63,7 @@ test("Init mint manager", async () => {
   expect(mintManager.authority.toString()).toBe(
     provider.wallet.publicKey.toString()
   );
-  expect(mintManager.ruleset.toString()).toBe(
-    findRulesetId(RULESET_NAME_1).toString()
-  );
+  expect(mintManager.ruleset.toString()).toBe(RULESET_ID_1.toString());
 });
 
 test("Update mint manager", async () => {
@@ -80,7 +77,7 @@ test("Update mint manager", async () => {
         mintManager: mintManagerId,
         authority: provider.wallet.publicKey,
         payer: provider.wallet.publicKey,
-        ruleset: findRulesetId(RULESET_NAME_2),
+        ruleset: RULESET_ID_2,
       },
       {
         updateMintManagerIx: {

@@ -14,8 +14,7 @@ import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
-const RULESET_NAME = "ruleset-no-checks";
-const RULESET_ID = findRulesetId(RULESET_NAME);
+const RULESET_ID = findRulesetId();
 
 let provider: CardinalProvider;
 
@@ -62,7 +61,5 @@ test("Init", async () => {
   expect(mintManager.authority.toString()).toBe(
     provider.wallet.publicKey.toString()
   );
-  expect(mintManager.ruleset.toString()).toBe(
-    findRulesetId(RULESET_NAME).toString()
-  );
+  expect(mintManager.ruleset.toString()).toBe(RULESET_ID.toString());
 });

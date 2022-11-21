@@ -28,7 +28,7 @@ use crate::utils::assert_owner;
 
 ///////////// CONSTANTS /////////////
 pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
-pub const DEFAULT_REQUIRED_CREATOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
+pub const DEFAULT_REQUIRED_CREATOR: &str = "cteamyte8zjZTeexp3qTzvpb24TKRSL3HFad9SzNaNJ";
 pub const DEFAULT_MINIMUM_CREATOR_SHARE: u8 = 5;
 pub const BASE_PROGRAMS: [&str; 2] = [
     "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",

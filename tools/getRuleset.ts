@@ -12,7 +12,7 @@ export type RulesetParams = {
 const main = async (cluster = "devnet") => {
   const connection = connectionFor(cluster);
 
-  const rulesetId = findRulesetId("ruleset-no-checks");
+  const rulesetId = findRulesetId();
   const ruleset = await Ruleset.fromAccountAddress(connection, rulesetId);
   console.log(ruleset.name);
   console.log(ruleset.allowedPrograms);

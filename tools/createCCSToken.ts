@@ -20,7 +20,7 @@ import { connectionFor, createMintTx, executeTransaction } from "../utils";
 
 dotenv.config();
 
-const DEFAULT_RULESET = "ruleset-no-checks";
+const DEFAULT_RULESET = "";
 
 export type CreateCSSTokenParams = {
   rulesetName?: string;
