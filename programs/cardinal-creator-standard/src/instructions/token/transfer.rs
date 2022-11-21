@@ -1,6 +1,7 @@
 use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
+use crate::state::check_creators;
 use crate::state::is_default_program;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
@@ -56,6 +57,7 @@ pub struct TransferCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
     pub ruleset: &'a AccountInfo<'info>,
     pub mint: &'a AccountInfo<'info>,
+    pub mint_metadata: &'a AccountInfo<'info>,
     pub from: &'a AccountInfo<'info>,
     pub to: &'a AccountInfo<'info>,
     pub authority: &'a AccountInfo<'info>,
@@ -72,6 +74,7 @@ impl<'a, 'info> TransferCtx<'a, 'info> {
             mint_manager: next_account_info(account_iter)?,
             ruleset: next_account_info(account_iter)?,
             mint: next_account_info(account_iter)?,
+            mint_metadata: next_account_info(account_iter)?,
             from: next_account_info(account_iter)?,
             to: next_account_info(account_iter)?,
             authority: next_account_info(account_iter)?,
@@ -143,8 +146,9 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
     }
 
     /////////////// check allowed / disallowed ///////////////
+    let remaining_accounts = &mut ctx.remaining_accounts.iter();
     let [allowed_programs, disallowed_addresses] =
-        allowlist_disallowlist(&ruleset, ctx.remaining_accounts)?;
+        allowlist_disallowlist(&ruleset, remaining_accounts)?;
 
     for i in 0..num_instructions {
         let ix = load_instruction_at_checked(i.into(), ctx.instructions)
@@ -166,7 +170,9 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
             }
         }
     }
-    ////////////////////////////////////////////////////////////
+
+    /////////////// check creators ///////////////
+    check_creators(ctx.mint.key, &ruleset, ctx.mint_metadata)?;
 
     ///////////////// handle transfer /////////////////
 

@@ -1,5 +1,8 @@
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
+use mpl_token_metadata::pda::find_metadata_account;
+use mpl_token_metadata::state::Metadata;
+use mpl_token_metadata::state::TokenMetadataAccount;
 use shank::ShankAccount;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::hash::hash;
@@ -13,6 +16,7 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use std::fmt::Result as FmtResult;
 use std::io::ErrorKind;
+use std::slice::Iter;
 use std::u8;
 
 use borsh::maybestd::io::Error as BorshError;
@@ -25,6 +29,8 @@ use crate::utils::assert_owner;
 ///////////// CONSTANTS /////////////
 pub const COLLECTOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
 pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
+pub const DEFAULT_REQUIRED_CREATOR: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
+pub const DEFAULT_MINIMUM_CREATOR_SHARE: u8 = 5;
 pub const DEFAULT_PROGRAMS: [&str; 2] = [
     "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
     "mccsLbWK9m7pbFotPmPGBhN37WnsfHG6SRsmeRTJSiP",
@@ -288,9 +294,9 @@ impl CreatorStandardAccount for Ruleset {
 ///////////// RULESET /////////////
 
 ///////////// UTILS /////////////
-pub fn allowlist_disallowlist(
+pub fn allowlist_disallowlist<'info>(
     ruleset: &Ruleset,
-    remaining_accounts: Vec<&AccountInfo>,
+    remaining_accounts: &mut Iter<&AccountInfo<'info>>,
 ) -> Result<[HashSet<String>; 2], ProgramError> {
     let mut allowed_programs = HashSet::new();
     for program_id in &ruleset.allowed_programs {
@@ -302,14 +308,10 @@ pub fn allowlist_disallowlist(
         disallowed_addresses.insert(program_id.to_string());
     }
 
-    let mut count: usize = 0;
     for ruleset_pubkey in &ruleset.extensions {
-        let extension_ruleset_info_uncheked = remaining_accounts.get(count);
-        if extension_ruleset_info_uncheked.is_none() {
-            return Err(ProgramError::from(ErrorCode::NotEnoughRemainingAccounts));
-        }
-        count += 1;
-        let extension_ruleset_info = extension_ruleset_info_uncheked.unwrap();
+        let extension_ruleset_info = remaining_accounts
+            .next()
+            .ok_or(ProgramError::NotEnoughAccountKeys)?;
         if extension_ruleset_info.key != ruleset_pubkey {
             return Err(ProgramError::from(ErrorCode::InvalidRuleset));
         }
@@ -328,25 +330,56 @@ pub fn allowlist_disallowlist(
     return Ok([allowed_programs, disallowed_addresses]);
 }
 
-pub fn check_allowlist_disallowlist(
+pub fn check_allowlist_disallowlist<'info>(
     account_id: &Pubkey,
     ruleset: &Ruleset,
-    remaining_accounts: Vec<&AccountInfo>,
+    remaining_accounts: &mut Iter<&AccountInfo<'info>>,
 ) -> Result<bool, ProgramError> {
     let [allowed_programs, disallowed_addresses] =
-        allowlist_disallowlist(&ruleset, remaining_accounts)?;
+        allowlist_disallowlist(ruleset, remaining_accounts)?;
 
     if !allowed_programs.is_empty()
         && !is_default_program(account_id)
         && !allowed_programs.contains(&account_id.to_string())
     {
-        return Ok(false);
+        return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));
     }
 
     if !disallowed_addresses.is_empty() && disallowed_addresses.contains(&account_id.to_string()) {
-        return Ok(false);
+        return Err(ProgramError::from(ErrorCode::AddressDisallowed));
     }
+    Ok(true)
+}
 
+pub fn check_creators<'info>(
+    mint: &Pubkey,
+    _ruleset: &Ruleset,
+    mint_metadata_account_info: &AccountInfo<'info>,
+) -> Result<bool, ProgramError> {
+    let mint_metadata_id = find_metadata_account(mint).0;
+    assert_with_msg(
+        mint_metadata_account_info.key == &mint_metadata_id,
+        ErrorCode::InvalidMintMetadata,
+        "Invalid mint metadata address",
+    )?;
+    if !mint_metadata_account_info.data_is_empty() {
+        let mint_metadata = Metadata::from_account_info(mint_metadata_account_info)?;
+        if let Some(creators) = mint_metadata.data.creators {
+            let mut allowed = false;
+            for creator in creators {
+                if creator.address.to_string() == DEFAULT_REQUIRED_CREATOR
+                    && creator.share >= DEFAULT_MINIMUM_CREATOR_SHARE
+                {
+                    allowed = true;
+                }
+            }
+            if !allowed {
+                return Err(ProgramError::from(
+                    ErrorCode::InusufficientMinimumCreatorShare,
+                ));
+            }
+        }
+    }
     Ok(true)
 }
 ///////////// UTILS /////////////

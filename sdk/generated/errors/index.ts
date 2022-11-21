@@ -213,13 +213,62 @@ createErrorFromNameLookup.set(
 )
 
 /**
+ * InvalidMintMetadata: 'Invalid mint metadata'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InvalidMintMetadataError extends Error {
+  readonly code: number = 0x1779
+  readonly name: string = 'InvalidMintMetadata'
+  constructor() {
+    super('Invalid mint metadata')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InvalidMintMetadataError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x1779, () => new InvalidMintMetadataError())
+createErrorFromNameLookup.set(
+  'InvalidMintMetadata',
+  () => new InvalidMintMetadataError()
+)
+
+/**
+ * InusufficientMinimumCreatorShare: 'Insufficient minimum creator share'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class InusufficientMinimumCreatorShareError extends Error {
+  readonly code: number = 0x177a
+  readonly name: string = 'InusufficientMinimumCreatorShare'
+  constructor() {
+    super('Insufficient minimum creator share')
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, InusufficientMinimumCreatorShareError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(
+  0x177a,
+  () => new InusufficientMinimumCreatorShareError()
+)
+createErrorFromNameLookup.set(
+  'InusufficientMinimumCreatorShare',
+  () => new InusufficientMinimumCreatorShareError()
+)
+
+/**
  * InvlaidHolderTokenAccount: 'Invalid holder token account'
  *
  * @category Errors
  * @category generated
  */
 export class InvlaidHolderTokenAccountError extends Error {
-  readonly code: number = 0x1779
+  readonly code: number = 0x177b
   readonly name: string = 'InvlaidHolderTokenAccount'
   constructor() {
     super('Invalid holder token account')
@@ -230,7 +279,7 @@ export class InvlaidHolderTokenAccountError extends Error {
 }
 
 createErrorFromCodeLookup.set(
-  0x1779,
+  0x177b,
   () => new InvlaidHolderTokenAccountError()
 )
 createErrorFromNameLookup.set(
@@ -245,7 +294,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidTargetTokenAccountError extends Error {
-  readonly code: number = 0x177a
+  readonly code: number = 0x177c
   readonly name: string = 'InvalidTargetTokenAccount'
   constructor() {
     super('Invalid target token account')
@@ -256,7 +305,7 @@ export class InvalidTargetTokenAccountError extends Error {
 }
 
 createErrorFromCodeLookup.set(
-  0x177a,
+  0x177c,
   () => new InvalidTargetTokenAccountError()
 )
 createErrorFromNameLookup.set(
@@ -271,7 +320,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidCloseTokenAccountError extends Error {
-  readonly code: number = 0x177b
+  readonly code: number = 0x177d
   readonly name: string = 'InvalidCloseTokenAccount'
   constructor() {
     super('Invalid token account to close')
@@ -281,7 +330,7 @@ export class InvalidCloseTokenAccountError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x177b, () => new InvalidCloseTokenAccountError())
+createErrorFromCodeLookup.set(0x177d, () => new InvalidCloseTokenAccountError())
 createErrorFromNameLookup.set(
   'InvalidCloseTokenAccount',
   () => new InvalidCloseTokenAccountError()
@@ -294,7 +343,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidHolderTokenAccountError extends Error {
-  readonly code: number = 0x177c
+  readonly code: number = 0x177e
   readonly name: string = 'InvalidHolderTokenAccount'
   constructor() {
     super('Invalid holder token account')
@@ -305,7 +354,7 @@ export class InvalidHolderTokenAccountError extends Error {
 }
 
 createErrorFromCodeLookup.set(
-  0x177c,
+  0x177e,
   () => new InvalidHolderTokenAccountError()
 )
 createErrorFromNameLookup.set(
@@ -320,7 +369,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidRulesetError extends Error {
-  readonly code: number = 0x177d
+  readonly code: number = 0x177f
   readonly name: string = 'InvalidRuleset'
   constructor() {
     super('Invalid ruleset')
@@ -330,7 +379,7 @@ export class InvalidRulesetError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x177d, () => new InvalidRulesetError())
+createErrorFromCodeLookup.set(0x177f, () => new InvalidRulesetError())
 createErrorFromNameLookup.set('InvalidRuleset', () => new InvalidRulesetError())
 
 /**
@@ -340,7 +389,7 @@ createErrorFromNameLookup.set('InvalidRuleset', () => new InvalidRulesetError())
  * @category generated
  */
 export class InvalidPreTransferInstructionError extends Error {
-  readonly code: number = 0x177e
+  readonly code: number = 0x1780
   readonly name: string = 'InvalidPreTransferInstruction'
   constructor() {
     super('Invalid pre transfer instruction')
@@ -351,7 +400,7 @@ export class InvalidPreTransferInstructionError extends Error {
 }
 
 createErrorFromCodeLookup.set(
-  0x177e,
+  0x1780,
   () => new InvalidPreTransferInstructionError()
 )
 createErrorFromNameLookup.set(
@@ -366,7 +415,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidPostTransferInstructionError extends Error {
-  readonly code: number = 0x177f
+  readonly code: number = 0x1781
   readonly name: string = 'InvalidPostTransferInstruction'
   constructor() {
     super('Invalid post transfer instruction')
@@ -377,7 +426,7 @@ export class InvalidPostTransferInstructionError extends Error {
 }
 
 createErrorFromCodeLookup.set(
-  0x177f,
+  0x1781,
   () => new InvalidPostTransferInstructionError()
 )
 createErrorFromNameLookup.set(
@@ -392,7 +441,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class AddressDisallowedError extends Error {
-  readonly code: number = 0x1780
+  readonly code: number = 0x1782
   readonly name: string = 'AddressDisallowed'
   constructor() {
     super('Disallowed address included')
@@ -402,7 +451,7 @@ export class AddressDisallowedError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1780, () => new AddressDisallowedError())
+createErrorFromCodeLookup.set(0x1782, () => new AddressDisallowedError())
 createErrorFromNameLookup.set(
   'AddressDisallowed',
   () => new AddressDisallowedError()
@@ -415,7 +464,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class ProgramNotAllowedError extends Error {
-  readonly code: number = 0x1781
+  readonly code: number = 0x1783
   readonly name: string = 'ProgramNotAllowed'
   constructor() {
     super('Program not allowed in allowed programs to transfer')
@@ -425,7 +474,7 @@ export class ProgramNotAllowedError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1781, () => new ProgramNotAllowedError())
+createErrorFromCodeLookup.set(0x1783, () => new ProgramNotAllowedError())
 createErrorFromNameLookup.set(
   'ProgramNotAllowed',
   () => new ProgramNotAllowedError()
@@ -438,7 +487,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class UnknownAccountError extends Error {
-  readonly code: number = 0x1782
+  readonly code: number = 0x1784
   readonly name: string = 'UnknownAccount'
   constructor() {
     super('Unknown account found in instruction')
@@ -448,7 +497,7 @@ export class UnknownAccountError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1782, () => new UnknownAccountError())
+createErrorFromCodeLookup.set(0x1784, () => new UnknownAccountError())
 createErrorFromNameLookup.set('UnknownAccount', () => new UnknownAccountError())
 
 /**
@@ -458,7 +507,7 @@ createErrorFromNameLookup.set('UnknownAccount', () => new UnknownAccountError())
  * @category generated
  */
 export class AccountNotFoundError extends Error {
-  readonly code: number = 0x1783
+  readonly code: number = 0x1785
   readonly name: string = 'AccountNotFound'
   constructor() {
     super('Account not found in instruction')
@@ -468,7 +517,7 @@ export class AccountNotFoundError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1783, () => new AccountNotFoundError())
+createErrorFromCodeLookup.set(0x1785, () => new AccountNotFoundError())
 createErrorFromNameLookup.set(
   'AccountNotFound',
   () => new AccountNotFoundError()
@@ -481,7 +530,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class TokenAlreadyInUseError extends Error {
-  readonly code: number = 0x1784
+  readonly code: number = 0x1786
   readonly name: string = 'TokenAlreadyInUse'
   constructor() {
     super('Token already in use')
@@ -491,7 +540,7 @@ export class TokenAlreadyInUseError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1784, () => new TokenAlreadyInUseError())
+createErrorFromCodeLookup.set(0x1786, () => new TokenAlreadyInUseError())
 createErrorFromNameLookup.set(
   'TokenAlreadyInUse',
   () => new TokenAlreadyInUseError()
@@ -504,7 +553,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidTokenUserError extends Error {
-  readonly code: number = 0x1785
+  readonly code: number = 0x1787
   readonly name: string = 'InvalidTokenUser'
   constructor() {
     super('Invalid token user')
@@ -514,7 +563,7 @@ export class InvalidTokenUserError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1785, () => new InvalidTokenUserError())
+createErrorFromCodeLookup.set(0x1787, () => new InvalidTokenUserError())
 createErrorFromNameLookup.set(
   'InvalidTokenUser',
   () => new InvalidTokenUserError()
@@ -527,7 +576,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class TokenCurentlyInUseError extends Error {
-  readonly code: number = 0x1786
+  readonly code: number = 0x1788
   readonly name: string = 'TokenCurentlyInUse'
   constructor() {
     super('Token currently in use')
@@ -537,7 +586,7 @@ export class TokenCurentlyInUseError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1786, () => new TokenCurentlyInUseError())
+createErrorFromCodeLookup.set(0x1788, () => new TokenCurentlyInUseError())
 createErrorFromNameLookup.set(
   'TokenCurentlyInUse',
   () => new TokenCurentlyInUseError()
@@ -550,7 +599,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidRulesetAuthorityError extends Error {
-  readonly code: number = 0x1787
+  readonly code: number = 0x1789
   readonly name: string = 'InvalidRulesetAuthority'
   constructor() {
     super('Invalid ruleset authority')
@@ -560,7 +609,7 @@ export class InvalidRulesetAuthorityError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1787, () => new InvalidRulesetAuthorityError())
+createErrorFromCodeLookup.set(0x1789, () => new InvalidRulesetAuthorityError())
 createErrorFromNameLookup.set(
   'InvalidRulesetAuthority',
   () => new InvalidRulesetAuthorityError()
@@ -573,7 +622,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidFreezeAuthorityError extends Error {
-  readonly code: number = 0x1788
+  readonly code: number = 0x178a
   readonly name: string = 'InvalidFreezeAuthority'
   constructor() {
     super('Invalid freeze authority')
@@ -583,7 +632,7 @@ export class InvalidFreezeAuthorityError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1788, () => new InvalidFreezeAuthorityError())
+createErrorFromCodeLookup.set(0x178a, () => new InvalidFreezeAuthorityError())
 createErrorFromNameLookup.set(
   'InvalidFreezeAuthority',
   () => new InvalidFreezeAuthorityError()
@@ -596,7 +645,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class InvalidMintAuthorityError extends Error {
-  readonly code: number = 0x1789
+  readonly code: number = 0x178b
   readonly name: string = 'InvalidMintAuthority'
   constructor() {
     super('Invalid mint authority')
@@ -606,7 +655,7 @@ export class InvalidMintAuthorityError extends Error {
   }
 }
 
-createErrorFromCodeLookup.set(0x1789, () => new InvalidMintAuthorityError())
+createErrorFromCodeLookup.set(0x178b, () => new InvalidMintAuthorityError())
 createErrorFromNameLookup.set(
   'InvalidMintAuthority',
   () => new InvalidMintAuthorityError()
@@ -619,7 +668,7 @@ createErrorFromNameLookup.set(
  * @category generated
  */
 export class NotEnoughRemainingAccountsError extends Error {
-  readonly code: number = 0x178a
+  readonly code: number = 0x178c
   readonly name: string = 'NotEnoughRemainingAccounts'
   constructor() {
     super('Not enought remaining accounts')
@@ -630,7 +679,7 @@ export class NotEnoughRemainingAccountsError extends Error {
 }
 
 createErrorFromCodeLookup.set(
-  0x178a,
+  0x178c,
   () => new NotEnoughRemainingAccountsError()
 )
 createErrorFromNameLookup.set(

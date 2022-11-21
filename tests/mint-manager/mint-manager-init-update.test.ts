@@ -6,7 +6,11 @@ import { createInitMintManagerInstruction } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { Ruleset } from "../../sdk/generated/accounts/Ruleset";
 import { createUpdateMintManagerInstruction } from "../../sdk/generated/instructions/UpdateMintManager";
-import { findMintManagerId, findRulesetId } from "../../sdk/pda";
+import {
+  findMintManagerId,
+  findMintMetadataId,
+  findRulesetId,
+} from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
 import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
@@ -45,6 +49,7 @@ test("Init mint manager", async () => {
     createInitMintManagerInstruction({
       mintManager: mintManagerId,
       mint: mintKeypair.publicKey,
+      mintMetadata: findMintMetadataId(mintKeypair.publicKey),
       ruleset: RULESET_ID_1,
       holderTokenAccount: ata,
       tokenAuthority: provider.wallet.publicKey,

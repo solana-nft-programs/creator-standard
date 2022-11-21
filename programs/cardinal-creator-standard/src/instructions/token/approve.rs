@@ -137,13 +137,14 @@ pub fn handler(ctx: ApproveCtx, ix: ApproveIx) -> ProgramResult {
         return Err(ProgramError::from(ErrorCode::TokenCurentlyInUse));
     }
     let mint_manager_seeds = assert_mint_manager_seeds(ctx.mint.key, ctx.mint_manager.key)?;
+    let remaining_accounts = &mut ctx.remaining_accounts.iter();
 
     /////////////// check allowed / disallowed ///////////////
     let [allowed_programs, disallowed_addresses] =
-        allowlist_disallowlist(&ruleset, ctx.remaining_accounts)?;
+        allowlist_disallowlist(&ruleset, remaining_accounts)?;
 
     if !allowed_programs.is_empty()
-        && !is_default_program(&ctx.delegate.owner)
+        && !is_default_program(ctx.delegate.owner)
         && !allowed_programs.contains(&ctx.delegate.owner.to_string())
     {
         return Err(ProgramError::from(ErrorCode::ProgramNotAllowed));

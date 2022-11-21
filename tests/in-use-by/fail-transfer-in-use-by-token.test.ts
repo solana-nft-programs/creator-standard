@@ -20,6 +20,7 @@ import { createTransferInstruction } from "../../sdk/generated/instructions/Tran
 import {
   DEFAULT_COLLECTOR,
   findMintManagerId,
+  findMintMetadataId,
   findRulesetId,
 } from "../../sdk/pda";
 import type { CardinalProvider } from "../../utils";
@@ -162,6 +163,7 @@ test("Transfer", async () => {
   );
   const ix = createTransferInstruction({
     mintManager: mintManagerId,
+    mintMetadata: findMintMetadataId(mintKeypair.publicKey),
     ruleset: RULESET_ID,
     mint: mintKeypair.publicKey,
     from: fromAtaId,

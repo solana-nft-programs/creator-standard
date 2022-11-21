@@ -3,6 +3,7 @@ use std::str::FromStr;
 use crate::errors::ErrorCode;
 use crate::id;
 use crate::state::assert_mint_manager_seeds;
+use crate::state::check_creators;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::state::Ruleset;
@@ -66,6 +67,7 @@ pub fn init_mint_manager(
 pub struct InitMintManagerCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
     pub mint: &'a AccountInfo<'info>,
+    pub mint_metadata: &'a AccountInfo<'info>,
     pub ruleset: &'a AccountInfo<'info>,
     pub holder_token_account: &'a AccountInfo<'info>,
     pub token_authority: &'a AccountInfo<'info>,
@@ -83,6 +85,7 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         let ctx = Self {
             mint_manager: next_account_info(account_iter)?,
             mint: next_account_info(account_iter)?,
+            mint_metadata: next_account_info(account_iter)?,
             ruleset: next_account_info(account_iter)?,
             holder_token_account: next_account_info(account_iter)?,
             token_authority: next_account_info(account_iter)?,
@@ -123,6 +126,9 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
 
         // token_authority
         assert_signer(ctx.token_authority, "token_authority")?;
+
+        // mint_metadata
+        // checked when deserialized
 
         // ruleset_collector
         assert_mut(ctx.ruleset_collector, "ruleset_collector")?;
@@ -200,6 +206,10 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
     if &mint.mint_authority.unwrap() != ctx.token_authority.key {
         return Err(ProgramError::from(ErrorCode::InvalidMintAuthority));
     }
+
+    /////////////// check creators ///////////////
+    let ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
+    check_creators(&mint_manager.mint, &ruleset, ctx.mint_metadata)?;
 
     // set mint authority
     invoke(
