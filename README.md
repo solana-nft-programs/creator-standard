@@ -10,9 +10,9 @@
 
 # Background
 
-The goal of this standard is not to replace the Token program or the Metadata program (base layer). The standard aims to introduce a layer on top of a token’s base layer that permissions transfers according to a predefined set of rules specified by the token’s creator.
+The Creator Standard is a smart contract-level solution to the issue of royalty circumvention that allows creators to decide with which programs their NFTs can interact without sacrificing basic wallet-to-wallet transfers. 
 
-We bounced a lot back and forth on the phrasing of the proposed solution between “standard” vs “solution”. We concluded to the “standard” phrasing because this approach will not be supporting already minted Master Edition tokens. A “solution” would allow this on-top layer to be introduced to all already existing existing tokens, however the current proposed approach implements permissioned transfers for all but Master Edition tokens. Our standard utilizes a token’s freeze authority which for a Master Edition is owned by Metaplex and cannot be proxied.
+The protocol, which is built on top of the SPL token program, selectively permissions token transfers to achieve this. Every token has an associated Mint Manager account, which holds its freeze and mint authority. Each mint manager specifies a ruleset, which is simply a set of "rules" (allowlist/denylist) that dictates which programs can interact with and transfer the NFT. The ruleset is assigned by the NFT's creator and can be updated at their discretion.
 
 # Basic NFT
 
