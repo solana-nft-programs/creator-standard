@@ -11,7 +11,11 @@ import dotenv from "dotenv";
 import fetch from "node-fetch";
 
 import { createInitMintManagerInstruction, Ruleset } from "../sdk";
-import { findMintManagerId, findRulesetId } from "../sdk/pda";
+import {
+  findMintManagerId,
+  findMintMetadataId,
+  findRulesetId,
+} from "../sdk/pda";
 import { connectionFor, createMintTx, executeTransaction } from "../utils";
 
 dotenv.config();
@@ -97,6 +101,7 @@ const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
   tx.add(
     createInitMintManagerInstruction({
       mintManager: mintManagerId,
+      mintMetadata: findMintMetadataId(mintKeypair.publicKey),
       mint: mintKeypair.publicKey,
       ruleset: rulesetId,
       holderTokenAccount: holdetAta,
