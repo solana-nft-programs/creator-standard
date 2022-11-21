@@ -74,11 +74,10 @@ pub enum CreatorStandardInstruction {
     UpdateMintManager(UpdateMintManagerIx),
 
     #[account(0, writable, name = "mint_manager")]
-    #[account(1, name = "mint_metadata", desc = "Mint metadata")]
-    #[account(2, name = "ruleset")]
-    #[account(3, name = "in_use_by_address")]
-    #[account(4, signer, name = "holder")]
-    #[account(5, name = "holder_token_account")]
+    #[account(1, name = "ruleset")]
+    #[account(2, name = "in_use_by_address")]
+    #[account(3, signer, name = "holder")]
+    #[account(4, name = "holder_token_account")]
     SetInUseBy,
 
     #[account(0, writable, name = "mint_manager")]
@@ -89,22 +88,20 @@ pub enum CreatorStandardInstruction {
     #[account(0, name = "mint_manager")]
     #[account(1, name = "ruleset")]
     #[account(2, name = "mint")]
-    #[account(3, name = "mint_metadata", desc = "Mint metadata")]
-    #[account(4, writable, name = "holder_token_account")]
-    #[account(5, signer, name = "holder")]
-    #[account(6, name = "delegate")]
-    #[account(7, name = "token_program")]
+    #[account(3, writable, name = "holder_token_account")]
+    #[account(4, signer, name = "holder")]
+    #[account(5, name = "delegate")]
+    #[account(6, name = "token_program")]
     Approve(ApproveIx),
 
     #[account(0, writable, name = "mint_manager")]
     #[account(1, name = "ruleset")]
     #[account(2, name = "mint")]
-    #[account(3, name = "mint_metadata", desc = "Mint metadata")]
-    #[account(4, name = "in_use_by_address")]
-    #[account(5, writable, name = "holder_token_account")]
-    #[account(6, signer, name = "holder")]
-    #[account(7, name = "delegate")]
-    #[account(8, name = "token_program")]
+    #[account(3, name = "in_use_by_address")]
+    #[account(4, writable, name = "holder_token_account")]
+    #[account(5, signer, name = "holder")]
+    #[account(6, name = "delegate")]
+    #[account(7, name = "token_program")]
     ApproveAndSetInUseBy(ApproveAndSetInUseByIx),
 
     #[account(0, writable, name = "mint_manager")]

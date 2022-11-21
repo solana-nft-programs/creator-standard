@@ -1,7 +1,6 @@
 use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
-use crate::state::check_creators;
 use crate::state::is_default_program;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
@@ -62,7 +61,6 @@ pub struct ApproveCtx<'a, 'info> {
     pub mint_manager: &'a AccountInfo<'info>,
     pub ruleset: &'a AccountInfo<'info>,
     pub mint: &'a AccountInfo<'info>,
-    pub mint_metadata: &'a AccountInfo<'info>,
     pub holder_token_account: &'a AccountInfo<'info>,
     pub holder: &'a AccountInfo<'info>,
     pub delegate: &'a AccountInfo<'info>,
@@ -77,7 +75,6 @@ impl<'a, 'info> ApproveCtx<'a, 'info> {
             mint_manager: next_account_info(account_iter)?,
             ruleset: next_account_info(account_iter)?,
             mint: next_account_info(account_iter)?,
-            mint_metadata: next_account_info(account_iter)?,
             holder_token_account: next_account_info(account_iter)?,
             holder: next_account_info(account_iter)?,
             delegate: next_account_info(account_iter)?,
@@ -159,8 +156,7 @@ pub fn handler(ctx: ApproveCtx, ix: ApproveIx) -> ProgramResult {
     {
         return Err(ProgramError::from(ErrorCode::AddressDisallowed));
     }
-    /////////////// check creators ///////////////
-    check_creators(ctx.mint.key, &ruleset, ctx.mint_metadata)?;
+    ////////////////////////////////////////////////////////////
 
     // thaw account
     invoke_signed(

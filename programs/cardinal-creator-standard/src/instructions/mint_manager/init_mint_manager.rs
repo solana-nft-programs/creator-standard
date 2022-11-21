@@ -77,7 +77,6 @@ pub struct InitMintManagerCtx<'a, 'info> {
     pub payer: &'a AccountInfo<'info>,
     pub token_program: &'a AccountInfo<'info>,
     pub system_program: &'a AccountInfo<'info>,
-    pub remaining_accounts: Vec<&'a AccountInfo<'info>>,
 }
 
 impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
@@ -96,7 +95,6 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
             payer: next_account_info(account_iter)?,
             token_program: next_account_info(account_iter)?,
             system_program: next_account_info(account_iter)?,
-            remaining_accounts: account_iter.collect(),
         };
         // deserializations
         let ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
