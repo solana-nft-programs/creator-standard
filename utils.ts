@@ -19,8 +19,8 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
-import { findMintManagerId, findMintMetadataId } from "./sdk";
 
+import { findMintManagerId, findMintMetadataId } from "./sdk";
 import {
   createInitMintManagerInstruction,
   PROGRAM_ADDRESS,
