@@ -82,6 +82,7 @@ test("Transfer", async () => {
     RULESET_ID
   );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
+  const mintMetadataId = findMintMetadataId(mintKeypair.publicKey);
   const tx = new Transaction();
   const recipient = Keypair.generate();
   const fromAtaId = getAssociatedTokenAddressSync(
@@ -106,7 +107,7 @@ test("Transfer", async () => {
   );
   const ix = createTransferInstruction({
     mintManager: mintManagerId,
-    mintMetadata: findMintMetadataId(mintKeypair.publicKey),
+    mintMetadata: mintMetadataId,
     ruleset: RULESET_ID,
     mint: mintKeypair.publicKey,
     from: fromAtaId,

@@ -3,16 +3,12 @@ import { Wallet } from "@project-serum/anchor";
 import { getAssociatedTokenAddressSync, getMint } from "@solana/spl-token";
 import { Keypair, LAMPORTS_PER_SOL, Transaction } from "@solana/web3.js";
 
-import {
-  createInitMintManagerInstruction,
-  handleRemainingAccountsForRuleset,
-  Ruleset,
-} from "../../sdk";
+import { handleRemainingAccountsForRuleset, Ruleset } from "../../sdk";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createRemoveInUseByInstruction } from "../../sdk/generated/instructions/RemoveInUseBy";
 import { createSetInUseByInstruction } from "../../sdk/generated/instructions/SetInUseBy";
 import { findMintManagerId, findRulesetId } from "../../sdk/pda";
-import type { CardinalProvider } from "../../utils";
+import { CardinalProvider, createCCSMintTx } from "../../utils";
 import { executeTransaction, getProvider, tryGetAccount } from "../../utils";
 
 const mintKeypair = Keypair.generate();
@@ -34,23 +30,11 @@ beforeAll(async () => {
 
 test("Initialize mint", async () => {
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
-  const ata = getAssociatedTokenAddressSync(
+  const tx = await createCCSMintTx(
+    provider.connection,
     mintKeypair.publicKey,
-    provider.wallet.publicKey
-  );
-
-  const tx = new Transaction();
-  tx.add(
-    createInitMintManagerInstruction({
-      mintManager: mintManagerId,
-      mint: mintKeypair.publicKey,
-      mintMetadata: mintManagerId,
-      ruleset: RULESET_ID,
-      holderTokenAccount: ata,
-      tokenAuthority: provider.wallet.publicKey,
-      authority: provider.wallet.publicKey,
-      payer: provider.wallet.publicKey,
-    })
+    provider.wallet.publicKey,
+    RULESET_ID
   );
   await executeTransaction(provider.connection, tx, provider.wallet, [
     mintKeypair,

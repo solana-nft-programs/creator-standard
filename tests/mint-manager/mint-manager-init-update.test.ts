@@ -34,6 +34,7 @@ beforeAll(async () => {
 
 test("Init mint manager", async () => {
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
+  const mintMetadataId = findMintMetadataId(mintKeypair.publicKey);
   const tx = new Transaction();
 
   const ata = getAssociatedTokenAddressSync(
@@ -44,7 +45,7 @@ test("Init mint manager", async () => {
     createInitMintManagerInstruction({
       mintManager: mintManagerId,
       mint: mintKeypair.publicKey,
-      mintMetadata: findMintMetadataId(mintKeypair.publicKey),
+      mintMetadata: mintMetadataId,
       ruleset: RULESET_ID_1,
       holderTokenAccount: ata,
       tokenAuthority: provider.wallet.publicKey,

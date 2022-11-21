@@ -19,7 +19,7 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
-import { findMintManagerId } from "./sdk";
+import { findMintManagerId, findMintMetadataId } from "./sdk";
 
 import {
   createInitMintManagerInstruction,
@@ -205,12 +205,13 @@ export const createCCSMintTx = async (
 ): Promise<Transaction> => {
   const tx = await createMintTx(connection, mint, authority);
   const mintManagerId = findMintManagerId(mint);
+  const mintMetadataId = findMintMetadataId(mint);
   const targetTokenAccountId = await findAta(mint, authority, true);
   tx.add(
     createInitMintManagerInstruction({
       mintManager: mintManagerId,
       mint: mint,
-      mintMetadata: mintManagerId,
+      mintMetadata: mintMetadataId,
       ruleset: rulesetId,
       holderTokenAccount: targetTokenAccountId,
       tokenAuthority: authority,
