@@ -128,12 +128,7 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         assert_signer(ctx.token_authority, "token_authority")?;
 
         // mint_metadata
-        // let mint_metadata_id = find_metadata_account(ctx.mint.key).0;
-        // assert_with_msg(
-        //     ctx.mint_metadata.key == &mint_metadata_id,
-        //     ErrorCode::InvalidMintMetadata,
-        //     "Invalid mint metadata address",
-        // )?;
+        // checked when deserialized
 
         // ruleset_collector
         assert_mut(ctx.ruleset_collector, "ruleset_collector")?;

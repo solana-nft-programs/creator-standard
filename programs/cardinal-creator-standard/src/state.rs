@@ -336,7 +336,7 @@ pub fn check_allowlist_disallowlist<'info>(
     remaining_accounts: &mut Iter<&AccountInfo<'info>>,
 ) -> Result<bool, ProgramError> {
     let [allowed_programs, disallowed_addresses] =
-        allowlist_disallowlist(&ruleset, remaining_accounts)?;
+        allowlist_disallowlist(ruleset, remaining_accounts)?;
 
     if !allowed_programs.is_empty()
         && !is_default_program(account_id)
