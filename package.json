@@ -1,6 +1,6 @@
 {
   "name": "@cardinal/creator-standard",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "SDK for cardinal-creator-standard",
   "keywords": [
     "solana",
@@ -22,8 +22,7 @@
     "access": "public"
   },
   "files": [
-    "dist/",
-    "sdk/"
+    "dist/"
   ],
   "scripts": {
     "test": "jest --setupFiles dotenv/config",
