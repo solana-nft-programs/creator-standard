@@ -6,8 +6,7 @@ import {
   Metadata,
 } from "@metaplex-foundation/mpl-token-metadata";
 import * as anchor from "@project-serum/anchor";
-import type { PublicKey } from "@solana/web3.js";
-import { Keypair } from "@solana/web3.js";
+import { Keypair, PublicKey } from "@solana/web3.js";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
@@ -134,5 +133,7 @@ const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
   }
 };
 
-const params: CreateCSSTokenParams = {};
+const params: CreateCSSTokenParams = {
+  target: new PublicKey("6twkNYKJuv2642Hr99fDBoFxPM3yZt38GJRw7qBj9bem"),
+};
 main(params).catch((e) => console.log(e));
