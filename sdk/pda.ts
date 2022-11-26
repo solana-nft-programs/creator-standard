@@ -32,3 +32,15 @@ export const findMintMetadataId = (mintId: PublicKey): PublicKey => {
     METADATA_PROGRAM_ID
   )[0];
 };
+
+export const findMintEditionId = (mintId: PublicKey): PublicKey => {
+  return findProgramAddressSync(
+    [
+      utils.bytes.utf8.encode("metadata"),
+      METADATA_PROGRAM_ID.toBuffer(),
+      mintId.toBuffer(),
+      utils.bytes.utf8.encode("edition"),
+    ],
+    METADATA_PROGRAM_ID
+  )[0];
+};
