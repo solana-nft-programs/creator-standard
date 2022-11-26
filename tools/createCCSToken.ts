@@ -26,7 +26,7 @@ dotenv.config();
 
 const DEFAULT_RULESET = "";
 
-export type CreateCSSTokenParams = {
+export type CreateCCSTokenParams = {
   rulesetName?: string;
   target?: PublicKey;
 };
@@ -35,7 +35,7 @@ const wallet = Keypair.fromSecretKey(
   anchor.utils.bytes.bs58.decode(process.env.TEST_WALLET || "")
 ); // your wallet's secret key // your wallet's secret key
 
-const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
+const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
   const connection = connectionFor(cluster);
 
   const mintKeypair = Keypair.generate();
@@ -133,7 +133,7 @@ const main = async (params: CreateCSSTokenParams, cluster = "devnet") => {
   }
 };
 
-const params: CreateCSSTokenParams = {
+const params: CreateCCSTokenParams = {
   target: new PublicKey("6twkNYKJuv2642Hr99fDBoFxPM3yZt38GJRw7qBj9bem"),
 };
 main(params).catch((e) => console.log(e));
