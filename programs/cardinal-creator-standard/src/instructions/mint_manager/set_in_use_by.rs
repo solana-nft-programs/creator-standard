@@ -34,8 +34,8 @@ pub fn set_in_use_by(
         program_id,
         accounts: vec![
             AccountMeta::new(mint_manager, false),
-            AccountMeta::new_readonly(ruleset, true),
-            AccountMeta::new_readonly(in_use_by_address, true),
+            AccountMeta::new_readonly(ruleset, false),
+            AccountMeta::new_readonly(in_use_by_address, false),
             AccountMeta::new_readonly(holder, true),
             AccountMeta::new_readonly(holder_token_account, false),
         ],
