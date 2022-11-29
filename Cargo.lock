@@ -1321,9 +1321,9 @@ dependencies = [
 
 [[package]]
 name = "solana-frozen-abi"
-version = "1.14.7"
+version = "1.14.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e9d5107e663df4a87c658ee764e9f0e4d15adf8bc1d1c9088b45ed8eaaf4958"
+checksum = "3a5fb9c1bd1cf7ccc2b96209f0a9061afb7f0e94ca1ada6caf268fd4bc5274ff"
 dependencies = [
  "ahash",
  "blake3",
@@ -1355,9 +1355,9 @@ dependencies = [
 
 [[package]]
 name = "solana-frozen-abi-macro"
-version = "1.14.7"
+version = "1.14.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7e4600fe5ae28cec848debc4ea3b41f34d9d8fd088aca209fbb1e8205489d08d"
+checksum = "091d54072f4c79ecf31bb472fcd53c15329666c33b8c2a94f13475b2a263712a"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1367,9 +1367,9 @@ dependencies = [
 
 [[package]]
 name = "solana-logger"
-version = "1.14.7"
+version = "1.14.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f78a1849908659ed28696b92f030b1048b8ddafadfad0e95e79dcd21fe31072"
+checksum = "8e1ce09bef8af337028d7a1ebf814b7ae060530a3947ceb2d5bed177b943e38c"
 dependencies = [
  "env_logger",
  "lazy_static",
@@ -1378,9 +1378,9 @@ dependencies = [
 
 [[package]]
 name = "solana-program"
-version = "1.14.7"
+version = "1.14.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "512475cccb7e13f96ba76ed091b2d79a8431a485c73be728cd2235f9adba5a4e"
+checksum = "58bee7b596fdf962d5619b6331b9b6a05144d5f04a22f95cd8706d940036135a"
 dependencies = [
  "base64 0.13.1",
  "bincode",
@@ -1427,9 +1427,9 @@ dependencies = [
 
 [[package]]
 name = "solana-sdk"
-version = "1.14.7"
+version = "1.14.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0cb45fd782d3793c3821dd961b9c7a28b675e187f7f22cff06e694c7743904ce"
+checksum = "9dab8992a688a99747c31b346444518a9ca44ba23faa7079f54c89eda5a947f3"
 dependencies = [
  "assert_matches",
  "base64 0.13.1",
@@ -1478,9 +1478,9 @@ dependencies = [
 
 [[package]]
 name = "solana-sdk-macro"
-version = "1.14.7"
+version = "1.14.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a08cc4804804ecb9eb07a16c7ff2d4a770fe0533298f36f867a5efc2e3284745"
+checksum = "62bb026ece5b73ec6cefcba5ef96496a28c53c99e767cc77d8abffa36127783d"
 dependencies = [
  "bs58 0.4.0",
  "proc-macro2",
