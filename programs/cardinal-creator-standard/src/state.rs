@@ -1,6 +1,7 @@
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
 use mpl_token_metadata::pda::find_metadata_account;
+use mpl_token_metadata::state::Creator;
 use mpl_token_metadata::state::Metadata;
 use mpl_token_metadata::state::TokenMetadataAccount;
 use shank::ShankAccount;
@@ -346,6 +347,23 @@ pub fn check_allowlist_disallowlist<'info>(
     Ok(true)
 }
 
+pub fn is_creators_valid(creators: &Vec<Creator>) -> Result<bool, ProgramError> {
+    let mut allowed = false;
+    for creator in creators {
+        if creator.address.to_string() == DEFAULT_REQUIRED_CREATOR
+            && creator.share >= DEFAULT_MINIMUM_CREATOR_SHARE
+        {
+            allowed = true;
+        }
+    }
+    if !allowed {
+        return Err(ProgramError::from(
+            ErrorCode::InusufficientMinimumCreatorShare,
+        ));
+    }
+    Ok(true)
+}
+
 pub fn check_creators<'info>(
     mint: &Pubkey,
     _ruleset: &Ruleset,
@@ -360,19 +378,7 @@ pub fn check_creators<'info>(
     if !mint_metadata_account_info.data_is_empty() {
         let mint_metadata = Metadata::from_account_info(mint_metadata_account_info)?;
         if let Some(creators) = mint_metadata.data.creators {
-            let mut allowed = false;
-            for creator in creators {
-                if creator.address.to_string() == DEFAULT_REQUIRED_CREATOR
-                    && creator.share >= DEFAULT_MINIMUM_CREATOR_SHARE
-                {
-                    allowed = true;
-                }
-            }
-            if !allowed {
-                return Err(ProgramError::from(
-                    ErrorCode::InusufficientMinimumCreatorShare,
-                ));
-            }
+            return is_creators_valid(&creators);
         }
     }
     Ok(true)
