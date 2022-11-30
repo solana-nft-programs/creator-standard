@@ -96,7 +96,7 @@ pub fn unpack_checked_mint_account(
 ) -> Result<Mint, ProgramError> {
     let check_mint = Mint::unpack(&account.data.try_borrow().expect("Could not borrow data"));
     assert_with_msg(
-        check_mint.is_ok() || *account.owner != spl_token::id(),
+        check_mint.is_ok() && *account.owner == spl_token::id(),
         ProgramError::from(ErrorCode::InvalidMint),
         lazy_format!(
             "Invalid {} mint account {}",
@@ -115,7 +115,7 @@ pub fn unpack_checked_token_account(
     let check_token_account =
         TokenAccount::unpack(&account.data.try_borrow().expect("Could not borrow data"));
     assert_with_msg(
-        check_token_account.is_ok() || *account.owner != spl_token::id(),
+        check_token_account.is_ok() && *account.owner == spl_token::id(),
         ProgramError::from(ErrorCode::InvalidTokenAccount),
         lazy_format!(
             "Invalid {} token account {}",
