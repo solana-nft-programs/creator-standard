@@ -172,12 +172,12 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
     }
 
     // token_authority checks
-    if mint.freeze_authority.is_some() && &mint.freeze_authority.unwrap() != ctx.token_authority.key
+    if mint.freeze_authority.is_none() || &mint.freeze_authority.unwrap() != ctx.token_authority.key
     {
         return Err(ProgramError::from(ErrorCode::InvalidFreezeAuthority));
     }
 
-    if &mint.mint_authority.unwrap() != ctx.token_authority.key {
+    if mint.mint_authority.is_none() || &mint.mint_authority.unwrap() != ctx.token_authority.key {
         return Err(ProgramError::from(ErrorCode::InvalidMintAuthority));
     }
 
