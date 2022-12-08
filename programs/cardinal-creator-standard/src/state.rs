@@ -376,7 +376,7 @@ pub fn check_creators<'info>(
         "Invalid mint metadata address",
     )?;
     if !mint_metadata_account_info.data_is_empty() {
-        let mint_metadata = Metadata::from_account_info(mint_metadata_account_info)?;
+        let mint_metadata: Metadata = Metadata::from_account_info(mint_metadata_account_info)?;
         if let Some(creators) = mint_metadata.data.creators {
             return is_creators_valid(&creators);
         }
