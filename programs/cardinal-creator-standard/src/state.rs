@@ -1,9 +1,5 @@
 use borsh::BorshDeserialize;
 use borsh::BorshSerialize;
-use mpl_token_metadata::pda::find_metadata_account;
-use mpl_token_metadata::state::Creator;
-use mpl_token_metadata::state::Metadata;
-use mpl_token_metadata::state::TokenMetadataAccount;
 use shank::ShankAccount;
 use solana_program::entrypoint::ProgramResult;
 use solana_program::hash::hash;
@@ -28,9 +24,6 @@ use crate::id;
 use crate::utils::assert_owner;
 
 ///////////// CONSTANTS /////////////
-pub const RULESET_AUTHORITY: &str = "gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV";
-pub const DEFAULT_REQUIRED_CREATOR: &str = "cteamyte8zjZTeexp3qTzvpb24TKRSL3HFad9SzNaNJ";
-pub const DEFAULT_MINIMUM_CREATOR_SHARE: u8 = 10;
 pub const BASE_PROGRAMS: [&str; 2] = [
     "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
     "mccsLbWK9m7pbFotPmPGBhN37WnsfHG6SRsmeRTJSiP",
@@ -347,40 +340,4 @@ pub fn check_allowlist_disallowlist<'info>(
     Ok(true)
 }
 
-pub fn is_creators_valid(creators: &Vec<Creator>) -> Result<bool, ProgramError> {
-    let mut allowed = false;
-    for creator in creators {
-        if creator.address.to_string() == DEFAULT_REQUIRED_CREATOR
-            && creator.share >= DEFAULT_MINIMUM_CREATOR_SHARE
-        {
-            allowed = true;
-        }
-    }
-    if !allowed {
-        return Err(ProgramError::from(
-            ErrorCode::InusufficientMinimumCreatorShare,
-        ));
-    }
-    Ok(true)
-}
-
-pub fn check_creators<'info>(
-    mint: &Pubkey,
-    _ruleset: &Ruleset,
-    mint_metadata_account_info: &AccountInfo<'info>,
-) -> Result<bool, ProgramError> {
-    let mint_metadata_id = find_metadata_account(mint).0;
-    assert_with_msg(
-        mint_metadata_account_info.key == &mint_metadata_id,
-        ErrorCode::InvalidMintMetadata,
-        "Invalid mint metadata address",
-    )?;
-    if !mint_metadata_account_info.data_is_empty() {
-        let mint_metadata: Metadata = Metadata::from_account_info(mint_metadata_account_info)?;
-        if let Some(creators) = mint_metadata.data.creators {
-            return is_creators_valid(&creators);
-        }
-    }
-    Ok(true)
-}
 ///////////// UTILS /////////////

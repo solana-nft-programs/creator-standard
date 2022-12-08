@@ -1,10 +1,8 @@
 use crate::errors::ErrorCode;
 use crate::id;
 use crate::state::assert_mint_manager_seeds;
-use crate::state::check_creators;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
-use crate::state::Ruleset;
 use crate::state::MINT_MANAGER_SIZE;
 use crate::utils::assert_address;
 use crate::utils::assert_amount;
@@ -117,9 +115,6 @@ impl<'a, 'info> InitMintManagerCtx<'a, 'info> {
         // token_authority
         assert_signer(ctx.token_authority, "token_authority")?;
 
-        // mint_metadata
-        // checked when deserialized
-
         ///// no checks for authority, potentially they are also signer that is why leaving here and not passing as ix /////
 
         // payer
@@ -180,10 +175,6 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
     if mint.mint_authority.is_none() || &mint.mint_authority.unwrap() != ctx.token_authority.key {
         return Err(ProgramError::from(ErrorCode::InvalidMintAuthority));
     }
-
-    /////////////// check creators ///////////////
-    let ruleset: Ruleset = Ruleset::from_account_info(ctx.ruleset)?;
-    check_creators(&mint_manager.mint, &ruleset, ctx.mint_metadata)?;
 
     // set mint authority
     invoke(

@@ -1,7 +1,6 @@
 use crate::errors::ErrorCode;
 use crate::state::allowlist_disallowlist;
 use crate::state::assert_mint_manager_seeds;
-use crate::state::check_creators;
 use crate::state::is_base_program;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
@@ -172,9 +171,6 @@ pub fn handler(ctx: TransferCtx) -> ProgramResult {
             }
         }
     }
-
-    /////////////// check creators ///////////////
-    check_creators(ctx.mint.key, &ruleset, ctx.mint_metadata)?;
 
     ///////////////// handle transfer /////////////////
 

@@ -10,11 +10,7 @@ import { Keypair, PublicKey } from "@solana/web3.js";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
-import {
-  createInitMintManagerInstruction,
-  DEFAULT_MINIMUM_CREATOR_SHARE,
-  DEFAULT_REQUIRED_CREATOR,
-} from "../sdk";
+import { createInitMintManagerInstruction } from "../sdk";
 import {
   findMintManagerId,
   findMintMetadataId,
@@ -86,13 +82,8 @@ const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
           creators: [
             new Creator({
               address: wallet.publicKey.toString(),
-              verified: false,
-              share: 100 - DEFAULT_MINIMUM_CREATOR_SHARE,
-            }),
-            new Creator({
-              address: DEFAULT_REQUIRED_CREATOR,
-              verified: false,
-              share: DEFAULT_MINIMUM_CREATOR_SHARE,
+              verified: true,
+              share: 100,
             }),
           ],
           collection: null,

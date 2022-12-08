@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use crate::id;
 use crate::state::assert_ruleset_seeds;
 use crate::state::calculate_ruleset_size;
@@ -7,7 +5,6 @@ use crate::CreatorStandardInstruction;
 
 use crate::state::CreatorStandardAccount;
 use crate::state::Ruleset;
-use crate::state::RULESET_AUTHORITY;
 use crate::utils::assert_address;
 use crate::utils::assert_empty;
 use crate::utils::assert_mut;
@@ -89,11 +86,6 @@ impl<'a, 'info> InitRulesetCtx<'a, 'info> {
 
         // authority
         assert_signer(ctx.authority, "authority")?;
-        assert_address(
-            ctx.authority.key,
-            &Pubkey::from_str(RULESET_AUTHORITY).expect("Invalid public key"),
-            "authority",
-        )?;
 
         // payer
         assert_signer(ctx.payer, "payer")?;
