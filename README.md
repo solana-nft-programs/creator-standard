@@ -4,13 +4,13 @@
   <img style="width: full" src="./doc-assets/banner.png" />
 </div>
 
-## Read the [GitBook](https://cardinal-so.gitbook.io/creator-standard/)
+## Read the [GitBook](https://docs.cardinal.so/the-creator-standard/summary)
 
 > Contains the entire end-to-end proposal that includes background, proposed solution, pricing and examples of technical integration.
 
 # Background
 
-The Creator Standard is a smart contract-level solution to the issue of royalty circumvention that allows creators to decide with which programs their NFTs can interact without sacrificing basic wallet-to-wallet transfers. 
+The Creator Standard is a smart contract-level solution to the issue of royalty circumvention that allows creators to decide with which programs their NFTs can interact without sacrificing basic wallet-to-wallet transfers.
 
 The protocol, which is built on top of the SPL token program, selectively permissions token transfers to achieve this. Every token has an associated Mint Manager account, which holds its freeze and mint authority. Each mint manager specifies a ruleset, which is simply a set of "rules" (allowlist/denylist) that dictates which programs can interact with and transfer the NFT. The ruleset is assigned by the NFT's creator and can be updated at their discretion.
 
