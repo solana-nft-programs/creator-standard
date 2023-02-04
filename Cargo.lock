@@ -291,7 +291,7 @@ dependencies = [
  "mpl-token-metadata",
  "num-derive",
  "num-traits",
- "sha2 0.9.9",
+ "sha2 0.10.6",
  "shank 0.0.5",
  "solana-program",
  "solana-sdk",
