@@ -586,6 +586,58 @@
         "type": "u8",
         "value": 13
       }
+    },
+    {
+      "name": "CloseMintManager",
+      "accounts": [
+        {
+          "name": "mintManager",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "holderTokenAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "newTokenAuthority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false,
+          "desc": "Token program"
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false,
+          "desc": "System program"
+        }
+      ],
+      "args": [],
+      "discriminant": {
+        "type": "u8",
+        "value": 14
+      }
     }
   ],
   "accounts": [
