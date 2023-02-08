@@ -75,7 +75,7 @@ impl<'a, 'info> CloseMintManagerCtx<'a, 'info> {
 
         // check valid mint
         assert_mut(ctx.mint, "mint")?;
-        assert_address(&ctx.mint.key, &mint_manager.mint, "mint")?;
+        assert_address(ctx.mint.key, &mint_manager.mint, "mint")?;
         unpack_checked_mint_account(ctx.mint, Some("token mint"))?;
 
         // no checks for new token authority
@@ -83,7 +83,7 @@ impl<'a, 'info> CloseMintManagerCtx<'a, 'info> {
         // authority
         assert_signer(ctx.authority, "authority")?;
         assert_address(
-            &ctx.authority.key,
+            ctx.authority.key,
             &mint_manager.authority,
             "mint manager authority check",
         )?;
