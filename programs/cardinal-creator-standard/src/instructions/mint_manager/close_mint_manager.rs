@@ -1,10 +1,7 @@
-use std::str::FromStr;
-
 use crate::errors::ErrorCode;
 use crate::state::assert_mint_manager_seeds;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
-use crate::state::AUTHORITY;
 use crate::utils::assert_address;
 use crate::utils::assert_amount;
 use crate::utils::assert_mut;
@@ -84,8 +81,6 @@ impl<'a, 'info> CloseMintManagerCtx<'a, 'info> {
         assert_address(&ctx.mint.key, &mint_manager.mint, "mint")?;
         unpack_checked_mint_account(ctx.mint, Some("token mint"))?;
 
-        // authority
-        assert_signer(ctx.authority, "authority")?;
         // holder_token_account
         let holder_token_account =
             unpack_checked_token_account(ctx.holder_token_account, Some("holder_token_account"))?;
@@ -101,21 +96,24 @@ impl<'a, 'info> CloseMintManagerCtx<'a, 'info> {
             "holder_token_account",
         )?;
 
-        let authority_gmd_check = assert_address(
+        let mint_manager_authority_check = assert_address(
             &ctx.authority.key,
-            &Pubkey::from_str(AUTHORITY).unwrap(),
-            "authority check gmd",
+            &mint_manager.authority,
+            "mint manager authority check",
         );
         let authority_owner_check = assert_address(
             &holder_token_account.owner,
             ctx.authority.key,
             "authority check holder",
         );
-        if authority_owner_check.is_err() && authority_gmd_check.is_err() {
+        if authority_owner_check.is_err() && mint_manager_authority_check.is_err() {
             return Err(ProgramError::from(ErrorCode::InvalidAuthority));
         }
 
         // no checks for new token authority
+
+        // authority
+        assert_signer(ctx.authority, "authority")?;
 
         // payer
         assert_signer(ctx.payer, "payer")?;
