@@ -74,8 +74,6 @@ impl<'a, 'info> CloseMintManagerCtx<'a, 'info> {
             system_program: next_account_info(account_iter)?,
         };
         // deserializations
-        let holder_token_account =
-            unpack_checked_token_account(ctx.holder_token_account, Some("holder_token_account"))?;
         let mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
 
         // mint_manager
@@ -86,36 +84,38 @@ impl<'a, 'info> CloseMintManagerCtx<'a, 'info> {
         assert_address(&ctx.mint.key, &mint_manager.mint, "mint")?;
         unpack_checked_mint_account(ctx.mint, Some("token mint"))?;
 
+        // authority
+        assert_signer(ctx.authority, "authority")?;
         // holder_token_account
+        let holder_token_account =
+            unpack_checked_token_account(ctx.holder_token_account, Some("holder_token_account"))?;
         assert_mut(ctx.holder_token_account, "holder_token_account")?;
-        assert_amount(
-            &holder_token_account.amount.to_string(),
-            "1",
-            "holder_token_account",
-        )?;
         assert_address(
             &holder_token_account.mint,
             ctx.mint.key,
             "holder_token_account mint",
         )?;
-        let authority_holder_check = assert_address(
+        assert_amount(
+            &holder_token_account.amount.to_string(),
+            "1",
+            "holder_token_account",
+        )?;
+
+        let authority_gmd_check = assert_address(
+            &ctx.authority.key,
+            &Pubkey::from_str(AUTHORITY).unwrap(),
+            "authority check gmd",
+        );
+        let authority_owner_check = assert_address(
             &holder_token_account.owner,
             ctx.authority.key,
             "authority check holder",
         );
-        let authority_gmd_check = assert_address(
-            &holder_token_account.mint,
-            &Pubkey::from_str(AUTHORITY).unwrap(),
-            "authority check gmd",
-        );
-        if authority_holder_check.is_err() && authority_gmd_check.is_err() {
+        if authority_owner_check.is_err() && authority_gmd_check.is_err() {
             return Err(ProgramError::from(ErrorCode::InvalidAuthority));
         }
 
         // no checks for new token authority
-
-        // authority
-        assert_signer(ctx.authority, "authority")?;
 
         // payer
         assert_signer(ctx.payer, "payer")?;
