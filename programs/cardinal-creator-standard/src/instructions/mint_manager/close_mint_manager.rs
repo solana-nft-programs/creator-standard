@@ -1,13 +1,10 @@
-use crate::errors::ErrorCode;
 use crate::state::assert_mint_manager_seeds;
 use crate::state::CreatorStandardAccount;
 use crate::state::MintManager;
 use crate::utils::assert_address;
-use crate::utils::assert_amount;
 use crate::utils::assert_mut;
 use crate::utils::assert_signer;
 use crate::utils::unpack_checked_mint_account;
-use crate::utils::unpack_checked_token_account;
 use crate::CreatorStandardInstruction;
 use borsh::BorshSerialize;
 use solana_program::account_info::next_account_info;
@@ -81,39 +78,15 @@ impl<'a, 'info> CloseMintManagerCtx<'a, 'info> {
         assert_address(&ctx.mint.key, &mint_manager.mint, "mint")?;
         unpack_checked_mint_account(ctx.mint, Some("token mint"))?;
 
-        // holder_token_account
-        let holder_token_account =
-            unpack_checked_token_account(ctx.holder_token_account, Some("holder_token_account"))?;
-        assert_mut(ctx.holder_token_account, "holder_token_account")?;
-        assert_address(
-            &holder_token_account.mint,
-            ctx.mint.key,
-            "holder_token_account mint",
-        )?;
-        assert_amount(
-            &holder_token_account.amount.to_string(),
-            "1",
-            "holder_token_account",
-        )?;
-
-        let mint_manager_authority_check = assert_address(
-            &ctx.authority.key,
-            &mint_manager.authority,
-            "mint manager authority check",
-        );
-        let authority_owner_check = assert_address(
-            &holder_token_account.owner,
-            ctx.authority.key,
-            "authority check holder",
-        );
-        if authority_owner_check.is_err() && mint_manager_authority_check.is_err() {
-            return Err(ProgramError::from(ErrorCode::InvalidAuthority));
-        }
-
         // no checks for new token authority
 
         // authority
         assert_signer(ctx.authority, "authority")?;
+        assert_address(
+            &ctx.authority.key,
+            &mint_manager.authority,
+            "mint manager authority check",
+        )?;
 
         // payer
         assert_signer(ctx.payer, "payer")?;
