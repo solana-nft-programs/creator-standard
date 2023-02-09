@@ -32,6 +32,7 @@ pub const BASE_PROGRAMS: [&str; 2] = [
 pub fn is_base_program(program_id: &Pubkey) -> bool {
     BASE_PROGRAMS.contains(&&program_id.to_string()[..])
 }
+
 ///////////// CONSTANTS /////////////
 
 ///////////// ACCOUNT TYPE /////////////

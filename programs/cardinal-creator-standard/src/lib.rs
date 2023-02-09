@@ -145,6 +145,16 @@ pub enum CreatorStandardInstruction {
     #[account(8, name = "system_program")]
     #[account(9, name = "instructions")]
     Transfer,
+
+    #[account(0, writable, name = "mint_manager")]
+    #[account(1, writable, name = "mint")]
+    #[account(2, writable, name = "holder_token_account")]
+    #[account(3, name = "new_token_authority")]
+    #[account(4, name = "authority")]
+    #[account(5, writable, signer, name = "payer")]
+    #[account(6, name = "token_program", desc = "Token program")]
+    #[account(7, name = "system_program", desc = "System program")]
+    CloseMintManager,
 }
 
 pub fn process_instruction(
@@ -223,6 +233,11 @@ pub fn process_instruction(
             msg!("CreatorStandardInstruction::Transfer");
             let ctx = TransferCtx::load(accounts)?;
             instructions::token::transfer::handler(ctx)
+        }
+        CreatorStandardInstruction::CloseMintManager => {
+            msg!("CreatorStandardInstruction::CloseMintManager");
+            let ctx = CloseMintManagerCtx::load(accounts)?;
+            instructions::mint_manager::close_mint_manager::handler(ctx)
         }
     }
 }
