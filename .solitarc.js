@@ -7,7 +7,7 @@ const binaryInstallDir = path.join(__dirname, "..", "..", "target", "solita");
 module.exports = {
   idlGenerator: "shank",
   programName: "cardinal_creator_standard",
-  programId: "creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez",
+  programId: "ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3",
   idlDir,
   sdkDir,
   binaryInstallDir,

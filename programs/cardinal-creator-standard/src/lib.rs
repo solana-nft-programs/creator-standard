@@ -15,7 +15,7 @@ pub mod utils;
 use instructions::*;
 use solana_security_txt::security_txt;
 
-solana_program::declare_id!("creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez");
+solana_program::declare_id!("ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3");
 
 #[cfg(not(feature = "no-entrypoint"))]
 security_txt! {

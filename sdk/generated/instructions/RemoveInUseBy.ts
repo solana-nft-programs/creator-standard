@@ -42,7 +42,7 @@ export const removeInUseByInstructionDiscriminator = 6
  */
 export function createRemoveInUseByInstruction(
   accounts: RemoveInUseByInstructionAccounts,
-  programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
+  programId = new web3.PublicKey('ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3')
 ) {
   const [data] = RemoveInUseByStruct.serialize({
     instructionDiscriminator: removeInUseByInstructionDiscriminator,

@@ -53,7 +53,7 @@ export const closeMintManagerInstructionDiscriminator = 14
  */
 export function createCloseMintManagerInstruction(
   accounts: CloseMintManagerInstructionAccounts,
-  programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
+  programId = new web3.PublicKey('ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3')
 ) {
   const [data] = CloseMintManagerStruct.serialize({
     instructionDiscriminator: closeMintManagerInstructionDiscriminator,

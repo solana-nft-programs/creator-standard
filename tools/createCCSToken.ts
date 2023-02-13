@@ -127,4 +127,4 @@ const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
 const params: CreateCCSTokenParams = {
   target: new PublicKey("gmdS6fDgVbeCCYwwvTPJRKM9bFbAgSZh6MTDUT2DcgV"),
 };
-main(params).catch((e) => console.log(e));
+main(params, "devnet").catch((e) => console.log(e));

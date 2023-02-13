@@ -63,6 +63,6 @@ const main = async (params: RulesetParams, cluster = "devnet") => {
 };
 
 const params: RulesetParams = {
-  name: "",
+  name: "ruleset-no-checks",
 };
-main(params).catch((e) => console.log(e));
+main(params, "devnet").catch((e) => console.log(e));
