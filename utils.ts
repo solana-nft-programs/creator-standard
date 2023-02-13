@@ -19,12 +19,15 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
+import dotenv from "dotenv";
 
 import { findMintManagerId, findMintMetadataId } from "./sdk";
 import {
   createInitMintManagerInstruction,
   PROGRAM_ADDRESS,
 } from "./sdk/generated";
+
+dotenv.config();
 
 export async function newAccountWithLamports(
   connection: Connection,
@@ -140,13 +143,11 @@ export const handleError = (e: any) => {
 const networkURLs: { [key: string]: { primary: string; secondary?: string } } =
   {
     ["mainnet-beta"]: {
-      primary:
-        process.env.MAINNET_PRIMARY || "https://solana-api.projectserum.com",
+      primary: process.env.RPC_URL || "https://solana-api.projectserum.com",
       secondary: "https://solana-api.projectserum.com",
     },
     mainnet: {
-      primary:
-        process.env.MAINNET_PRIMARY || "https://solana-api.projectserum.com",
+      primary: process.env.RPC_URL || "https://solana-api.projectserum.com",
       secondary: "https://solana-api.projectserum.com",
     },
     devnet: { primary: "https://api.devnet.solana.com/" },
@@ -159,7 +160,7 @@ export const connectionFor = (
   defaultCluster = "mainnet"
 ) => {
   return new Connection(
-    process.env.RPC_URL || networkURLs[cluster || defaultCluster]!.primary,
+    networkURLs[cluster || defaultCluster]!.primary,
     "recent"
   );
 };
