@@ -70,9 +70,9 @@ impl<'a, 'info> CloseMintManagerCtx<'a, 'info> {
         };
         // deserializations
         let mint_manager: MintManager = MintManager::from_account_info(ctx.mint_manager)?;
-        if mint_manager.in_use_by.is_some() {
-            return Err(ProgramError::from(ErrorCode::TokenCurentlyInUse));
-        }
+        // if mint_manager.in_use_by.is_some() {
+        //     return Err(ProgramError::from(ErrorCode::TokenCurentlyInUse));
+        // }
 
         // mint_manager
         assert_mut(ctx.mint_manager, "mint_manager")?;

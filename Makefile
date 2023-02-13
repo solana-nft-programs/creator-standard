@@ -14,7 +14,7 @@ start:
 		--clone 2NjwBshDhNPyGXmYU2VBnWySvgqg1hiEAY2CPeNCd4qf \
 		--clone EBs1boZXeJHZpNxi6WJeWN3sBtZH1fMe5x8owCg2Z4Z7 \
 		--clone 67breUU4gNRwXdNtMd7Qv7sdtKSaPu1vxWbtGrGm1ywL \
-		--bpf-program creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez ./target/deploy/cardinal_creator_standard.so \
+		--bpf-program ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3 ./target/deploy/cardinal_creator_standard.so \
 		--reset --quiet & echo $$! > validator.PID
 	sleep 8
 	solana airdrop 1000 $(TEST_KEY) --url http://localhost:8899

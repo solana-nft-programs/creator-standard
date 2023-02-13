@@ -70,7 +70,7 @@ export const updateMintManagerInstructionDiscriminator = 4
 export function createUpdateMintManagerInstruction(
   accounts: UpdateMintManagerInstructionAccounts,
   args: UpdateMintManagerInstructionArgs,
-  programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
+  programId = new web3.PublicKey('ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3')
 ) {
   const [data] = UpdateMintManagerStruct.serialize({
     instructionDiscriminator: updateMintManagerInstructionDiscriminator,

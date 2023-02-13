@@ -48,7 +48,7 @@ export const revokeInstructionDiscriminator = 12
  */
 export function createRevokeInstruction(
   accounts: RevokeInstructionAccounts,
-  programId = new web3.PublicKey('creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez')
+  programId = new web3.PublicKey('ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3')
 ) {
   const [data] = RevokeStruct.serialize({
     instructionDiscriminator: revokeInstructionDiscriminator,

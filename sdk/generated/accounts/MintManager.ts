@@ -89,7 +89,7 @@ export class MintManager implements MintManagerArgs {
    */
   static gpaBuilder(
     programId: web3.PublicKey = new web3.PublicKey(
-      'creatS3mfzrTGjwuLD1Pa2HXJ1gmq6WXb4ssnwUbJez'
+      'ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3'
     )
   ) {
     return beetSolana.GpaBuilder.fromStruct(programId, mintManagerBeet)
