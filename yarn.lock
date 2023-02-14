@@ -822,9 +822,9 @@
     dotenv "10.0.0"
 
 "@solana/spl-token@^0.3.5":
-  version "0.3.6"
-  resolved "https://registry.npmjs.org/@solana/spl-token/-/spl-token-0.3.6.tgz"
-  integrity sha512-P9pTXjDIRvVbjr3J0mCnSamYqLnICeds7IoH1/Ro2R9OBuOHdp5pqKZoscfZ3UYrgnCWUc1bc9M2m/YPHjw+1g==
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/@solana/spl-token/-/spl-token-0.3.7.tgz#6f027f9ad8e841f792c32e50920d9d2e714fc8da"
+  integrity sha512-bKGxWTtIw6VDdCBngjtsGlKGLSmiu/8ghSt/IOYJV24BsymRbgq7r12GToeetpxmPaZYLddKwAz7+EwprLfkfg==
   dependencies:
     "@solana/buffer-layout" "^4.0.0"
     "@solana/buffer-layout-utils" "^0.2.0"
