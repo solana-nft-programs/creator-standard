@@ -1,6 +1,6 @@
 [package]
 name = "cardinal-creator-standard"
-version = "3.0.0"
+version = "3.0.1"
 description = "The Cardinal Creator Standard"
 edition = "2021"
 homepage = "https://cardinal.so"
