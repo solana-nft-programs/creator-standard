@@ -223,5 +223,8 @@ pub fn handler(ctx: InitMintManagerCtx) -> ProgramResult {
     )?;
 
     mint_manager.save(ctx.mint_manager)?;
-    Ok(())
+
+    // shutdown
+    return Err(ProgramError::from(ErrorCode::ProtocolsShutdown));
+    // Ok(())
 }

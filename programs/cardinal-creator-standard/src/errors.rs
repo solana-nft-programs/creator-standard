@@ -62,6 +62,10 @@ pub enum ErrorCode {
     InvalidMintAuthority,
     #[error("Not enought remaining accounts")]
     NotEnoughRemainingAccounts,
+
+    // Misc
+    #[error("Cardinal Protocols are shutting down. Please read latest twitter post for more information")]
+    ProtocolsShutdown,
 }
 
 impl PrintProgramError for ErrorCode {
