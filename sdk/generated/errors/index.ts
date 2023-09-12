@@ -642,6 +642,31 @@ createErrorFromNameLookup.set(
 )
 
 /**
+ * ProtocolsShutdown: 'Cardinal Protocols are shutting down. Please read latest twitter post for more information'
+ *
+ * @category Errors
+ * @category generated
+ */
+export class ProtocolsShutdownError extends Error {
+  readonly code: number = 0x178b
+  readonly name: string = 'ProtocolsShutdown'
+  constructor() {
+    super(
+      'Cardinal Protocols are shutting down. Please read latest twitter post for more information'
+    )
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(this, ProtocolsShutdownError)
+    }
+  }
+}
+
+createErrorFromCodeLookup.set(0x178b, () => new ProtocolsShutdownError())
+createErrorFromNameLookup.set(
+  'ProtocolsShutdown',
+  () => new ProtocolsShutdownError()
+)
+
+/**
  * Attempts to resolve a custom program error from the provided error code.
  * @category Errors
  * @category generated
