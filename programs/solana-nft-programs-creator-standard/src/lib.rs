@@ -18,16 +18,6 @@ use solana_security_txt::security_txt;
 solana_program::declare_id!("ccsxqYAg64wuLEh45KabyPvkKjrEfDPsDZUQrGn7mf3");
 
 #[cfg(not(feature = "no-entrypoint"))]
-security_txt! {
-    name: "Cardinal Creator Standard",
-    project_url: "cardinal.so",
-    contacts: "email:team@cardinal.so,twitter:@cardinal_labs",
-    policy: "https://github.com/cardinal-labs/cardinal-creator-standard/blob/main/LICENSE",
-    preferred_languages: "en",
-    source_code: "https://github.com/cardinal-labs/cardinal-creator-standard"
-}
-
-#[cfg(not(feature = "no-entrypoint"))]
 solana_program::entrypoint!(process_instruction);
 
 #[cfg_attr(feature = "serde-feature", derive(Serialize, Deserialize))]

@@ -9,21 +9,21 @@ import {
   findMintMetadataId,
   findRulesetId,
 } from "../../sdk/pda";
-import type { CardinalProvider } from "../../utils";
+import type { SolanaProvider } from "../../utils";
 import { createMintTx, executeTransaction, getProvider } from "../../utils";
 
 const mintKeypair = Keypair.generate();
 
 const RULESET_ID = findRulesetId();
 
-let provider: CardinalProvider;
+let provider: SolanaProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
   const splMintIx = await createMintTx(
     provider.connection,
     mintKeypair.publicKey,
-    provider.wallet.publicKey
+    provider.wallet.publicKey,
   );
   await executeTransaction(provider.connection, splMintIx, provider.wallet, [
     mintKeypair,
@@ -36,7 +36,7 @@ test("Init", async () => {
 
   const ata = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    provider.wallet.publicKey
+    provider.wallet.publicKey,
   );
   tx.add(
     createInitMintManagerInstruction({
@@ -48,18 +48,18 @@ test("Init", async () => {
       tokenAuthority: provider.wallet.publicKey,
       authority: provider.wallet.publicKey,
       payer: provider.wallet.publicKey,
-    })
+    }),
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
-    mintManagerId
+    mintManagerId,
   );
   expect(mintManager.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(mintManager.authority.toString()).toBe(
-    provider.wallet.publicKey.toString()
+    provider.wallet.publicKey.toString(),
   );
   expect(mintManager.ruleset.toString()).toBe(RULESET_ID.toString());
 });

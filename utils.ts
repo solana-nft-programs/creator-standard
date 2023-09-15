@@ -1,4 +1,3 @@
-import { findAta } from "@cardinal/common";
 import { utils, Wallet } from "@project-serum/anchor";
 import {
   createAssociatedTokenAccountInstruction,
@@ -19,6 +18,7 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
+import { findAta } from "@solana-nft-programs/common";
 import dotenv from "dotenv";
 
 import { findMintManagerId, findMintMetadataId } from "./sdk";
@@ -32,12 +32,12 @@ dotenv.config();
 export async function newAccountWithLamports(
   connection: Connection,
   lamports = LAMPORTS_PER_SOL,
-  keypair = Keypair.generate()
+  keypair = Keypair.generate(),
 ): Promise<Keypair> {
   const account = keypair;
   const signature = await connection.requestAirdrop(
     account.publicKey,
-    lamports
+    lamports,
   );
   await connection.confirmTransaction(signature, "confirmed");
   return account;
@@ -52,7 +52,7 @@ export async function executeTransaction(
   connection: Connection,
   tx: Transaction,
   wallet: Wallet,
-  signers?: Signer[]
+  signers?: Signer[],
 ): Promise<string> {
   tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
   tx.feePayer = wallet.publicKey;
@@ -69,18 +69,18 @@ export async function executeTransaction(
   }
 }
 
-export type CardinalProvider = {
+export type SolanaProvider = {
   connection: Connection;
   wallet: Wallet;
   keypair: Keypair;
 };
 
-export async function getProvider(): Promise<CardinalProvider> {
+export async function getProvider(): Promise<SolanaProvider> {
   const connection = getConnection();
   const keypair = await newAccountWithLamports(
     connection,
     LAMPORTS_PER_SOL,
-    keypairFrom(process.env.TEST_KEY ?? "./tests/test-keypairs/test-key.json")
+    keypairFrom(process.env.TEST_KEY ?? "./tests/test-keypairs/test-key.json"),
   );
   const wallet = new Wallet(keypair);
   return {
@@ -103,8 +103,8 @@ export const keypairFrom = (s: string, n?: string): Keypair => {
             .replace("[", "")
             .replace("]", "")
             .split(",")
-            .map((c) => parseInt(c))
-        )
+            .map((c) => parseInt(c)),
+        ),
       );
     } else {
       return Keypair.fromSecretKey(utils.bytes.bs58.decode(s));
@@ -116,9 +116,9 @@ export const keypairFrom = (s: string, n?: string): Keypair => {
           JSON.parse(
             require("fs").readFileSync(s, {
               encoding: "utf-8",
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
     } catch (e) {
       process.stdout.write(`${n ?? "keypair"} is not valid keypair`);
@@ -157,23 +157,23 @@ const networkURLs: { [key: string]: { primary: string; secondary?: string } } =
 
 export const connectionFor = (
   cluster: string | null,
-  defaultCluster = "mainnet"
+  defaultCluster = "mainnet",
 ) => {
   return new Connection(
     networkURLs[cluster || defaultCluster]!.primary,
-    "recent"
+    "recent",
   );
 };
 
 export const secondaryConnectionFor = (
   cluster: string | null,
-  defaultCluster = "mainnet"
+  defaultCluster = "mainnet",
 ) => {
   return new Connection(
     process.env.RPC_URL ||
       networkURLs[cluster || defaultCluster]?.secondary ||
       networkURLs[cluster || defaultCluster]!.primary,
-    "recent"
+    "recent",
   );
 };
 
@@ -181,7 +181,7 @@ export const createMintTx = async (
   connection: Connection,
   mint: PublicKey,
   authority: PublicKey,
-  target = authority
+  target = authority,
 ) => {
   const ata = getAssociatedTokenAddressSync(mint, target);
   return new Transaction().add(
@@ -194,7 +194,7 @@ export const createMintTx = async (
     }),
     createInitializeMint2Instruction(mint, 0, authority, authority),
     createAssociatedTokenAccountInstruction(authority, ata, target, mint),
-    createMintToInstruction(mint, ata, authority, 1)
+    createMintToInstruction(mint, ata, authority, 1),
   );
 };
 
@@ -202,7 +202,7 @@ export const createCCSMintTx = async (
   connection: Connection,
   mint: PublicKey,
   authority: PublicKey,
-  rulesetId: PublicKey
+  rulesetId: PublicKey,
 ): Promise<Transaction> => {
   const tx = await createMintTx(connection, mint, authority);
   const mintManagerId = findMintManagerId(mint);
@@ -218,7 +218,7 @@ export const createCCSMintTx = async (
       tokenAuthority: authority,
       authority: authority,
       payer: authority,
-    })
+    }),
   );
   return tx;
 };

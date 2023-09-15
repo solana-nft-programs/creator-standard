@@ -1,4 +1,3 @@
-import { findAta } from "@cardinal/common";
 import {
   CreateMetadataV2,
   Creator,
@@ -7,6 +6,7 @@ import {
 } from "@metaplex-foundation/mpl-token-metadata";
 import * as anchor from "@project-serum/anchor";
 import { Keypair, PublicKey } from "@solana/web3.js";
+import { findAta } from "@solana-nft-programs/common";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 
@@ -28,7 +28,7 @@ export type CreateCCSTokenParams = {
 };
 
 const wallet = Keypair.fromSecretKey(
-  anchor.utils.bytes.bs58.decode(process.env.TEST_WALLET || "")
+  anchor.utils.bytes.bs58.decode(process.env.TEST_WALLET || ""),
 ); // your wallet's secret key // your wallet's secret key
 
 const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
@@ -40,7 +40,7 @@ const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
   const holdetAta = await findAta(
     mintKeypair.publicKey,
     params.target || wallet.publicKey,
-    true
+    true,
   );
 
   // init mint
@@ -48,7 +48,7 @@ const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
     connection,
     mintKeypair.publicKey,
     wallet.publicKey,
-    params.target
+    params.target,
   );
 
   // metadata
@@ -65,7 +65,7 @@ const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
     method: "GET",
     redirect: "follow",
   });
-  const metadataUri = `https://nft.cardinal.so/metadata?img=${
+  const metadataUri = `https://nft.host.so/metadata?img=${
     response.url
   }&name=${encodeURIComponent(metadataName)}`;
   const metadataId = await Metadata.getPDA(mintKeypair.publicKey);
@@ -92,8 +92,8 @@ const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
         updateAuthority: wallet.publicKey,
         mint: mintKeypair.publicKey,
         mintAuthority: wallet.publicKey,
-      }
-    ).instructions
+      },
+    ).instructions,
   );
 
   // init mint manager
@@ -107,7 +107,7 @@ const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
       tokenAuthority: wallet.publicKey,
       authority: wallet.publicKey,
       payer: wallet.publicKey,
-    })
+    }),
   );
 
   let txid = "";
@@ -116,7 +116,7 @@ const main = async (params: CreateCCSTokenParams, cluster = "devnet") => {
       mintKeypair,
     ]);
     console.log(
-      `Created CCS token https://explorer.solana.com/tx/${txid}?cluster=${cluster}.`
+      `Created CCS token https://explorer.solana.com/tx/${txid}?cluster=${cluster}.`,
     );
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions

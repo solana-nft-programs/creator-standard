@@ -1,22 +1,15 @@
 {
-  "name": "@cardinal/creator-standard",
-  "version": "3.0.2",
-  "description": "SDK for cardinal-creator-standard",
+  "name": "@solana-nft-programs/creator-standard",
+  "version": "1.0.0",
+  "description": "SDK for creator-standard",
   "keywords": [
     "solana",
     "anchor",
-    "cardinal",
     "creator-standard"
   ],
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "repository": "git@github.com:cardinal-labs/cardinal-creator-standard.git",
-  "author": "The Cardinal Team <team@cardinal.so>",
-  "bugs": {
-    "url": "https://github.com/cardinal-labs/cardinal-creator-standard/issues",
-    "email": "info@cardinal.so"
-  },
-  "homepage": "https://cardinal.so",
+  "repository": "git@github.com:solana-nft-programs/creator-standard.git",
   "license": "AGPL-3.0",
   "publishConfig": {
     "access": "public"
@@ -42,7 +35,7 @@
     "@solana/web3.js": "^1.66.2"
   },
   "devDependencies": {
-    "@cardinal/common": "^4.0.1",
+    "@solana-nft-programs/common": "^1.0.0",
     "@metaplex-foundation/mpl-token-metadata": "^1.2.5",
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/jest": "^29.2.0",

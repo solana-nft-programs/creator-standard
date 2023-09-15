@@ -23,12 +23,12 @@ const main = async (cluster = "devnet") => {
           memcmp: {
             offset: 0,
             bytes: anchor.utils.bytes.bs58.encode(
-              BorshAccountsCoder.accountDiscriminator("ruleset")
+              BorshAccountsCoder.accountDiscriminator("ruleset"),
             ),
           },
         },
       ],
-    }
+    },
   );
   const rulesets: [PublicKey, Ruleset][] = [];
   console.log(programAccounts.map((acc) => acc.pubkey.toString()));
@@ -44,7 +44,7 @@ const main = async (cluster = "devnet") => {
       ruleset[1].name,
       ruleset[1].accountType.toString(),
       ruleset[1].allowedPrograms,
-    ])
+    ]),
   );
 };
 

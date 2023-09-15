@@ -7,7 +7,7 @@ import {
 } from "@solana/spl-token";
 import { Keypair, Transaction } from "@solana/web3.js";
 
-import type { CardinalProvider } from "../../utils";
+import type { SolanaProvider } from "../../utils";
 import {
   createMintTx,
   executeTransaction,
@@ -18,7 +18,7 @@ import {
 const mintKeypair = Keypair.generate();
 const user = Keypair.generate();
 
-let provider: CardinalProvider;
+let provider: SolanaProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
@@ -28,7 +28,7 @@ test("Initialize mint", async () => {
   const tx = await createMintTx(
     provider.connection,
     mintKeypair.publicKey,
-    provider.wallet.publicKey
+    provider.wallet.publicKey,
   );
   await executeTransaction(provider.connection, tx, provider.wallet, [
     mintKeypair,
@@ -36,17 +36,17 @@ test("Initialize mint", async () => {
 
   // check mint
   const mintInfo = await tryGetAccount(() =>
-    getMint(provider.connection, mintKeypair.publicKey)
+    getMint(provider.connection, mintKeypair.publicKey),
   );
   expect(mintInfo).not.toBeNull();
   expect(mintInfo?.isInitialized).toBeTruthy();
   expect(mintInfo?.supply.toString()).toBe("1");
   expect(mintInfo?.decimals.toString()).toBe("0");
   expect(mintInfo?.freezeAuthority?.toString()).toBe(
-    provider.wallet.publicKey.toString()
+    provider.wallet.publicKey.toString(),
   );
   expect(mintInfo?.mintAuthority?.toString()).toBe(
-    provider.wallet.publicKey.toString()
+    provider.wallet.publicKey.toString(),
   );
 });
 
@@ -55,7 +55,7 @@ test("Create token account for a user", async () => {
 
   const userAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    user.publicKey
+    user.publicKey,
   );
 
   tx.add(
@@ -63,17 +63,17 @@ test("Create token account for a user", async () => {
       provider.wallet.publicKey,
       userAtaId,
       user.publicKey,
-      mintKeypair.publicKey
-    )
+      mintKeypair.publicKey,
+    ),
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
 
   const closedTokenAccount = await tryGetAccount(() =>
-    getAccount(provider.connection, userAtaId)
+    getAccount(provider.connection, userAtaId),
   );
   expect(closedTokenAccount?.isInitialized).toBeTruthy();
   expect(closedTokenAccount?.mint.toString()).toBe(
-    mintKeypair.publicKey.toString()
+    mintKeypair.publicKey.toString(),
   );
   expect(closedTokenAccount?.isFrozen).toBeFalsy();
   expect(closedTokenAccount?.owner.toString()).toBe(user.publicKey.toString());

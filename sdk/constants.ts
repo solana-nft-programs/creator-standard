@@ -5,7 +5,7 @@ import { findMintManagerId } from "./pda";
 
 export const identifyCCSToken = async (
   connection: Connection,
-  mintId: PublicKey
+  mintId: PublicKey,
 ): Promise<boolean> => {
   const mintManagerId = findMintManagerId(mintId);
   const mintData = await getMint(connection, mintId);

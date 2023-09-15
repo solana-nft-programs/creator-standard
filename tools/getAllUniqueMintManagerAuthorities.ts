@@ -23,19 +23,19 @@ const main = async (cluster = "devnet") => {
           memcmp: {
             offset: 0,
             bytes: anchor.utils.bytes.bs58.encode(
-              BorshAccountsCoder.accountDiscriminator("mint-manager")
+              BorshAccountsCoder.accountDiscriminator("mint-manager"),
             ),
           },
         },
       ],
-    }
+    },
   );
   const uniqueMintManagerAuthorities: { [key: string]: string[] } = {};
   programAccounts.forEach((account) => {
     const mintManager = MintManager.fromAccountInfo(account.account)[0];
     if (
       !Object.keys(uniqueMintManagerAuthorities).includes(
-        mintManager.authority.toString()
+        mintManager.authority.toString(),
       )
     ) {
       uniqueMintManagerAuthorities[mintManager.authority.toString()] = [
@@ -43,7 +43,7 @@ const main = async (cluster = "devnet") => {
       ];
     } else {
       uniqueMintManagerAuthorities[mintManager.authority.toString()]?.push(
-        `https://explorer.solana.com/account/${mintManager.mint.toString()}?cluster=${cluster}`
+        `https://explorer.solana.com/account/${mintManager.mint.toString()}?cluster=${cluster}`,
       );
     }
   });

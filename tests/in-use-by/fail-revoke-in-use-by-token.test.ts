@@ -12,7 +12,7 @@ import { createApproveInstruction } from "../../sdk/generated/instructions/Appro
 import { createRevokeInstruction } from "../../sdk/generated/instructions/Revoke";
 import { createSetInUseByInstruction } from "../../sdk/generated/instructions/SetInUseBy";
 import { findMintManagerId, findRulesetId } from "../../sdk/pda";
-import type { CardinalProvider } from "../../utils";
+import type { SolanaProvider } from "../../utils";
 import {
   createCCSMintTx,
   executeTransaction,
@@ -25,7 +25,7 @@ const mintKeypair = Keypair.generate();
 const RULESET_ID = findRulesetId();
 const inUseByAddress = Keypair.generate();
 
-let provider: CardinalProvider;
+let provider: SolanaProvider;
 let delegate: Keypair;
 
 beforeAll(async () => {
@@ -40,7 +40,7 @@ test("Init", async () => {
     provider.connection,
     mintKeypair.publicKey,
     provider.wallet.publicKey,
-    RULESET_ID
+    RULESET_ID,
   );
   await executeTransaction(provider.connection, tx, provider.wallet, [
     mintKeypair,
@@ -48,7 +48,7 @@ test("Init", async () => {
 
   // check mint
   const mintInfo = await tryGetAccount(() =>
-    getMint(provider.connection, mintKeypair.publicKey)
+    getMint(provider.connection, mintKeypair.publicKey),
   );
   expect(mintInfo).not.toBeNull();
   expect(mintInfo?.isInitialized).toBeTruthy();
@@ -60,11 +60,11 @@ test("Init", async () => {
   // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
-    mintManagerId
+    mintManagerId,
   );
   expect(mintManager.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(mintManager.authority.toString()).toBe(
-    provider.wallet.publicKey.toString()
+    provider.wallet.publicKey.toString(),
   );
   expect(mintManager.ruleset.toString()).toBe(RULESET_ID.toString());
 });
@@ -72,13 +72,13 @@ test("Init", async () => {
 test("Delegate", async () => {
   const rulesetData = await Ruleset.fromAccountAddress(
     provider.connection,
-    RULESET_ID
+    RULESET_ID,
   );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const tx = new Transaction();
   const holderAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    provider.wallet.publicKey
+    provider.wallet.publicKey,
   );
   const holderAta = await getAccount(provider.connection, holderAtaId);
   expect(holderAta.isFrozen).toBe(true);
@@ -94,7 +94,7 @@ test("Delegate", async () => {
       holder: provider.wallet.publicKey,
       delegate: delegate.publicKey,
     },
-    { approveIx: { amount: 1 } }
+    { approveIx: { amount: 1 } },
   );
   handleRemainingAccountsForRuleset(ix, rulesetData);
   tx.add(ix);
@@ -105,7 +105,7 @@ test("Delegate", async () => {
   expect(holderAtaCheck.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(holderAtaCheck.amount.toString()).toBe("1");
   expect(holderAtaCheck.delegate?.toString()).toBe(
-    delegate.publicKey.toString()
+    delegate.publicKey.toString(),
   );
   expect(holderAtaCheck.delegatedAmount.toString()).toBe("1");
 });
@@ -113,12 +113,12 @@ test("Delegate", async () => {
 test("Set in use by", async () => {
   const rulesetData = await Ruleset.fromAccountAddress(
     provider.connection,
-    RULESET_ID
+    RULESET_ID,
   );
   const mintManagerId = findMintManagerId(mintKeypair.publicKey);
   const holderAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    provider.wallet.publicKey
+    provider.wallet.publicKey,
   );
 
   const tx = new Transaction();
@@ -136,14 +136,14 @@ test("Set in use by", async () => {
   // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
-    mintManagerId
+    mintManagerId,
   );
   expect(mintManager.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(mintManager.inUseBy?.toString()).toBe(
-    inUseByAddress.publicKey.toString()
+    inUseByAddress.publicKey.toString(),
   );
   expect(mintManager.authority.toString()).toBe(
-    provider.wallet.publicKey.toString()
+    provider.wallet.publicKey.toString(),
   );
   expect(mintManager.ruleset.toString()).toBe(RULESET_ID.toString());
 });
@@ -153,7 +153,7 @@ test("Revoke", async () => {
   const tx = new Transaction();
   const holderAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    provider.wallet.publicKey
+    provider.wallet.publicKey,
   );
   const holderAta = await getAccount(provider.connection, holderAtaId);
   expect(holderAta.isFrozen).toBe(true);
@@ -167,9 +167,9 @@ test("Revoke", async () => {
       mint: mintKeypair.publicKey,
       holderTokenAccount: holderAtaId,
       holder: provider.wallet.publicKey,
-    })
+    }),
   );
   await expect(
-    executeTransaction(provider.connection, tx, provider.wallet)
+    executeTransaction(provider.connection, tx, provider.wallet),
   ).rejects.toThrow();
 });

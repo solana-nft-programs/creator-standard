@@ -1,10 +1,4 @@
-# Cardinal Creator Standard
-
-<div style="text-align: center; width: 100%;">
-  <img style="width: full" src="./doc-assets/banner.png" />
-</div>
-
-## Read the [GitBook](https://docs.cardinal.so/the-creator-standard/summary)
+# Creator Standard
 
 > Contains the entire end-to-end proposal that includes background, proposed solution, pricing and examples of technical integration.
 

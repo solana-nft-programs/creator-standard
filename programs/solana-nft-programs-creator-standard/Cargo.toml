@@ -1,17 +1,15 @@
 [package]
-name = "cardinal-creator-standard"
-version = "3.0.2"
-description = "The Cardinal Creator Standard"
+name = "solana-nft-programs-creator-standard"
+version = "1.0.0"
+description = "The Creator Standard"
 edition = "2021"
-homepage = "https://cardinal.so"
-repository = "https://github.com/cardinal-labs/cardinal-creator-standard"
-authors = ["Cardinal <team@cardinal.so>"]
+repository = "https://github.com/solana-nft-programs/creator-standard"
 license = "AGPL-3.0"
-keywords = ["solana", "cardinal"]
+keywords = ["solana"]
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "cardinal_creator_standard"
+name = "solana_nft_programs_creator_standard"
 
 [features]
 no-entrypoint = []
@@ -24,7 +22,6 @@ solana-program = "1.10.29"
 shank = "^0.0.5"
 spl-token = { version = "^3.3.0", features = ["no-entrypoint"] }
 spl-associated-token-account = { version = "1.1.2", features = [ "no-entrypoint"] }
-mpl-token-metadata = { version = "1.6.5", features = [ "no-entrypoint" ] }
 thiserror = "^1.0.24"
 borsh = "0.9.3"
 arrayref = "0.3.6"

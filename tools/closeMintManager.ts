@@ -13,7 +13,7 @@ export type Params = {
 };
 
 const wallet = Keypair.fromSecretKey(
-  anchor.utils.bytes.bs58.decode(process.env.WALLET || "")
+  anchor.utils.bytes.bs58.decode(process.env.WALLET || ""),
 ); // your wallet's secret key
 
 const main = async (params: Params, cluster = "devnet") => {
@@ -22,7 +22,7 @@ const main = async (params: Params, cluster = "devnet") => {
 
   const mintManager = await MintManager.fromAccountAddress(
     connection,
-    params.mintManagerId
+    params.mintManagerId,
   );
   const tkas = await connection.getTokenLargestAccounts(mintManager.mint);
   const tokenAccount = tkas.value.find((tk) => Number(tk.amount) === 1);
@@ -39,14 +39,14 @@ const main = async (params: Params, cluster = "devnet") => {
       newTokenAuthority: findMintEditionId(mintManager.mint),
       authority: wallet.publicKey,
       payer: wallet.publicKey,
-    })
+    }),
   );
 
   try {
     const txid = await executeTransaction(
       connection,
       transaction,
-      new anchor.Wallet(wallet)
+      new anchor.Wallet(wallet),
     );
     console.log(`https://explorer.solana.com/address/${txid}`);
   } catch (e) {
@@ -59,5 +59,5 @@ main(
   {
     mintManagerId: new PublicKey("address-here"),
   },
-  "mainnet-beta"
+  "mainnet-beta",
 ).catch((e) => console.log(e));

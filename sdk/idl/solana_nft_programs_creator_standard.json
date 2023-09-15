@@ -1,6 +1,6 @@
 {
-  "version": "3.0.0",
-  "name": "cardinal_creator_standard",
+  "version": "3.0.2",
+  "name": "solana_nft_programs_creator_standard",
   "instructions": [
     {
       "name": "InitRuleset",

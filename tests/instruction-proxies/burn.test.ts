@@ -9,7 +9,7 @@ import { Keypair, Transaction } from "@solana/web3.js";
 import { MintManager } from "../../sdk/generated/accounts/MintManager";
 import { createBurnInstruction } from "../../sdk/generated/instructions/Burn";
 import { findMintManagerId, findRulesetId } from "../../sdk/pda";
-import type { CardinalProvider } from "../../utils";
+import type { SolanaProvider } from "../../utils";
 import {
   createCCSMintTx,
   executeTransaction,
@@ -21,7 +21,7 @@ const mintKeypair = Keypair.generate();
 
 const RULESET_ID = findRulesetId();
 
-let provider: CardinalProvider;
+let provider: SolanaProvider;
 
 beforeAll(async () => {
   provider = await getProvider();
@@ -34,7 +34,7 @@ test("Initialize mint", async () => {
     provider.connection,
     mintKeypair.publicKey,
     provider.wallet.publicKey,
-    RULESET_ID
+    RULESET_ID,
   );
   await executeTransaction(provider.connection, tx, provider.wallet, [
     mintKeypair,
@@ -42,7 +42,7 @@ test("Initialize mint", async () => {
 
   // check mint
   const mintInfo = await tryGetAccount(() =>
-    getMint(provider.connection, mintKeypair.publicKey)
+    getMint(provider.connection, mintKeypair.publicKey),
   );
   expect(mintInfo).not.toBeNull();
   expect(mintInfo?.isInitialized).toBeTruthy();
@@ -54,11 +54,11 @@ test("Initialize mint", async () => {
   // check mint manager
   const mintManager = await MintManager.fromAccountAddress(
     provider.connection,
-    mintManagerId
+    mintManagerId,
   );
   expect(mintManager.mint.toString()).toBe(mintKeypair.publicKey.toString());
   expect(mintManager.authority.toString()).toBe(
-    provider.wallet.publicKey.toString()
+    provider.wallet.publicKey.toString(),
   );
   expect(mintManager.ruleset.toString()).toBe(RULESET_ID.toString());
 });
@@ -68,7 +68,7 @@ test("Burn mint", async () => {
   const tx = new Transaction();
   const holderAtaId = getAssociatedTokenAddressSync(
     mintKeypair.publicKey,
-    provider.wallet.publicKey
+    provider.wallet.publicKey,
   );
   const holderAta = await getAccount(provider.connection, holderAtaId);
   expect(holderAta.isFrozen).toBe(true);
@@ -81,11 +81,11 @@ test("Burn mint", async () => {
       mint: mintKeypair.publicKey,
       holderTokenAccount: holderAtaId,
       holder: provider.wallet.publicKey,
-    })
+    }),
   );
   await executeTransaction(provider.connection, tx, provider.wallet);
   const mintInfo = await tryGetAccount(() =>
-    getMint(provider.connection, mintKeypair.publicKey)
+    getMint(provider.connection, mintKeypair.publicKey),
   );
   expect(mintInfo?.supply.toString()).toBe("0");
 });
